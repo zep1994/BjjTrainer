@@ -22,6 +22,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddScoped<TrainingSessionService>();
 builder.Services.AddScoped<LessonService>();
+builder.Services.AddScoped<TechniqueService>();
 builder.Services.AddScoped< LessonSectionService>();
 builder.Services.AddScoped<SubLessonService>();
 builder.Services.AddScoped<UserService>();

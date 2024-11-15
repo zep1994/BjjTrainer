@@ -11,7 +11,7 @@ namespace BjjTrainer.ViewModels
         private readonly UserService _userService;
         private bool _isRefreshing;
 
-        public ObservableCollection<Lesson> FavoriteLessons { get; set; }
+        public ObservableCollection<Models.Lessons.Lesson> FavoriteLessons { get; set; }
         public ICommand LoadFavoritesCommand { get; }
 
         public bool IsRefreshing
@@ -23,7 +23,7 @@ namespace BjjTrainer.ViewModels
         public FavoritesViewModel()
         {
             _userService = new UserService();
-            FavoriteLessons = new ObservableCollection<Lesson>();
+            FavoriteLessons = new ObservableCollection<Models.Lessons.Lesson>();
             LoadFavoritesCommand = new Command(async () => await LoadFavoritesAsync());
         }
 

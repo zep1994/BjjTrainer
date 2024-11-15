@@ -15,7 +15,7 @@ namespace BjjTrainer.ViewModels
         private readonly UserService _userService = userService;
 
 
-        public ObservableCollection<Lesson> Lessons { get; } = [];
+        public ObservableCollection<Models.Lessons.Lesson> Lessons { get; } = [];
 
         public async Task LoadLessonsAsync()
         {

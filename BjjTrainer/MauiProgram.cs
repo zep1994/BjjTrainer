@@ -3,6 +3,7 @@ using BjjTrainer.Services.Lessons;
 using BjjTrainer.Services.Training;
 using BjjTrainer.Services.Users;
 using BjjTrainer.ViewModels;
+using BjjTrainer.ViewModels.Lesson;
 using BjjTrainer.ViewModels.Training;
 using BjjTrainer.Views.Lessons;
 using BjjTrainer.Views.Training;

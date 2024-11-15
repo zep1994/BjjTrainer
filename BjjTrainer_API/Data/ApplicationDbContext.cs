@@ -16,6 +16,7 @@ namespace BjjTrainer_API.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<TrainingSession> TrainingSessions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Technique> Techniques { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

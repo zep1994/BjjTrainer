@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:BjjTrainer.Controls"
     xmlns:views="clr-namespace:BjjTrainer.Views"
     xmlns:lessons="clr-namespace:BjjTrainer.Views.Lessons"
+    xmlns:tech="clr-namespace:BjjTrainer.Views.Lessons.Technique"
     xmlns:users="clr-namespace:BjjTrainer.Views.Users"
     xmlns:train="clr-namespace:BjjTrainer.Views.Training"
     xmlns:viewModels="clr-namespace:BjjTrainer.ViewModels"
@@ -76,5 +77,6 @@
     <ShellContent Route="TrainingSessionListPage" ContentTemplate="{DataTemplate train:TrainingSessionListPage}" />
     <ShellContent Route="TrainingSessionDetailPage" ContentTemplate="{DataTemplate train:TrainingSessionDetailPage}" />
     <ShellContent Route="TrainingSessionCreatePage" ContentTemplate="{DataTemplate train:TrainingSessionCreatePage}" />
+    <ShellContent Route="TechniqueListPage" ContentTemplate="{DataTemplate tech:TechniqueListPage}" />
 
 </Shell>
