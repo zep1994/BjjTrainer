@@ -1,17 +1,17 @@
 ﻿using BjjTrainer.Messages;
+using BjjTrainer.Models.DTO.Moves;
 using BjjTrainer.Models.DTO.TrainingLog;
-using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
 using BjjTrainer.Services.Trainings;
 using BjjTrainer.Views.Components;
 using CommunityToolkit.Mvvm.Messaging;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
 
-public partial class UpdateTrainingLogViewModel : BaseViewModel
+public partial class UpdateTrainingLogViewModel : ObservableObject
 {
     private readonly TrainingService _trainingService;
 
-    public ObservableCollection<UpdateMoveDto> Moves { get; set; } = new();
+    public ObservableCollection<UpdateMoveDto> Moves { get; set; } = [];
 
     private DateTime _date;
     public DateTime Date
@@ -68,6 +68,14 @@ public partial class UpdateTrainingLogViewModel : BaseViewModel
         get => _isCoachLog;
         set => SetProperty(ref _isCoachLog, value);
     }
+
+    private bool _isBusy;
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set => SetProperty(ref _isBusy, value);
+    }
+
     public int LogId { get; set; }
 
     public UpdateTrainingLogViewModel(int logId)

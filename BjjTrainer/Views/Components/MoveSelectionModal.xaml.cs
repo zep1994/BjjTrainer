@@ -1,5 +1,5 @@
 using BjjTrainer.Messages;
-using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
+using BjjTrainer.Models.DTO.Moves;
 using BjjTrainer.Services.Trainings;
 using BjjTrainer.ViewModels.Components;
 using CommunityToolkit.Mvvm.Messaging;
@@ -14,12 +14,15 @@ namespace BjjTrainer.Views.Components
         private ObservableCollection<UpdateMoveDto> _selectedMoves;
         private readonly int _logId;
 
-        public MoveSelectionModal(ObservableCollection<UpdateMoveDto> selectedMoves, int logId)
+        public MoveSelectionModal(ObservableCollection<UpdateMoveDto>? selectedMoves = null, int logId = 0)
         {
             InitializeComponent();
             _trainingService = new TrainingService();
-            _selectedMoves = selectedMoves;
+            _selectedMoves = selectedMoves ?? [];
             _logId = logId;
+
+            ViewModel = new MoveSelectionViewModel(_selectedMoves);
+            BindingContext = ViewModel;
 
             LoadAllMovesAsync();
         }

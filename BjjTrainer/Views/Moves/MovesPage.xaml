@@ -2,59 +2,53 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Moves.MovesPage"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
-             xmlns:vm="clr-namespace:BjjTrainer.ViewModels.Moves"
              Title="Moves"
              BackgroundColor="{StaticResource BackgroundColor}">
 
-    <ContentPage.BindingContext>
-        <vm:MovesViewModel />
-    </ContentPage.BindingContext>
+    <Grid RowDefinitions="Auto, *">
+        <!-- Standard Search Bar -->
+        <SearchBar Grid.Row="0"
+                   Placeholder="Search..."
+                   Text="{Binding SearchText, Mode=TwoWay}"
+                   TextChanged="OnSearchTextChanged" />
 
-    <Grid RowDefinitions="Auto,*">
-         <!-- Syncfusion ListView -->
-        <syncfusion:SfListView x:Name="LogListView"
-                               Grid.Row="1"
-                               ItemsSource="{Binding Moves}"
-                               SelectionMode="Single"
-                               AutoFitMode="Height">
+        <!-- Moves List -->
+        <ListView x:Name="MovesListView"
+                  Grid.Row="1"
+                  ItemsSource="{Binding FilteredMoves}"
+                  SelectionMode="None"
+                  BackgroundColor="Transparent">
 
-            <syncfusion:SfListView.ItemTemplate>
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="15"
-                           Margin="10"
-                           BorderColor="LightGray"
-                           CornerRadius="8"
-                           HasShadow="True"
-                           BackgroundColor="{StaticResource AccentBlue}">
+                    <ViewCell>
+                        <Frame Padding="12"
+                               Margin="10"
+                               BorderColor="{StaticResource AccentGray}"
+                               CornerRadius="12"
+                               HasShadow="True"
+                               BackgroundColor="{StaticResource CardBackground}">
 
-                        <Grid ColumnDefinitions="*,Auto"
-                              RowDefinitions="Auto,Auto,Auto,Auto"
-                              ColumnSpacing="10"
-                              RowSpacing="6">
+                            <StackLayout Spacing="5">
+                                <Label Text="{Binding Name}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
 
-                            <!-- Title and Date Section -->
-                            <Label Text="Moves"
-                                   FontSize="20"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   Grid.ColumnSpan="2" />
+                                <Label Text="{Binding Description}"
+                                       FontSize="14"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
 
-                            <!-- Training Time and Details -->
-                            <Label Text="{Binding Name, StringFormat='Move Name: {0} hrs'}"
-                                   FontSize="14"
-                                   TextColor="White"
-                                   Grid.Row="3" />
-
-                            <Label Text="{Binding Description, StringFormat='Description: {0}'}"
-                                   FontSize="14"
-                                   TextColor="White"
-                                   Grid.Row="4" />
-
-                        </Grid>
-                    </Frame>
+                                <Label Text="{Binding SkillLevel, StringFormat='Skill Level: {0}'}"
+                                       FontSize="12"
+                                       FontAttributes="Italic"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+                            </StackLayout>
+                        </Frame>
+                    </ViewCell>
                 </DataTemplate>
-            </syncfusion:SfListView.ItemTemplate>
-        </syncfusion:SfListView>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </ContentPage>

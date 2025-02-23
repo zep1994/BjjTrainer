@@ -58,7 +58,7 @@ namespace BjjTrainer_API.Services_API.Coaches
                 {
                     Id = tlm.Move.Id,
                     Name = tlm.Move.Name
-                }).ToList() : new List<LogMoveDto>()
+                }).ToList() : []
             }).ToList();
 
             return result;
@@ -105,7 +105,7 @@ namespace BjjTrainer_API.Services_API.Coaches
                 {
                     Id = tlm.Move.Id,
                     Name = tlm.Move.Name
-                }).ToList() : new List<LogMoveDto>()
+                }).ToList() : []
             };
         }
 

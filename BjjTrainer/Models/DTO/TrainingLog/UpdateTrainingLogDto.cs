@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
+using BjjTrainer.Models.DTO.Moves;
 
 namespace BjjTrainer.Models.DTO.TrainingLog
 {

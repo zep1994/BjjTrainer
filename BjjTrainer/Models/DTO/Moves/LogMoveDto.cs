@@ -1,4 +1,4 @@
-﻿namespace BjjTrainer.Models.Moves
+﻿namespace BjjTrainer.Models.DTO.Moves
 {
     public class LogMoveDto
     {

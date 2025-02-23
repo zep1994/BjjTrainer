@@ -1,5 +1,5 @@
 ﻿using BjjTrainer.Models.DTO.Events;
-using BjjTrainer.Models.Moves;
+using BjjTrainer.Models.DTO.Moves;
 
 namespace BjjTrainer.Models.DTO.Coaches
 {
@@ -15,7 +15,7 @@ namespace BjjTrainer.Models.DTO.Coaches
         public bool IsAllDay { get; set; }
         public int? SchoolId { get; set; }
 
-        public List<CheckInDto> CheckIns { get; set; } = new();
-        public List<LogMoveDto>? Moves { get; set; } = new();
+        public List<CheckInDto> CheckIns { get; set; } = [];
+        public List<LogMoveDto>? Moves { get; set; } = [];
     }
 }

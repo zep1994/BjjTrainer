@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.DTO;
+﻿using BjjTrainer.Models.DTO.Users;
 using System.Net.Http.Json;
 
 namespace BjjTrainer.Services.Users

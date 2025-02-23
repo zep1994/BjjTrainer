@@ -122,7 +122,7 @@ namespace BjjTrainer_API.Services_API.Schools
                 if (coach == null || coach.SchoolId == null)
                 {
                     Console.WriteLine("Error: Coach is not assigned to a school.");
-                    return new List<ApplicationUser>();
+                    return [];
                 }
 
                 var students = await _context.ApplicationUsers

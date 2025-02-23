@@ -16,9 +16,9 @@ namespace BjjTrainer_API.Models.DTO.Coaches
         public int? SchoolId { get; set; }
 
         // Attendees with minimal info (Username + Check-in time)
-        public List<CheckInDto> CheckIns { get; set; } = new();
+        public List<CheckInDto> CheckIns { get; set; } = [];
 
         // Moves practiced in this event (Only Name and ID)
-        public List<LogMoveDto>? Moves { get; set; } = new();
+        public List<LogMoveDto>? Moves { get; set; } = [];
     }
 }

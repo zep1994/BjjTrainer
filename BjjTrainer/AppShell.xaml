@@ -89,13 +89,7 @@
             <ShellContent Title="Coach Management" ContentTemplate="{DataTemplate coach:CoachManagementPage}" />
         </Tab>
 
-        
-
-        <!-- User Profile Tab -->
-        <ShellContent Title="Profile"
-               Icon="profile_icon.png"
-               ContentTemplate="{DataTemplate users:UserProfilePage}"
-               Route="UserProfilePage" />
+        <ShellContent Title="Profile" Icon="default_profile.png" ContentTemplate="{DataTemplate users:UserProfilePage}" Route="UserProfilePage" />
     </TabBar>
     
     <ShellContent Title="Lessons" Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />

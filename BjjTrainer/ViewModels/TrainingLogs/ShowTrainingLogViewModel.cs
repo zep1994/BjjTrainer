@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.Moves;
+﻿using BjjTrainer.Models.DTO.Moves;
 using BjjTrainer.Services.Trainings;
 using MvvmHelpers;
 using System.Collections.ObjectModel;

@@ -23,7 +23,7 @@ namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
         public string Notes { get; set; } = string.Empty;
         public string SelfAssessment { get; set; } = string.Empty;
         public List<int>? MoveIds { get; set; } = [];
-        public List<LogMoveDto>? Moves { get; set; } = new();
+        public List<LogMoveDto>? Moves { get; set; } = [];
         public bool IsCoachLog { get; set; }
         public bool IsImported { get; set; } = false;
         public int? ImportedFromLogId { get; set; }

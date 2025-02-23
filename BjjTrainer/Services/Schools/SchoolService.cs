@@ -13,7 +13,7 @@ namespace BjjTrainer.Services.Schools
             try
             {
                 var schools = await HttpClient.GetFromJsonAsync<List<School>>("school");
-                return schools ?? new List<School>();
+                return schools ?? [];
             }
             catch (Exception ex)
             {
@@ -129,7 +129,7 @@ namespace BjjTrainer.Services.Schools
                 if (students == null || students.Count == 0)
                 {
                     Console.WriteLine("No students found.");
-                    return new List<User>();
+                    return [];
                 }
 
                 return students;
@@ -137,7 +137,7 @@ namespace BjjTrainer.Services.Schools
             catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching students: {ex.Message}");
-                return new List<User>();
+                return [];
             }
         }
     }

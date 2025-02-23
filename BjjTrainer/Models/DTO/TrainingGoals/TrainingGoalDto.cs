@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.Moves;
+﻿using BjjTrainer.Models.DTO.Moves;
 
 namespace BjjTrainer.Models.DTO.TrainingGoals
 {

@@ -1,15 +1,17 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
-namespace BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves
+namespace BjjTrainer.Models.DTO.Moves
 {
-    public class UpdateMoveDto : INotifyPropertyChanged
+    public class MoveDto
     {
-        private bool _isSelected;
-
         public int Id { get; set; }
         public string Name { get; set; }
-
+        public string Description { get; set; }
+        public string Content { get; set; }
+        public string? SkillLevel { get; set; }
+        public List<string>? Tags { get; set; }
+        public int TrainingLogCount { get; set; }
+        private bool _isSelected;
         public bool IsSelected
         {
             get => _isSelected;
@@ -18,14 +20,14 @@ namespace BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves
                 if (_isSelected != value)
                 {
                     _isSelected = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsSelected));
                 }
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

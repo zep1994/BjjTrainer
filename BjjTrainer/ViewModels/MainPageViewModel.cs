@@ -1,4 +1,4 @@
-﻿using BjjTrainer.Models.Moves;
+﻿using BjjTrainer.Models.DTO.Moves;
 using BjjTrainer.Models.TrainingGoal;
 using BjjTrainer.Services.Events;
 using BjjTrainer.Services.Moves;
