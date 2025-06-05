@@ -1,4 +1,5 @@
 ﻿using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
+using BjjTrainer_API.Models.Trainings;
 using BjjTrainer_API.Services_API.Trainings;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,17 @@ namespace BjjTrainer_API.Controllers.Training
         public TrainingLogController(TrainingService trainingService)
         {
             _trainingService = trainingService;
+        }
+
+        // ******************************** CREATE TRAINING LOG ********************************
+        [HttpPost("log")]
+        public async Task<IActionResult> CreateTrainingLog([FromBody] CreateTrainingLogDto dto)
+        {
+            if (dto == null || string.IsNullOrEmpty(dto.ApplicationUserId))
+                return BadRequest("Invalid training log data.");
+
+            await _trainingService.AddTrainingLogAsync(dto);
+            return Ok();
         }
 
         // ******************************** GET TRAINING LOGS BY USER ********************************

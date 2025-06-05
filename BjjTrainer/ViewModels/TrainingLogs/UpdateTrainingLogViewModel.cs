@@ -99,6 +99,10 @@ public partial class UpdateTrainingLogViewModel : BaseViewModel
     {
         try
         {
+            // Get all moves
+            var allMoves = await _trainingService.GetAllMovesAsync();
+
+            // Get the log and its moves
             var log = await _trainingService.GetTrainingLogMoves(LogId);
             if (log != null)
             {
@@ -112,8 +116,14 @@ public partial class UpdateTrainingLogViewModel : BaseViewModel
                 IsCoachLog = log.IsCoachLog;
 
                 Moves.Clear();
-                foreach (var move in log.Moves)
+
+                // Get IDs of moves that were trained in this session
+                var trainedMoveIds = log.Moves?.Select(m => m.Id).ToHashSet() ?? new HashSet<int>();
+
+                // Add all moves, preselecting those that were trained
+                foreach (var move in allMoves)
                 {
+                    move.IsSelected = trainedMoveIds.Contains(move.Id);
                     Moves.Add(move);
                 }
             }

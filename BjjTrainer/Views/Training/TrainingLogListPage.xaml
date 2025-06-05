@@ -16,66 +16,85 @@
         <Button Text="Add Training Log"
                 Clicked="OnAddLogTapped"
                 HorizontalOptions="End"
-                Margin="10"/>
+                Margin="10"
+                BackgroundColor="{StaticResource AccentColor}"
+                TextColor="White"
+                CornerRadius="20"
+                FontAttributes="Bold"/>
 
         <!-- Syncfusion ListView -->
         <syncfusion:SfListView x:Name="LogListView"
-                               Grid.Row="1"
-                               ItemsSource="{Binding TrainingLogs}"
-                               SelectionMode="Single"
-                               AutoFitMode="Height">
+                                Grid.Row="1"
+                                ItemsSource="{Binding TrainingLogs}"
+                                SelectionMode="Single"
+                                AutoFitMode="Height">
 
             <syncfusion:SfListView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="15"
-                           Margin="10"
-                           BorderColor="LightGray"
-                           CornerRadius="8"
-                           HasShadow="True"
-                           BackgroundColor="{Binding DayColor}">
+                    <Frame Padding="18"
+                        Margin="12,8"
+                        BorderColor="{StaticResource CardBorderColor}"
+                        CornerRadius="16"
+                        HasShadow="True"
+                        BackgroundColor="{StaticResource CardBackgroundColor}">
 
-                        <Grid ColumnDefinitions="*,Auto"
-                              RowDefinitions="Auto,Auto,Auto,Auto"
-                              ColumnSpacing="10"
-                              RowSpacing="6">
+                        <Grid RowDefinitions="Auto,Auto,Auto"
+                            ColumnDefinitions="*,Auto"
+                            RowSpacing="10"
+                            ColumnSpacing="12">
 
-                            <!-- Title and Date Section -->
-                            <Label Text="Training Log"
-                                   FontSize="20"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   Grid.ColumnSpan="2" />
+                            <!-- Title and Date -->
+                            <StackLayout Grid.ColumnSpan="2" Spacing="2">
+                                <Label Text="Training Log"
+                                    FontSize="22"
+                                    FontAttributes="Bold"
+                                    TextColor="{StaticResource AccentColor}" />
+                                <Label Text="{Binding Date, StringFormat='Date: {0:MMMM dd, yyyy}'}"
+                                    FontSize="14"
+                                    TextColor="{StaticResource CardSubTextColor}" />
+                            </StackLayout>
 
-                            <Label Text="{Binding Date, StringFormat='Date: {0:MMMM dd, yyyy}'}"
-                                   FontSize="14"
-                                   TextColor="White"
-                                   Grid.Row="1" />
+                            <!-- Details: Time and Rounds -->
+                            <Grid Grid.Row="1" Grid.ColumnSpan="2" ColumnDefinitions="*,*">
+                                <StackLayout Spacing="2">
+                                    <Label Text="Time"
+                                        FontSize="12"
+                                        TextColor="{StaticResource CardSubTextColor}" />
+                                    <Label Text="{Binding Date, StringFormat='{0:hh:mm tt}'}"
+                                        FontSize="16"
+                                        FontAttributes="Bold"
+                                        TextColor="{StaticResource CardMainTextColor}" />
+                                </StackLayout>
+                                <StackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="Rounds"
+                                        FontSize="12"
+                                        TextColor="{StaticResource CardSubTextColor}" />
+                                    <Label Text="{Binding RoundsRolled, StringFormat='{0}'}"
+                                        FontSize="16"
+                                        FontAttributes="Bold"
+                                        TextColor="{StaticResource CardMainTextColor}" />
+                                </StackLayout>
+                            </Grid>
 
-                            <Label Text="{Binding Date, StringFormat='Time: {0:hh:mm tt}'}"
-                                   FontSize="14"
-                                   TextColor="White"
-                                   Grid.Row="2" />
+                            <!-- Training Time and View Button -->
+                            <Label Grid.Row="2"
+                                Text="{Binding TrainingTime, StringFormat='Training Time: {0} hrs'}"
+                                FontSize="14"
+                                TextColor="{StaticResource CardSubTextColor}"
+                                VerticalOptions="Center" />
 
-                            <!-- Training Time and Details -->
-                            <Label Text="{Binding TrainingTime, StringFormat='Training Time: {0} hrs'}"
-                                   FontSize="14"
-                                   TextColor="White"
-                                   Grid.Row="3" />
-
-                            <Label Text="{Binding RoundsRolled, StringFormat='Rounds: {0}'}"
-                                   FontSize="14"
-                                   TextColor="White"
-                                   Grid.Row="4" />
-
-                            <!-- View Button -->
                             <ImageButton Source="forward_arrow.png"
-                                         Grid.Column="1"
-                                         CommandParameter="{Binding Id}"
-                                         Clicked="OnViewLogClicked"
-                                         WidthRequest="30"
-                                         HeightRequest="30"
-                                         VerticalOptions="Center"
-                                         HorizontalOptions="End" />
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        CommandParameter="{Binding Id}"
+                                        Clicked="OnViewLogClicked"
+                                        WidthRequest="32"
+                                        HeightRequest="32"
+                                        BackgroundColor="{StaticResource AccentColor}"
+                                        CornerRadius="16"
+                                        Padding="4"
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="End" />
                         </Grid>
                     </Frame>
                 </DataTemplate>
@@ -84,10 +103,10 @@
             <!-- Placeholder when list is empty -->
             <syncfusion:SfListView.EmptyView>
                 <Label Text="No training logs available."
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       TextColor="Gray"
-                       FontSize="18" />
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    TextColor="Gray"
+                    FontSize="18" />
             </syncfusion:SfListView.EmptyView>
         </syncfusion:SfListView>
     </Grid>

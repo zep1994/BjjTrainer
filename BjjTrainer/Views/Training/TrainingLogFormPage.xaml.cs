@@ -45,7 +45,7 @@ namespace BjjTrainer.Views.Training
                     RoundsRolled = _viewModel.RoundsRolled ?? 0,
                     Submissions = _viewModel.Submissions ?? 0,
                     Taps = _viewModel.Taps ?? 0,
-                    Notes = _viewModel.Notes,
+                    Notes = _viewModel.Notes ?? string.Empty,
                     MoveIds = selectedMoves
                 };
 
@@ -62,6 +62,10 @@ namespace BjjTrainer.Views.Training
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
+        }
+        private async void OnBackButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
         }
     }
 }
