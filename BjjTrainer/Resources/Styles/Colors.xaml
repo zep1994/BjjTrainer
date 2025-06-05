@@ -6,7 +6,11 @@
 
     <!-- Primary Colors -->
     <Color x:Key="BackgroundColor">#000023</Color>
-    <Color x:Key="CardBackgroundColor">#2C2C2C</Color>
+    <Color x:Key="CardBackgroundColor">#23272F</Color>
+    <Color x:Key="CardBorderColor">#2D313A</Color>
+    <Color x:Key="CardMainTextColor">#FFFFFF</Color>
+    <Color x:Key="CardSubTextColor">#B0B4BE</Color>
+    <Color x:Key="AccentColor">#4F8EF7</Color>
     <Color x:Key="ChartGradientStart">#1E88E5</Color>
     <Color x:Key="ChartGradientEnd">#43A047</Color>
 

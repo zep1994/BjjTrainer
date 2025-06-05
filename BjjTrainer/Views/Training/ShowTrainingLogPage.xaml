@@ -1,101 +1,100 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:BjjTrainer.ViewModels.TrainingLogs"
-             x:Class="BjjTrainer.Views.Training.ShowTrainingLogPage"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
-             xmlns:syncfusionCards="clr-namespace:Syncfusion.Maui.Cards;assembly=Syncfusion.Maui.Cards"
-             xmlns:syncfusionExpander="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
-             xmlns:syncfusionButtons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
-             Title="Training Log Details"
-             BackgroundColor="{StaticResource BackgroundColor}">
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:vm="clr-namespace:BjjTrainer.ViewModels.TrainingLogs"
+            x:Class="BjjTrainer.Views.Training.ShowTrainingLogPage"
+            xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+            xmlns:syncfusionCards="clr-namespace:Syncfusion.Maui.Cards;assembly=Syncfusion.Maui.Cards"
+            xmlns:syncfusionExpander="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
+            xmlns:syncfusionButtons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+            Title="Training Log Details"
+            BackgroundColor="{StaticResource BackgroundColor}">
 
-    <Grid RowDefinitions="Auto,*,Auto"
-          Padding="20"
-          RowSpacing="20"
-          ColumnSpacing="20">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="24">
 
-        <!-- Header Section (Spans both columns) -->
-        <Label Text="Training Log Details"
-               Grid.Row="0"
-               Grid.ColumnSpan="2"
-               FontSize="32"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               Margin="0,10,0,20"/>
+            <!-- Header -->
+            <Label Text="Training Log Details"
+                FontSize="28"
+                FontAttributes="Bold"
+                TextColor="{StaticResource AccentColor}"
+                HorizontalOptions="Center"
+                Margin="0,10,0,0"/>
 
-        <!-- Left Column (Training Details) -->
-        <syncfusionCards:SfCardView Grid.Row="1"
-                                    Grid.Column="0"
-                                    CornerRadius="12"
-                                    BorderColor="LightGray"
-                                    VerticalOptions="FillAndExpand">
-            <VerticalStackLayout Padding="20" Spacing="15">
-                <Label Text="Training Summary"
-                       FontSize="22"
-                       FontAttributes="Bold"/>
+            <!-- Card -->
+            <syncfusionCards:SfCardView
+                CornerRadius="16"
+                BorderColor="{StaticResource CardBorderColor}"
+                BackgroundColor="{StaticResource CardBackgroundColor}"
+                Padding="0">
 
-                <Grid ColumnDefinitions="Auto,*"
-                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
-                      ColumnSpacing="10">
-                    <Label Text="Date:" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
-                    <Label Text="{Binding Date, StringFormat='{0:MMMM dd, yyyy}'}" Grid.Row="0" Grid.Column="1"/>
+                <VerticalStackLayout Padding="24" Spacing="18">
 
-                    <Label Text="Time (Hours):" FontAttributes="Bold" Grid.Row="1" Grid.Column="0"/>
-                    <Label Text="{Binding TrainingTime}" Grid.Row="1" Grid.Column="1"/>
+                    <!-- Summary Title -->
+                    <Label Text="Training Summary"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource CardMainTextColor}" />
 
-                    <Label Text="Rounds:" FontAttributes="Bold" Grid.Row="2" Grid.Column="0"/>
-                    <Label Text="{Binding RoundsRolled}" Grid.Row="2" Grid.Column="1"/>
+                    <!-- Details Grid -->
+                    <Grid ColumnDefinitions="Auto,*"
+                        RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                        ColumnSpacing="12"
+                        RowSpacing="10">
 
-                    <Label Text="Submissions:" FontAttributes="Bold" Grid.Row="3" Grid.Column="0"/>
-                    <Label Text="{Binding Submissions}" Grid.Row="3" Grid.Column="1"/>
+                        <Label Text="Date:" FontAttributes="Bold" TextColor="{StaticResource CardSubTextColor}" Grid.Row="0" Grid.Column="0"/>
+                        <Label Text="{Binding Date, StringFormat='{0:MMMM dd, yyyy}'}" TextColor="{StaticResource CardMainTextColor}" Grid.Row="0" Grid.Column="1"/>
 
-                    <Label Text="Taps:" FontAttributes="Bold" Grid.Row="4" Grid.Column="0"/>
-                    <Label Text="{Binding Taps}" Grid.Row="4" Grid.Column="1"/>
-                    
-                            <!-- Right Column (Expanding Notes Section) -->
-        <syncfusionExpander:SfExpander Grid.Row="6"
-                                       Grid.Column="0"
-                                       VerticalOptions="FillAndExpand">
-            <syncfusionExpander:SfExpander.Header>
-                <Label Text="Notes"
-                       FontSize="20"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Start"/>
-            </syncfusionExpander:SfExpander.Header>
-            <VerticalStackLayout Padding="20">
-                <Label Text="{Binding Notes}" 
-                       FontSize="16"
-                       TextColor="{StaticResource PrimaryTextColor}"
-                       LineBreakMode="WordWrap"
-                       Margin="0,10,0,0"/>
-            </VerticalStackLayout>
-        </syncfusionExpander:SfExpander>
-                </Grid>
-            </VerticalStackLayout>
-        </syncfusionCards:SfCardView>
+                        <Label Text="Time (Hours):" FontAttributes="Bold" TextColor="{StaticResource CardSubTextColor}" Grid.Row="1" Grid.Column="0"/>
+                        <Label Text="{Binding TrainingTime}" TextColor="{StaticResource CardMainTextColor}" Grid.Row="1" Grid.Column="1"/>
 
+                        <Label Text="Rounds:" FontAttributes="Bold" TextColor="{StaticResource CardSubTextColor}" Grid.Row="2" Grid.Column="0"/>
+                        <Label Text="{Binding RoundsRolled}" TextColor="{StaticResource CardMainTextColor}" Grid.Row="2" Grid.Column="1"/>
 
+                        <Label Text="Submissions:" FontAttributes="Bold" TextColor="{StaticResource CardSubTextColor}" Grid.Row="3" Grid.Column="0"/>
+                        <Label Text="{Binding Submissions}" TextColor="{StaticResource CardMainTextColor}" Grid.Row="3" Grid.Column="1"/>
 
-        <!-- Action Buttons (Centered) -->
-        <HorizontalStackLayout Grid.Row="2"
-                               Grid.ColumnSpan="2"
-                               HorizontalOptions="Center"
-                               Spacing="25"
-                               Margin="0,30,0,0">
-            <syncfusionButtons:SfButton Text="Back"
-                                        WidthRequest="130"
-                                        HeightRequest="50"
-                                        Clicked="OnBackButtonClicked"
-                                        BackgroundColor="{StaticResource LightGray}"
-                                        VerticalOptions="Center"/>
+                        <Label Text="Taps:" FontAttributes="Bold" TextColor="{StaticResource CardSubTextColor}" Grid.Row="4" Grid.Column="0"/>
+                        <Label Text="{Binding Taps}" TextColor="{StaticResource CardMainTextColor}" Grid.Row="4" Grid.Column="1"/>
+                    </Grid>
 
-            <syncfusionButtons:SfButton Text="Update"
-                                        WidthRequest="130"
-                                        HeightRequest="50"
-                                        Clicked="OnUpdateButtonClicked"
-                                        BackgroundColor="{StaticResource AccentBlue}"
-                                        TextColor="White"
-                                        VerticalOptions="Center"/>
-        </HorizontalStackLayout>
-    </Grid>
+                    <!-- Notes Expander -->
+                    <syncfusionExpander:SfExpander>
+                        <syncfusionExpander:SfExpander.Header>
+                            <Label Text="Notes"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                TextColor="{StaticResource AccentColor}"
+                                Padding="0,8,0,0"/>
+                        </syncfusionExpander:SfExpander.Header>
+                        <VerticalStackLayout Padding="0,8,0,0">
+                            <Label Text="{Binding Notes}"
+                                FontSize="16"
+                                TextColor="{StaticResource CardMainTextColor}"
+                                LineBreakMode="WordWrap"/>
+                        </VerticalStackLayout>
+                    </syncfusionExpander:SfExpander>
+                </VerticalStackLayout>
+            </syncfusionCards:SfCardView>
+
+            <!-- Action Buttons -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" Margin="0,10,0,0">
+                <syncfusionButtons:SfButton Text="Back"
+                                            WidthRequest="120"
+                                            HeightRequest="48"
+                                            Clicked="OnBackButtonClicked"
+                                            BackgroundColor="{StaticResource CardBorderColor}"
+                                            TextColor="{StaticResource CardMainTextColor}"
+                                            CornerRadius="24"
+                                            FontAttributes="Bold"/>
+                <syncfusionButtons:SfButton Text="Update"
+                                            WidthRequest="120"
+                                            HeightRequest="48"
+                                            Clicked="OnUpdateButtonClicked"
+                                            BackgroundColor="{StaticResource AccentColor}"
+                                            TextColor="White"
+                                            CornerRadius="24"
+                                            FontAttributes="Bold"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

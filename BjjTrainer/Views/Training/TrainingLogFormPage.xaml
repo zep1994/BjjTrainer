@@ -1,143 +1,136 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BjjTrainer.Views.Training.TrainingLogFormPage"
-             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              Title="Training Log"
              BackgroundColor="{StaticResource BackgroundColor}">
 
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="24">
 
-    <ContentPage.Content>
-        <ScrollView>
-            <VerticalStackLayout Padding="20" Spacing="15">
-                <!-- Date Field -->
-                <Frame CornerRadius="10" HasShadow="False" Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+            <!-- Page Title -->
+            <Label Text="Create Training Log"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource AccentColor}"
+                   HorizontalOptions="Center"
+                   Margin="0,10,0,0"/>
+
+            <!-- Card Container for Form Fields -->
+            <Frame CornerRadius="16"
+                   Padding="0"
+                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                   BorderColor="{StaticResource CardBorderColor}"
+                   HasShadow="True">
+
+                <VerticalStackLayout Padding="24" Spacing="18">
+
+                    <!-- Date Field -->
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
                         <Image Source="calendar.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
-                        <DatePicker Grid.Column="1" Date="{Binding Date}" TextColor="{StaticResource PrimaryTextColor}" />
+                        <DatePicker Grid.Column="1" Date="{Binding Date}" TextColor="{StaticResource CardMainTextColor}" />
                     </Grid>
-                </Frame>
 
-                <!-- Training Time Field -->
-                <Frame CornerRadius="10" HasShadow="False" Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <!-- Training Time Field -->
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
                         <Image Source="time10.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
                         <Entry Grid.Column="1" Text="{Binding TrainingTime}" Keyboard="Numeric" Placeholder="Training Time (minutes)"
-                               TextColor="{StaticResource PrimaryTextColor}" />
+                               TextColor="{StaticResource CardMainTextColor}" />
                     </Grid>
-                </Frame>
 
-                <!-- Rounds Rolled Field -->
-                <Frame CornerRadius="10" HasShadow="False" Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <!-- Rounds Rolled Field -->
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
                         <Image Source="rolled.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
                         <Entry Grid.Column="1" Text="{Binding RoundsRolled}" Keyboard="Numeric" Placeholder="Rounds Rolled"
-                               TextColor="{StaticResource PrimaryTextColor}" />
+                               TextColor="{StaticResource CardMainTextColor}" />
                     </Grid>
-                </Frame>
 
-                <!-- Submissions Field -->
-                <Frame CornerRadius="10" HasShadow="False" Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <!-- Submissions Field -->
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
                         <Image Source="progress.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
                         <Entry Grid.Column="1" Text="{Binding Submissions}" Keyboard="Numeric" Placeholder="Submissions"
-                               TextColor="{StaticResource PrimaryTextColor}" />
+                               TextColor="{StaticResource CardMainTextColor}" />
                     </Grid>
-                </Frame>
 
-                <!-- Taps Field -->
-                <Frame CornerRadius="10" HasShadow="False" Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <!-- Taps Field -->
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
                         <Image Source="tap.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
                         <Entry Grid.Column="1" Text="{Binding Taps}" Keyboard="Numeric" Placeholder="Taps Received"
-                               TextColor="{StaticResource PrimaryTextColor}" />
+                               TextColor="{StaticResource CardMainTextColor}" />
                     </Grid>
-                </Frame>
 
-                <!-- Notes Field -->
-                <Frame CornerRadius="10" HasShadow="False" Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <!-- Notes Field -->
+                    <Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
                         <Image Source="default_profile.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Start" Margin="0,5,0,0" />
                         <Editor Grid.Column="1" Text="{Binding Notes}" Placeholder="Additional Notes"
-                                TextColor="{StaticResource PrimaryTextColor}" AutoSize="TextChanges" />
+                                TextColor="{StaticResource CardMainTextColor}" AutoSize="TextChanges" />
                     </Grid>
-                </Frame>
 
-                <!-- Self Assessment Field -->
-                <Frame CornerRadius="10" HasShadow="False" Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <!-- Self Assessment Field -->
+                    <Grid ColumnDefinitions="Auto,*">
                         <Image Source="default_profile.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
                         <Entry Grid.Column="1" Text="{Binding SelfAssessment}" Keyboard="Text" Placeholder="Self Assessment"
-                               TextColor="{StaticResource PrimaryTextColor}" />
+                               TextColor="{StaticResource CardMainTextColor}" />
                     </Grid>
-                </Frame>
+                </VerticalStackLayout>
+            </Frame>
 
-                <!-- Moves Selection -->
-                <Label Text="Select Moves" FontAttributes="Bold" />
-                <CollectionView ItemsSource="{Binding Moves}" SelectionMode="Multiple">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="2" />
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame CornerRadius="5" BorderColor="LightGray" Padding="10" Margin="5">
-                                <HorizontalStackLayout>
-                                    <CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Center" />
-                                    <VerticalStackLayout>
-                                        <Label Text="{Binding Name}" FontAttributes="Bold" />
-                                        <Label Text="{Binding Description}" FontSize="12" TextColor="Gray" />
-                                    </VerticalStackLayout>
-                                </HorizontalStackLayout>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+            <!-- Moves Selection Section -->
+            <Frame CornerRadius="16"
+                   Padding="0"
+                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                   BorderColor="{StaticResource CardBorderColor}"
+                   HasShadow="True">
+                <VerticalStackLayout Padding="24" Spacing="12">
+                    <Label Text="Select Moves"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           TextColor="{StaticResource AccentColor}" />
+                    <CollectionView ItemsSource="{Binding Moves}" SelectionMode="Multiple">
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical" Span="2" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame CornerRadius="10"
+                                       BorderColor="{StaticResource CardBorderColor}"
+                                       BackgroundColor="{StaticResource CardBorderColor}"
+                                       Padding="10"
+                                       Margin="5,2">
+                                    <HorizontalStackLayout>
+                                        <CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Center" />
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="{StaticResource CardMainTextColor}" />
+                                            <Label Text="{Binding Description}" FontSize="12" TextColor="{StaticResource CardSubTextColor}" />
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
 
-                <!-- Submit Button -->
-                <Frame CornerRadius="10" Padding="0" BackgroundColor="{StaticResource PrimaryDark}">
-                    <Grid Padding="10">
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnSubmitButtonClicked" />
-                        </Grid.GestureRecognizers>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <!-- Check Icon -->
-                        <Image Source="check.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
-                        <!-- Submit Text -->
-                        <Label Text="Submit" Grid.Column="1" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" 
-               VerticalOptions="Center" HorizontalOptions="Center" />
-                    </Grid>
-                </Frame>
-            </VerticalStackLayout>
-        </ScrollView>
-    </ContentPage.Content>
+            <!-- Action Buttons -->
+            <HorizontalStackLayout Spacing="16" Margin="0,10,0,0">
+                <Button Text="Back"
+                        Clicked="OnBackButtonClicked"
+                        BackgroundColor="{StaticResource AccentRed}"
+                        TextColor="White"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        HeightRequest="48"
+                        HorizontalOptions="FillAndExpand" />
+                <Button Text="Submit"
+                        Clicked="OnSubmitButtonClicked"
+                        BackgroundColor="{StaticResource AccentGreen}"
+                        TextColor="White"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        HeightRequest="48"
+                        HorizontalOptions="FillAndExpand" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
