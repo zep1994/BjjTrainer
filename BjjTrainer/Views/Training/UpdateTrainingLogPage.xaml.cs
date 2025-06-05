@@ -1,3 +1,5 @@
+using System;
+using Microsoft.Maui.Controls;
 using Syncfusion.Maui.DataForm;
 
 namespace BjjTrainer.Views.Training
@@ -5,6 +7,8 @@ namespace BjjTrainer.Views.Training
     [QueryProperty(nameof(LogId), "logId")]
     public partial class UpdateTrainingLogPage : ContentPage
     {
+        private SfDataForm dataForm;
+
         public int LogId
         {
             get => BindingContext is UpdateTrainingLogViewModel vm ? vm.LogId : 0;
@@ -12,7 +16,6 @@ namespace BjjTrainer.Views.Training
             {
                 if (value > 0 && BindingContext is not UpdateTrainingLogViewModel)
                 {
-                    // Initialize ViewModel with LogId
                     BindingContext = new UpdateTrainingLogViewModel(value);
                     InitializeViewModel();
                 }
@@ -22,13 +25,13 @@ namespace BjjTrainer.Views.Training
         public UpdateTrainingLogPage()
         {
             InitializeComponent();
+            dataForm = new SfDataForm();
         }
 
         private async void InitializeViewModel()
         {
             if (BindingContext is UpdateTrainingLogViewModel viewModel)
             {
-                // Load the training log details
                 await viewModel.LoadTrainingLogDetailsAsync();
             }
         }
@@ -75,12 +78,11 @@ namespace BjjTrainer.Views.Training
 
         private void OnGenerateDataFormItem(object sender, GenerateDataFormItemEventArgs e)
         {
-            // Customize data form items for specific fields
             if (e.DataFormItem is DataFormTextEditorItem textEditorItem &&
                 (e.DataFormItem.FieldName == "TrainingTime" ||
-                 e.DataFormItem.FieldName == "RoundsRolled" ||
-                 e.DataFormItem.FieldName == "Submissions" ||
-                 e.DataFormItem.FieldName == "Taps"))
+                e.DataFormItem.FieldName == "RoundsRolled" ||
+                e.DataFormItem.FieldName == "Submissions" ||
+                e.DataFormItem.FieldName == "Taps"))
             {
                 textEditorItem.Keyboard = Keyboard.Numeric;
                 textEditorItem.Background = Colors.DarkSlateGray;

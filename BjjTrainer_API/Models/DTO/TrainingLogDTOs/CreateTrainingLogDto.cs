@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using BjjTrainer_API.Models.DTO.Moves;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs  // Fix Namespace
 {
@@ -16,7 +17,8 @@ namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs  // Fix Namespace
         public int Taps { get; set; } = 0;
         public string Notes { get; set; } = string.Empty;
         public string SelfAssessment { get; set; } = string.Empty;
-        public List<int> MoveIds { get; set; } = [];
+        public List<int>? MoveIds { get; set; } = [];
+        public List<LogMoveDto>? Moves { get; set; } = new();
         public bool IsCoachLog { get; set; }
         public bool IsImported { get; set; } = false;
         public int? ImportedFromLogId { get; set; }

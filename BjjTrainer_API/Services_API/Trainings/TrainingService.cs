@@ -209,6 +209,47 @@ namespace BjjTrainer_API.Services_API.Trainings
             await _context.SaveChangesAsync();
         }
 
+        // ******************************** CREATE NEW TRAINING LOG ********************************
+        public async Task AddTrainingLogAsync(CreateTrainingLogDto dto)
+        {
+            var user = await _context.ApplicationUsers.FindAsync(dto.ApplicationUserId);
+            if (user == null)
+                throw new Exception("User not found.");
+
+            var trainingLog = new TrainingLog
+            {
+                ApplicationUserId = dto.ApplicationUserId,
+                Date = dto.Date,
+                TrainingTime = dto.TrainingTime,
+                RoundsRolled = dto.RoundsRolled,
+                Submissions = dto.Submissions,
+                Taps = dto.Taps,
+                Notes = dto.Notes ?? string.Empty,
+                SelfAssessment = dto.SelfAssessment ?? string.Empty,
+                IsCoachLog = dto.IsCoachLog,
+                CalendarEventId = dto.CalendarEventId
+            };
+
+            _context.TrainingLogs.Add(trainingLog);
+            await _context.SaveChangesAsync();
+
+            if (dto.MoveIds != null)
+            {
+                foreach (var moveId in dto.MoveIds)
+                {
+                    _context.TrainingLogMoves.Add(new TrainingLogMove
+                    {
+                        TrainingLogId = trainingLog.Id,
+                        MoveId = moveId
+                    });
+                }
+            }
+
+            // Update user stats as needed...
+
+            await _context.SaveChangesAsync();
+        }
+
         // ******************************** DELETE TRAINING LOG ********************************
         public async Task DeleteTrainingLogAsync(int logId)
         {

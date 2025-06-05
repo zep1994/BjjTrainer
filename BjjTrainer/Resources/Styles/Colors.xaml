@@ -11,6 +11,8 @@
     <Color x:Key="CardMainTextColor">#FFFFFF</Color>
     <Color x:Key="CardSubTextColor">#B0B4BE</Color>
     <Color x:Key="AccentColor">#4F8EF7</Color>
+    <Color x:Key="AccentRed">#E74C3C</Color>
+    <Color x:Key="AccentGreen">#50E3C2</Color>
     <Color x:Key="ChartGradientStart">#1E88E5</Color>
     <Color x:Key="ChartGradientEnd">#43A047</Color>
 
@@ -31,7 +33,6 @@
     <!-- Dark Blue for graph bars and text -->
     <Color x:Key="TextPrimary">#03A9F4</Color>
     <!-- Black for text and graph elements -->
-    <Color x:Key="AccentGreen">#50E3C2</Color>
 
     <!-- Secondary Palette -->
     <Color x:Key="Secondary">#2C2C2C</Color>
@@ -63,9 +64,7 @@
 
     <!-- Accent Palette -->
     <Color x:Key="AccentBlue">#88CFF5</Color>
-    <!-- Matches the primary Light Blue -->
-    <Color x:Key="AccentRed">#FF4141</Color>
-    <!-- Matches the secondary Bright Red -->
+
 
     <!-- SolidColorBrushes -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />

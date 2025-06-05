@@ -1,168 +1,161 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.DataForm;assembly=Syncfusion.Maui.DataForm"
-             x:Class="BjjTrainer.Views.Training.UpdateTrainingLogPage"
-             Title="Update Training Log"
-             BackgroundColor="{StaticResource BackgroundColor}">
+			xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			x:Class="BjjTrainer.Views.Training.UpdateTrainingLogPage"
+			Title="Update Training Log"
+			BackgroundColor="{StaticResource BackgroundColor}">
 
-    <ContentPage.Resources>
-        <Color x:Key="CardBackgroundColor">#23272F</Color>
-        <Color x:Key="CardBorderColor">#2D313A</Color>
-        <Color x:Key="CardMainTextColor">#FFFFFF</Color>
-        <Color x:Key="CardSubTextColor">#B0B4BE</Color>
-        <Color x:Key="AccentColor">#4F8EF7</Color>
-        <Color x:Key="AccentRed">#E74C3C</Color>
-        <Color x:Key="AccentGreen">#27AE60</Color>
+	<ContentPage.Resources>
+		<Color x:Key="CardBackgroundColor">#23272F</Color>
+		<Color x:Key="CardBorderColor">#2D313A</Color>
+		<Color x:Key="CardMainTextColor">#FFFFFF</Color>
+		<Color x:Key="CardSubTextColor">#B0B4BE</Color>
+		<Color x:Key="AccentColor">#4F8EF7</Color>
+		<Color x:Key="AccentRed">#E74C3C</Color>
+		<Color x:Key="AccentGreen">#27AE60</Color>
 
-        <Style x:Key="labelRedStyle"
-               TargetType="Entry">
-            <Setter Property="HorizontalOptions" Value="Center" />
-            <Setter Property="VerticalOptions" Value="Center" />
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="TextColor" Value="Red" />
-        </Style>
+		<Style x:Key="labelRedStyle"
+				TargetType="Entry">
+			<Setter Property="HorizontalOptions" Value="Center" />
+			<Setter Property="VerticalOptions" Value="Center" />
+			<Setter Property="FontSize" Value="18" />
+			<Setter Property="TextColor" Value="Red" />
+		</Style>
 
-        <Style x:Key="labelBlueStyle"
-               TargetType="Label">
-            <Setter Property="HorizontalOptions" Value="Center" />
-            <Setter Property="VerticalOptions" Value="Center" />
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="TextColor" Value="Blue" />
-        </Style>
-    </ContentPage.Resources>
+		<Style x:Key="labelBlueStyle"
+				TargetType="Label">
+			<Setter Property="HorizontalOptions" Value="Center" />
+			<Setter Property="VerticalOptions" Value="Center" />
+			<Setter Property="FontSize" Value="18" />
+			<Setter Property="TextColor" Value="Blue" />
+		</Style>
+	</ContentPage.Resources>
 
-    <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="24">
+	<ScrollView>
+		<VerticalStackLayout Padding="24" Spacing="24">
 
-            <!-- Page Title -->
-            <Label Text="Update Training Log"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   TextColor="{StaticResource AccentColor}"
-                   HorizontalOptions="Center"
-                   Margin="0,10,0,0"/>
+			<!-- Page Title -->
+			<Label Text="Update Training Log"
+				FontSize="28"
+				FontAttributes="Bold"
+				TextColor="{StaticResource AccentColor}"
+				HorizontalOptions="Center"
+				Margin="0,10,0,0"/>
 
-            <!-- Card Container for DataForm -->
-            <Frame CornerRadius="16"
-                   Padding="0"
-                   BackgroundColor="{StaticResource CardBackgroundColor}"
-                   BorderColor="{StaticResource CardBorderColor}"
-                   HasShadow="True">
+			<!-- Card Container for Form Fields -->
+			<Frame CornerRadius="16"
+				Padding="0"
+				BackgroundColor="{StaticResource CardBackgroundColor}"
+				BorderColor="{StaticResource CardBorderColor}"
+				HasShadow="True">
 
-                <VerticalStackLayout Padding="24" Spacing="18">
-                    <syncfusion:SfDataForm x:Name="dataForm"
-                                           AutoGenerateItems="False"
-                                           DataObject="{Binding}"
-                                           ValidationMode="LostFocus"
-                                           CommitMode="LostFocus"
-                                           BackgroundColor="Transparent">
+				<VerticalStackLayout Padding="24" Spacing="18">
 
-                        <syncfusion:SfDataForm.Items>
-                            <syncfusion:DataFormDateItem FieldName="Date"
-                                                         LabelText="Training Date"
-                                                         Format="dd, MMMM yyyy"
-                                                         PlaceholderText="Select Date" />
+					<!-- Date Field -->
+					<Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
+						<Image Source="calendar.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+						<DatePicker Grid.Column="1" Date="{Binding Date}" TextColor="{StaticResource CardMainTextColor}" />
+					</Grid>
 
-                            <syncfusion:DataFormTextItem FieldName="TrainingTime"
-                                                         LabelText="Training Time (minutes)"
-                                                         PlaceholderText="Enter minutes"
-                                                         Keyboard="Numeric" />
+					<!-- Training Time Field -->
+					<Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
+						<Image Source="time10.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+						<Entry Grid.Column="1" Text="{Binding TrainingTime}" Keyboard="Numeric" Placeholder="Training Time (minutes)"
+								TextColor="{StaticResource CardMainTextColor}" />
+					</Grid>
 
-                            <syncfusion:DataFormTextItem FieldName="RoundsRolled"
-                                                         LabelText="Rounds Rolled"
-                                                         PlaceholderText="Enter rounds"
-                                                         Keyboard="Numeric" />
+					<!-- Rounds Rolled Field -->
+					<Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
+						<Image Source="rolled.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+						<Entry Grid.Column="1" Text="{Binding RoundsRolled}" Keyboard="Numeric" Placeholder="Rounds Rolled"
+								TextColor="{StaticResource CardMainTextColor}" />
+					</Grid>
 
-                            <syncfusion:DataFormTextItem FieldName="Submissions"
-                                                         LabelText="Submissions"
-                                                         PlaceholderText="Enter submissions"
-                                                         Keyboard="Numeric" />
+					<!-- Submissions Field -->
+					<Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
+						<Image Source="progress.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+						<Entry Grid.Column="1" Text="{Binding Submissions}" Keyboard="Numeric" Placeholder="Submissions"
+								TextColor="{StaticResource CardMainTextColor}" />
+					</Grid>
 
-                            <syncfusion:DataFormTextItem FieldName="Taps"
-                                                         LabelText="Taps"
-                                                         PlaceholderText="Enter taps"
-                                                         Keyboard="Numeric" />
+					<!-- Taps Field -->
+					<Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
+						<Image Source="tap.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+						<Entry Grid.Column="1" Text="{Binding Taps}" Keyboard="Numeric" Placeholder="Taps Received"
+								TextColor="{StaticResource CardMainTextColor}" />
+					</Grid>
 
-                            <syncfusion:DataFormTextItem FieldName="Notes"
-                                                         LabelText="Training Notes"
-                                                         PlaceholderText="Add notes (optional)"
-                                                         MaxLength="500" />
+					<!-- Notes Field -->
+					<Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
+						<Image Source="default_profile.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Start" Margin="0,5,0,0" />
+						<Editor Grid.Column="1" Text="{Binding Notes}" Placeholder="Additional Notes"
+								TextColor="{StaticResource CardMainTextColor}" AutoSize="TextChanges" />
+					</Grid>
 
-                            <syncfusion:DataFormTextItem FieldName="SelfAssessment"
-                                                         LabelText="Self Assessment"
-                                                         PlaceholderText="Your assessment"
-                                                         MaxLength="500" />
-                        </syncfusion:SfDataForm.Items>
-                    </syncfusion:SfDataForm>
-                </VerticalStackLayout>
-            </Frame>
+					<!-- Self Assessment Field -->
+					<Grid ColumnDefinitions="Auto,*">
+						<Image Source="default_profile.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+						<Entry Grid.Column="1" Text="{Binding SelfAssessment}" Keyboard="Text" Placeholder="Self Assessment"
+								TextColor="{StaticResource CardMainTextColor}" />
+					</Grid>
+				</VerticalStackLayout>
+			</Frame>
 
-            <!-- Selected Moves Section -->
-            <Frame CornerRadius="16"
-                   Padding="0"
-                   BackgroundColor="{StaticResource CardBackgroundColor}"
-                   BorderColor="{StaticResource CardBorderColor}"
-                   HasShadow="True">
+			<!-- Moves Selection Section -->
+			<Frame CornerRadius="16"
+				Padding="0"
+				BackgroundColor="{StaticResource CardBackgroundColor}"
+				BorderColor="{StaticResource CardBorderColor}"
+				HasShadow="True">
+				<VerticalStackLayout Padding="24" Spacing="12">
+					<Label Text="Select Moves"
+						FontAttributes="Bold"
+						FontSize="20"
+						TextColor="{StaticResource AccentColor}" />
+					<CollectionView ItemsSource="{Binding Moves}" SelectionMode="Multiple">
+						<CollectionView.ItemsLayout>
+							<GridItemsLayout Orientation="Vertical" Span="2" />
+						</CollectionView.ItemsLayout>
+						<CollectionView.ItemTemplate>
+							<DataTemplate>
+								<Frame CornerRadius="10"
+									BorderColor="{StaticResource CardBorderColor}"
+									BackgroundColor="{StaticResource CardBorderColor}"
+									Padding="10"
+									Margin="5,2">
+									<HorizontalStackLayout>
+										<CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Center" />
+										<VerticalStackLayout>
+											<Label Text="{Binding Name}" FontAttributes="Bold" TextColor="{StaticResource CardMainTextColor}" />
+											<Label Text="{Binding Description}" FontSize="12" TextColor="{StaticResource CardSubTextColor}" />
+										</VerticalStackLayout>
+									</HorizontalStackLayout>
+								</Frame>
+							</DataTemplate>
+						</CollectionView.ItemTemplate>
+					</CollectionView>
+				</VerticalStackLayout>
+			</Frame>
 
-                <VerticalStackLayout Padding="24" Spacing="12">
-                    <HorizontalStackLayout>
-                        <Label Text="Selected Moves"
-                               FontAttributes="Bold"
-                               FontSize="20"
-                               TextColor="{StaticResource AccentColor}"
-                               HorizontalOptions="StartAndExpand" />
-                        <Button Text="Edit Moves"
-                                x:Name="EditMovesButton"
-                                Clicked="OnEditMovesClicked"
-                                BackgroundColor="{StaticResource AccentColor}"
-                                TextColor="White"
-                                FontSize="16"
-                                FontAttributes="Bold"
-                                CornerRadius="16"
-                                HeightRequest="40"
-                                HorizontalOptions="End" />
-                    </HorizontalStackLayout>
-
-                    <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame CornerRadius="10"
-                                       Padding="10"
-                                       BackgroundColor="{StaticResource CardBorderColor}"
-                                       Margin="5,2">
-                                    <Label Text="{Binding Name}"
-                                           FontSize="16"
-                                           TextColor="{StaticResource CardMainTextColor}"
-                                           VerticalOptions="Center" />
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </Frame>
-
-            <!-- Action Buttons -->
-            <HorizontalStackLayout Spacing="16" Margin="0,10,0,0">
-                <Button Text="Back"
-                        Clicked="OnBackButtonClicked"
-                        BackgroundColor="{StaticResource AccentRed}"
-                        TextColor="White"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        CornerRadius="16"
-                        HeightRequest="48"
-                        HorizontalOptions="FillAndExpand" />
-                <Button Text="Save Update"
-                        Clicked="OnUpdateButtonClicked"
-                        BackgroundColor="{StaticResource AccentGreen}"
-                        TextColor="White"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        CornerRadius="16"
-                        HeightRequest="48"
-                        HorizontalOptions="FillAndExpand" />
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+			<!-- Action Buttons -->
+			<HorizontalStackLayout Spacing="16" Margin="0,10,0,0">
+				<Button Text="Back"
+						Clicked="OnBackButtonClicked"
+						BackgroundColor="{StaticResource AccentRed}"
+						TextColor="White"
+						FontSize="18"
+						FontAttributes="Bold"
+						CornerRadius="16"
+						HeightRequest="48" />
+				<Button Text="Save Update"
+						Clicked="OnUpdateButtonClicked"
+						BackgroundColor="{StaticResource AccentGreen}"
+						TextColor="White"
+						FontSize="18"
+						FontAttributes="Bold"
+						CornerRadius="16"
+						HeightRequest="48" />
+			</HorizontalStackLayout>
+		</VerticalStackLayout>
+	</ScrollView>
 </ContentPage>

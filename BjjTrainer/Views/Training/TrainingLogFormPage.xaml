@@ -119,8 +119,7 @@
                         FontSize="18"
                         FontAttributes="Bold"
                         CornerRadius="16"
-                        HeightRequest="48"
-                        HorizontalOptions="FillAndExpand" />
+                        HeightRequest="48" />
                 <Button Text="Submit"
                         Clicked="OnSubmitButtonClicked"
                         BackgroundColor="{StaticResource AccentGreen}"
@@ -128,8 +127,7 @@
                         FontSize="18"
                         FontAttributes="Bold"
                         CornerRadius="16"
-                        HeightRequest="48"
-                        HorizontalOptions="FillAndExpand" />
+                        HeightRequest="48" />
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
