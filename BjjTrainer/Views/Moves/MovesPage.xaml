@@ -12,45 +12,54 @@
     </ContentPage.BindingContext>
 
     <Grid RowDefinitions="Auto,*">
-         <!-- Syncfusion ListView -->
+        <!-- Page Title -->
+        <Label Text="Your Moves"
+               FontSize="28"
+               FontAttributes="Bold"
+               TextColor="{StaticResource AccentColor}"
+               HorizontalOptions="Center"
+               Margin="0,10,0,10"
+               Grid.Row="0">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Your " FontAttributes="Bold" />
+                    <Span Text="Moves" FontAttributes="Bold"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+
+        <!-- Syncfusion ListView -->
         <syncfusion:SfListView x:Name="LogListView"
                                Grid.Row="1"
                                ItemsSource="{Binding Moves}"
                                SelectionMode="Single"
                                AutoFitMode="Height">
-
             <syncfusion:SfListView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="15"
-                           Margin="10"
-                           BorderColor="LightGray"
-                           CornerRadius="8"
-                           HasShadow="True"
-                           BackgroundColor="{StaticResource AccentBlue}">
-
+                    <Frame Padding="16"
+                           Margin="8,4"
+                           CornerRadius="16"
+                           BorderColor="{StaticResource CardBorderColor}"
+                           BackgroundColor="{StaticResource CardBackgroundColor}"
+                           HasShadow="True">
                         <Grid ColumnDefinitions="*,Auto"
-                              RowDefinitions="Auto,Auto,Auto,Auto"
-                              ColumnSpacing="10"
-                              RowSpacing="6">
-
-                            <!-- Title and Date Section -->
-                            <Label Text="Moves"
-                                   FontSize="20"
+                              RowDefinitions="Auto,Auto"
+                              ColumnSpacing="12"
+                              RowSpacing="8">
+                            <!-- Move Name -->
+                            <Label Text="{Binding Name}"
+                                   FontSize="18"
                                    FontAttributes="Bold"
-                                   TextColor="White"
+                                   TextColor="{StaticResource CardMainTextColor}"
                                    Grid.ColumnSpan="2" />
 
-                            <!-- Training Time and Details -->
-                            <Label Text="{Binding Name, StringFormat='Move Name: {0} hrs'}"
-                                   FontSize="14"
-                                   TextColor="White"
-                                   Grid.Row="3" />
-
+                            <!-- Description -->
                             <Label Text="{Binding Description, StringFormat='Description: {0}'}"
                                    FontSize="14"
-                                   TextColor="White"
-                                   Grid.Row="4" />
-
+                                   TextColor="{StaticResource CardSubTextColor}"
+                                   LineBreakMode="WordWrap"
+                                   Grid.Row="1"
+                                   Grid.ColumnSpan="2" />
                         </Grid>
                     </Frame>
                 </DataTemplate>

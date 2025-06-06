@@ -4,53 +4,115 @@
              BackgroundColor="{StaticResource BackgroundColor}">
 
     <ScrollView>
-        <StackLayout Padding="20" Spacing="20">
+        <VerticalStackLayout Padding="24" Spacing="24">
 
-            <Label Text="Coach Management" 
-                   FontSize="24" 
+            <!-- Page Title -->
+            <Label Text="Coach Management"
+                   FontSize="28"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center" />
+                   TextColor="{StaticResource AccentColor}"
+                   HorizontalOptions="Center"
+                   Margin="0,10,0,10">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Coach " FontAttributes="Bold" />
+                        <Span Text="Management" FontAttributes="Bold" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
 
-            <!-- School Information -->
-            <Frame Padding="15" BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="10" HasShadow="True">
-                <StackLayout Spacing="10">
-                    <Label Text="Your School" FontSize="18" FontAttributes="Bold" />
+            <!-- School Information Section -->
+            <Frame CornerRadius="16"
+                   Padding="0"
+                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                   BorderColor="{StaticResource CardBorderColor}"
+                   HasShadow="True">
+                <VerticalStackLayout Padding="24" Spacing="16">
+                    <Label Text="Your School"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AccentColor}" />
 
                     <!-- Display School Name -->
-                    <Label Text="{Binding CoachSchool.Name}" 
+                    <Label Text="{Binding CoachSchool.Name}"
                            FontSize="16"
-                           IsVisible="{Binding HasSchool}" />
+                           TextColor="{StaticResource CardMainTextColor}"
+                           IsVisible="{Binding HasSchool}"
+                           LineBreakMode="WordWrap" />
 
-                    <Label Text="No school assigned." 
-                           FontSize="16" 
-                           TextColor="Gray"
+                    <Label Text="No school assigned."
+                           FontSize="16"
+                           TextColor="{StaticResource CardSubTextColor}"
                            IsVisible="{Binding HasSchool, Converter={StaticResource InverseBooleanConverter}}" />
 
                     <Button Text="Edit School"
-                            BackgroundColor="DodgerBlue"
+                            BackgroundColor="{StaticResource AccentGreen}"
                             TextColor="White"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="48"
+                            WidthRequest="150"
+                            HorizontalOptions="Center"
                             Clicked="OnEditSchoolClicked"
-                            IsVisible="{Binding HasSchool}" />
-                </StackLayout>
+                            IsVisible="{Binding HasSchool}">
+                        <Button.Shadow>
+                            <Shadow Brush="{StaticResource CardBorderColor}"
+                                    Offset="2,2"
+                                    Radius="8"
+                                    Opacity="0.3" />
+                        </Button.Shadow>
+                    </Button>
+                </VerticalStackLayout>
             </Frame>
 
-            <!-- Navigation Buttons for Lessons, Moves, and Events -->
-            <Frame Padding="15" BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="10" HasShadow="True">
-                <StackLayout Spacing="10">
-                    <Label Text="Manage Content" FontSize="18" FontAttributes="Bold" />
+            <!-- Manage Content Section -->
+            <Frame CornerRadius="16"
+                   Padding="0"
+                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                   BorderColor="{StaticResource CardBorderColor}"
+                   HasShadow="True">
+                <VerticalStackLayout Padding="24" Spacing="16">
+                    <Label Text="Manage Content"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AccentColor}" />
 
                     <Button Text="View Students"
-                            BackgroundColor="SteelBlue"
+                            BackgroundColor="{StaticResource AccentGreen}"
                             TextColor="White"
-                            Clicked="OnManageStudentsClicked" />
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="48"
+                            HorizontalOptions="FillAndExpand"
+                            Clicked="OnManageStudentsClicked">
+                        <Button.Shadow>
+                            <Shadow Brush="{StaticResource CardBorderColor}"
+                                    Offset="2,2"
+                                    Radius="8"
+                                    Opacity="0.3" />
+                        </Button.Shadow>
+                    </Button>
 
                     <Button Text="View Events"
-                            BackgroundColor="MediumSeaGreen"
+                            BackgroundColor="{StaticResource AccentGreen}"
                             TextColor="White"
-                            Clicked="OnViewEventsClicked" />
-                </StackLayout>
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="48"
+                            HorizontalOptions="FillAndExpand"
+                            Clicked="OnViewEventsClicked">
+                        <Button.Shadow>
+                            <Shadow Brush="{StaticResource CardBorderColor}"
+                                    Offset="2,2"
+                                    Radius="8"
+                                    Opacity="0.3" />
+                        </Button.Shadow>
+                    </Button>
+                </VerticalStackLayout>
             </Frame>
-
-        </StackLayout>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
