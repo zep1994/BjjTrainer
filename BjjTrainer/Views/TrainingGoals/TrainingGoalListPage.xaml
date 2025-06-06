@@ -6,40 +6,94 @@
              Title="Training Goals">
 
     <ContentPage.Content>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <!-- List of Training Goals -->
-            <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame CornerRadius="10" Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackgroundColor}" BorderColor="{StaticResource BorderColor}">
-                            <VerticalStackLayout>
-                                <Label FontAttributes="Bold" FontSize="18" Text="{Binding Notes}" />
-                                <Label FontSize="14" Text="{Binding GoalDate, StringFormat='Goal Date: {0:yyyy-MM-dd}'}" />
-                                <Button Text="View"
-                                        CommandParameter="{Binding Id}"
-                                        Clicked="OnViewGoalClicked"
-                                        BackgroundColor="Green"
-                                        TextColor="White"
-                                        FontAttributes="Bold" />
-                                <Button Text="Delete"
-                                        CommandParameter="{Binding Id}"
-                                        Clicked="OnDeleteGoalClicked"
-                                        BackgroundColor="Red"
-                                        TextColor="White"
-                                        FontAttributes="Bold" />    
-                            </VerticalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+        <ScrollView>
+            <VerticalStackLayout Padding="24" Spacing="20">
 
+                <!-- Page Title -->
+                <Label Text="Your Training Goals"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource AccentColor}"
+                       HorizontalOptions="Center"
+                       Margin="0,10,0,10">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Your " FontAttributes="Bold" />
+                            <Span Text="Training Goals" FontAttributes="Bold"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
 
-            <!-- Add New Goal Button -->
-            <Button Text="Add New Goal"
-                    BackgroundColor="#007AFF"
-                    TextColor="White"
-                    CornerRadius="8"
-                    Clicked="OnSaveGoalClicked" />
-        </VerticalStackLayout>
+                <!-- List of Training Goals -->
+                <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="16"
+                                   Padding="16"
+                                   Margin="0,4"
+                                   BackgroundColor="{StaticResource CardBackgroundColor}"
+                                   BorderColor="{StaticResource CardBorderColor}"
+                                   HasShadow="True">
+                                <VerticalStackLayout Spacing="12">
+                                    <Label Text="{Binding Notes}"
+                                           FontAttributes="Bold"
+                                           FontSize="18"
+                                           TextColor="{StaticResource CardMainTextColor}"
+                                           LineBreakMode="WordWrap"
+                                           MaxLines="2" />
+                                    <Label Text="{Binding GoalDate, StringFormat='Goal Date: {0:MMMM dd, yyyy}'}"
+                                           FontSize="14"
+                                           TextColor="{StaticResource CardSubTextColor}" />
+                                    <HorizontalStackLayout Spacing="12" HorizontalOptions="End">
+                                        <Button Text="View"
+                                                CommandParameter="{Binding Id}"
+                                                Clicked="OnViewGoalClicked"
+                                                BackgroundColor="{StaticResource AccentGreen}"
+                                                TextColor="White"
+                                                FontSize="16"
+                                                FontAttributes="Bold"
+                                                CornerRadius="12"
+                                                HeightRequest="44"
+                                                WidthRequest="100" />
+                                        <Button Text="Delete"
+                                                CommandParameter="{Binding Id}"
+                                                Clicked="OnDeleteGoalClicked"
+                                                BackgroundColor="{StaticResource AccentRed}"
+                                                TextColor="White"
+                                                FontSize="16"
+                                                FontAttributes="Bold"
+                                                CornerRadius="12"
+                                                HeightRequest="44"
+                                                WidthRequest="100" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Add New Goal Button -->
+                <Button Text="Add New Goal"
+                        BackgroundColor="{StaticResource AccentGreen}"
+                        TextColor="White"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        CornerRadius="16"
+                        HeightRequest="48"
+                        WidthRequest="200"
+                        HorizontalOptions="Center"
+                        Clicked="OnSaveGoalClicked">
+                    <Button.Shadow>
+                        <Shadow Brush="{StaticResource CardBorderColor}"
+                                Offset="2,2"
+                                Radius="8"
+                                Opacity="0.3" />
+                    </Button.Shadow>
+                </Button>
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
