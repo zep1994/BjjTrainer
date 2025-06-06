@@ -24,6 +24,33 @@
                     </Label.FormattedText>
                 </Label>
 
+                <!-- Add New Goal Button (Modern Floating Style) -->
+                <Frame Padding="0"
+                       Margin="0,0,0,10"
+                       HasShadow="True"
+                       BackgroundColor="Transparent"
+                       BorderColor="Transparent"
+                       HorizontalOptions="End">
+                    <Button Text="＋ New Goal"
+                            Clicked="OnSaveGoalClicked"
+                            BackgroundColor="{StaticResource AccentBlue}"
+                            TextColor="White"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            CornerRadius="24"
+                            HeightRequest="56"
+                            WidthRequest="180"
+                            HorizontalOptions="End"
+                            StyleClass="ModernButton">
+                        <Button.Shadow>
+                            <Shadow Brush="{StaticResource AccentBlue}"
+                                    Offset="0,4"
+                                    Radius="16"
+                                    Opacity="0.25" />
+                        </Button.Shadow>
+                    </Button>
+                </Frame>
+
                 <!-- List of Training Goals -->
                 <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
                     <CollectionView.ItemsLayout>
@@ -74,25 +101,6 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-
-                <!-- Add New Goal Button -->
-                <Button Text="Add New Goal"
-                        BackgroundColor="{StaticResource AccentGreen}"
-                        TextColor="White"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        CornerRadius="16"
-                        HeightRequest="48"
-                        WidthRequest="200"
-                        HorizontalOptions="Center"
-                        Clicked="OnSaveGoalClicked">
-                    <Button.Shadow>
-                        <Shadow Brush="{StaticResource CardBorderColor}"
-                                Offset="2,2"
-                                Radius="8"
-                                Opacity="0.3" />
-                    </Button.Shadow>
-                </Button>
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>

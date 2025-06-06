@@ -5,9 +5,10 @@ namespace BjjTrainer.Views.Events;
 
 public partial class CalendarPage : ContentPage
 {
-    private readonly CalendarViewModel _viewModel;
-
-    public CalendarPage() => InitializeComponent();
+    public CalendarPage()
+    {
+        InitializeComponent();
+    }
 
     protected override async void OnAppearing()
     {
@@ -17,17 +18,18 @@ public partial class CalendarPage : ContentPage
         {
             await vm.LoadAppointments();
         }
-        EventScheduler.View = SchedulerView.Month;
+        EventScheduler.View = SchedulerView.Week;
     }
 
     private async void OnSchedulerTapped(object sender, SchedulerTappedEventArgs e)
     {
         if (e.Appointments?.FirstOrDefault() is SchedulerAppointment appointment && appointment.Id != null)
         {
+            Console.WriteLine($"Tapped appointment Id: {appointment.Id}, Type: {appointment.Id.GetType()}");
             int eventId = Convert.ToInt32(appointment.Id);
             Console.WriteLine($"Navigating to ShowEventPage with EventId: {eventId}");
 
-            if (eventId > 0)  // Only navigate if the eventId is valid
+            if (eventId > 0)
             {
                 await Navigation.PushAsync(new ShowEventPage(eventId));
             }
@@ -36,10 +38,7 @@ public partial class CalendarPage : ContentPage
                 Console.WriteLine("Invalid eventId detected. Navigation canceled.");
             }
         }
-        else
-        {
-            await Navigation.PushAsync(new CalendarPage());
-        }
+        // Removed navigation to new CalendarPage to avoid navigation loop
     }
 
     // Navigate to CreateEventPage instead of triggering ShowAppointmentEditor

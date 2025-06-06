@@ -38,15 +38,15 @@ namespace BjjTrainer.ViewModels.Events
 
                     Title = eventDetails.Title;
                     Description = eventDetails.Description;
-                    FormattedDate = eventDetails.StartDate.ToString("MMMM dd, yyyy");
-                    FormattedEndDate = eventDetails.EndDate.ToString("MMMM dd, yyyy");
+                    FormattedDate = eventDetails.StartDate?.ToString("MMMM dd, yyyy") ?? string.Empty;
+                    FormattedEndDate = eventDetails.EndDate?.ToString("MMMM dd, yyyy") ?? string.Empty;
 
-                    FormattedStartTime = TimeSpan.TryParse(eventDetails.StartTime, out var startTime)
-                        ? startTime.ToString(@"hh\:mm")
+                    FormattedStartTime = eventDetails.StartTime.HasValue
+                        ? eventDetails.StartTime.Value.ToString(@"hh\:mm")
                         : "00:00";
 
-                    FormattedEndTime = TimeSpan.TryParse(eventDetails.EndTime, out var endTime)
-                        ? endTime.ToString(@"hh\:mm")
+                    FormattedEndTime = eventDetails.EndTime.HasValue
+                        ? eventDetails.EndTime.Value.ToString(@"hh\:mm")
                         : "00:00";
 
                     OnPropertyChanged(nameof(Title));

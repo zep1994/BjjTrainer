@@ -61,17 +61,25 @@ namespace BjjTrainer.Services.Events
         }
 
         // UPDATE
-        public async Task<bool> UpdateEventAsync(int eventId, CalendarEventDto updatedEvent)
+        public async Task<bool> UpdateEventAsync(int eventId, CalendarEventUpdateDto updatedEvent)
         {
             try
             {
                 AttachAuthorizationHeader();
-                var response = await HttpClient.PutAsJsonAsync($"events/{eventId}", updatedEvent);
+
+                // Log the object as JSON before sending
+                var json = JsonSerializer.Serialize(updatedEvent);
+                Console.WriteLine($"[UpdateEventAsync] Sending JSON for eventId={eventId}: {json}");
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await HttpClient.PutAsync($"calendar/events/{eventId}", content);
+
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                Console.WriteLine(ex.Message);
+                throw;
             }
         }
 
