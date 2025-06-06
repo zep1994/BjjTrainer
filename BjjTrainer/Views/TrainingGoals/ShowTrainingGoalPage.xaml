@@ -7,55 +7,135 @@
 
     <ContentPage.Content>
         <ScrollView>
-            <VerticalStackLayout Padding="20" Spacing="15">
+            <VerticalStackLayout Padding="24" Spacing="24">
+
+                <!-- Page Title -->
                 <Label Text="Training Goal Details"
-                       FontSize="24"
+                       FontSize="28"
                        FontAttributes="Bold"
+                       TextColor="{StaticResource AccentColor}"
                        HorizontalOptions="Center"
-                       TextColor="{StaticResource PrimaryTextColor}" />
+                       Margin="0,10,0,10">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Training " FontAttributes="Bold" />
+                            <Span Text="Goal Details" FontAttributes="Bold" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
 
-                <!-- Goal Date -->
-                <VerticalStackLayout>
-                    <Label Text="Goal Date:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding GoalDate, StringFormat='{0:yyyy-MM-dd}'}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
-                </VerticalStackLayout>
+                <!-- Card Container for Goal Details -->
+                <Frame CornerRadius="16"
+                       Padding="0"
+                       BackgroundColor="{StaticResource CardBackgroundColor}"
+                       BorderColor="{StaticResource CardBorderColor}"
+                       HasShadow="True">
+                    <VerticalStackLayout Padding="24" Spacing="18">
 
-                <!-- Notes -->
-                <VerticalStackLayout>
-                    <Label Text="Notes:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <Label Text="{Binding Notes}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}" />
-                </VerticalStackLayout>
+                        <!-- Goal Date -->
+                        <Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
+                            <Image Source="calendar.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Goal Date"
+                                       FontAttributes="Bold"
+                                       FontSize="14"
+                                       TextColor="{StaticResource CardMainTextColor}" />
+                                <Label Text="{Binding GoalDate, StringFormat='{0:MMMM dd, yyyy}'}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource CardSubTextColor}" />
+                            </VerticalStackLayout>
+                        </Grid>
 
-                <!-- Moves -->
-                <VerticalStackLayout>
-                    <Label Text="Moves Practiced:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                    <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource PrimaryTextColor}" />
-                                    <Label Text="{Binding Description}" FontSize="12" TextColor="Gray" />
-                                </VerticalStackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
+                        <!-- Notes -->
+                        <Grid ColumnDefinitions="Auto,*" Padding="0,0,0,8">
+                            <Image Source="notes.png" WidthRequest="24" HeightRequest="24" VerticalOptions="Start" Margin="0,5,0,0" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Notes"
+                                       FontAttributes="Bold"
+                                       FontSize="14"
+                                       TextColor="{StaticResource CardMainTextColor}" />
+                                <Label Text="{Binding Notes}"
+                                       FontSize="16"
+                                       TextColor="{StaticResource CardSubTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Moves Section -->
+                <Frame CornerRadius="16"
+                       Padding="0"
+                       BackgroundColor="{StaticResource CardBackgroundColor}"
+                       BorderColor="{StaticResource CardBorderColor}"
+                       HasShadow="True">
+                    <VerticalStackLayout Padding="24" Spacing="12">
+                        <Label Text="Moves Practiced"
+                               FontAttributes="Bold"
+                               FontSize="20"
+                               TextColor="{StaticResource AccentColor}" />
+                        <CollectionView ItemsSource="{Binding Moves}" SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame CornerRadius="10"
+                                           Padding="12"
+                                           Margin="0,4"
+                                           BackgroundColor="{StaticResource CardBackgroundColor}"
+                                           BorderColor="{StaticResource CardBorderColor}">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="{Binding Name}"
+                                                   FontAttributes="Bold"
+                                                   FontSize="16"
+                                                   TextColor="{StaticResource CardMainTextColor}" />
+                                            <Label Text="{Binding Description}"
+                                                   FontSize="14"
+                                                   TextColor="{StaticResource CardSubTextColor}"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
 
                 <!-- Navigation Buttons -->
-                <HorizontalStackLayout Spacing="10">
-                    <!-- Back Button -->
+                <HorizontalStackLayout Spacing="16" HorizontalOptions="Center" Margin="0,10,0,0">
                     <Button Text="Back"
                             Clicked="OnBackButtonClicked"
-                            BackgroundColor="Gray"
+                            BackgroundColor="{StaticResource AccentRed}"
                             TextColor="White"
-                            FontAttributes="Bold" />
-
-                    <!-- Update Button -->
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            CornerRadius="16"
+                            HeightRequest="48"
+                            WidthRequest="150">
+                        <Button.Shadow>
+                            <Shadow Brush="{StaticResource CardBorderColor}"
+                                    Offset="2,2"
+                                    Radius="8"
+                                    Opacity="0.3" />
+                        </Button.Shadow>
+                    </Button>
                     <Button Text="Update"
                             Clicked="OnUpdateButtonClicked"
-                            BackgroundColor="Blue"
+                            BackgroundColor="{StaticResource AccentGreen}"
                             TextColor="White"
-                            FontAttributes="Bold" />
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            CornerRadius="16"
+                            HeightRequest="48"
+                            WidthRequest="150">
+                        <Button.Shadow>
+                            <Shadow Brush="{StaticResource CardBorderColor}"
+                                    Offset="2,2"
+                                    Radius="8"
+                                    Opacity="0.3" />
+                        </Button.Shadow>
+                    </Button>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </ScrollView>
