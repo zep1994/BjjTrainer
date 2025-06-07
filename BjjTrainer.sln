@@ -12,6 +12,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "bjjtrainer-client", "bjjtrainer-client\", "{19DFAF7A-7192-2DA5-2D16-533247A53EE7}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_63198"
+		Debug.AspNetCompiler.PhysicalPath = "bjjtrainer-client\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63198\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_63198"
+		Release.AspNetCompiler.PhysicalPath = "bjjtrainer-client\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63198\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "63198"
+		SlnRelativePath = "bjjtrainer-client\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +49,10 @@ Global
 		{101081C2-C93F-4916-BE19-E4D7C9E4B1D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{101081C2-C93F-4916-BE19-E4D7C9E4B1D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{101081C2-C93F-4916-BE19-E4D7C9E4B1D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19DFAF7A-7192-2DA5-2D16-533247A53EE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19DFAF7A-7192-2DA5-2D16-533247A53EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19DFAF7A-7192-2DA5-2D16-533247A53EE7}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{19DFAF7A-7192-2DA5-2D16-533247A53EE7}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

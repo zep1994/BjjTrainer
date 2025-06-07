@@ -272,5 +272,13 @@ namespace BjjTrainer_API.Services_API.Calendars
 
             await _context.SaveChangesAsync();
         }
+
+        // ******************************** GET UPCOMING EVENTS COUNT ****************************************
+        public async Task<int> GetUpcomingEventsCountAsync(int schoolId, DateTime start, DateTime end)
+        {
+            return await _context.CalendarEvents
+                .Where(e => e.SchoolId == schoolId && e.StartDate >= start && e.StartDate < end)
+                .CountAsync();
+        }
     }
 }

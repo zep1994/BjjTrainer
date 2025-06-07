@@ -122,5 +122,12 @@ namespace BjjTrainer_API.Controllers.Users
             var users = await _userService.GetUsersBySchoolAsync(schoolId);
             return Ok(users);
         }
+
+        [HttpGet("school/{schoolId}/students")]
+        public async Task<IActionResult> GetStudentsBySchool(int schoolId)
+        {
+            var students = await _userService.GetUsersBySchoolAsync(schoolId);
+            return Ok(students);
+        }
     }
 }

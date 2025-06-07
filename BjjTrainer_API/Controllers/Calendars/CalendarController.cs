@@ -3,6 +3,7 @@ using BjjTrainer_API.Models.DTO.Calendars;
 using BjjTrainer_API.Services_API.Calendars;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Controllers.Calendar
 {
@@ -169,6 +170,18 @@ namespace BjjTrainer_API.Controllers.Calendar
             {
                 return BadRequest(new { Message = ex.Message });
             }
+        }
+
+        // ******************************** GET UPCOMING EVENTS COUNT ****************************************
+        [HttpGet("school/{schoolId}/upcoming-events-count")]
+        public async Task<IActionResult> GetUpcomingEventsCount(int schoolId)
+        {
+            var today = DateTime.UtcNow.Date;
+            var todayMin = today.AddDays(-150);
+            var weekFromNow = today.AddDays(7);
+
+            var count = await _calendarService.GetUpcomingEventsCountAsync(schoolId, todayMin, weekFromNow);
+            return Ok(new { count });
         }
     }
 }
