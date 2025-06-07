@@ -2,13 +2,10 @@
 
 namespace BjjTrainer.Models.DTO.Events
 {
-    public class CalendarEventDto
+    public class CalendarEventUpdateDto
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
-
-        [JsonPropertyName("applicationUserId")]
-        public string? ApplicationUserId { get; set; }
 
         [JsonPropertyName("title")]
         public string? Title { get; set; }
@@ -29,7 +26,7 @@ namespace BjjTrainer.Models.DTO.Events
         public TimeSpan? EndTime { get; set; }
 
         [JsonPropertyName("isAllDay")]
-        public bool IsAllDay { get; set; }
+        public bool? IsAllDay { get; set; }
 
         [JsonPropertyName("schoolId")]
         public int? SchoolId { get; set; }

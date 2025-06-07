@@ -12,7 +12,7 @@
                         AppointmentsSource="{Binding Appointments}"
                         Tapped="OnSchedulerTapped"
                         ShowWeekNumber="True"
-                        AllowedViews="Month"
+                        AllowedViews="Month,Week"
                         TodayHighlightBrush="{StaticResource ChartGradientStart}"
                         AppointmentDrop="OnAppointmentDrop" />
 

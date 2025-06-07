@@ -43,8 +43,8 @@ namespace BjjTrainer.ViewModels.Events
             }
         }
 
-        public ObservableCollection<Move> AvailableMoves { get; set; } = [];
-        public ObservableCollection<Move> SelectedMoves { get; set; } = [];
+        public ObservableCollection<Move> AvailableMoves { get; set; } = new();
+        public ObservableCollection<Move> SelectedMoves { get; set; } = new();
 
         public CreateEventViewModel()
         {
@@ -77,39 +77,27 @@ namespace BjjTrainer.ViewModels.Events
             }
         }
 
-        public async Task<bool> SaveEventAsync()
+        public async Task<bool> SaveEventAsync(CalendarEventCreateDTO dto)
         {
-            IsBusy = true;
+            // Ensure required fields are set
+            if (string.IsNullOrWhiteSpace(dto.Title) || dto.StartDate == default || dto.EndDate == default)
+                return false;
 
+            // Set ApplicationUserId from preferences
+            dto.ApplicationUserId = Preferences.Get("UserId", string.Empty);
+
+            // Defensive: Ensure MoveIds is not null
+            dto.MoveIds ??= new List<int>();
+
+            // Call the API
             try
             {
-                var selectedMoveIds = AvailableMoves
-                    .Where(m => m.IsSelected)  // Filter selected moves
-                    .Select(m => m.Id)
-                    .ToList();
-
-                var newEvent = new CalendarEventCreateDTO
-                {
-                    Title = Title ?? string.Empty,
-                    Description = Description ?? string.Empty,
-                    StartDate = StartDate,
-                    StartTime = StartTime,
-                    EndDate = EndDate < StartDate ? StartDate : EndDate,
-                    EndTime = EndTime,
-                    IncludeTrainingLog = IncludeTrainingLog,
-                    MoveIds = selectedMoveIds  
-                };
-
-                return await _eventService.CreateEventAsync(newEvent);
+                return await _eventService.CreateEventAsync(dto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving event: {ex.Message}");
                 return false;
-            }
-            finally
-            {
-                IsBusy = false;
             }
         }
     }

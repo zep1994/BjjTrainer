@@ -4,50 +4,118 @@
              Title="Event Details"
              BackgroundColor="{StaticResource BackgroundColor}">
 
-    <ContentPage.Content>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <Label Text="{Binding Title}" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
-            <StackLayout Padding="20">
-                <Label Text="Event Title" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Label Text="{Binding Title}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Large"/>
+    <ContentPage.Resources>
+        <Style x:Key="LabelCaptionStyle" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+        <Style x:Key="LabelValueStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="TextColor" Value="{StaticResource CardMainTextColor}"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+    </ContentPage.Resources>
 
-                <Label Text="Description" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Label Text="{Binding Description}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="24">
+            <!-- Accent Bar and Title -->
+            <Grid>
+                <BoxView HeightRequest="48"
+                         WidthRequest="6"
+                         VerticalOptions="Center"
+                         HorizontalOptions="Start"
+                         Color="{StaticResource AccentColor}"
+                         CornerRadius="3"/>
+                <Label Text="{Binding Title}"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource PrimaryTextColor}"
+                       Margin="16,0,0,0"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"/>
+            </Grid>
 
-                <Label Text="Start Date" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Label Text="{Binding FormattedDate}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Small"/>
+            <!-- Modern Date/Time Card -->
+            <Frame BackgroundColor="{StaticResource CardBackgroundColor}"
+                   CornerRadius="16"
+                   HasShadow="True"
+                   Padding="0"
+                   Margin="0,0,0,0"
+                   BorderColor="{StaticResource AccentColor}">
+                <Grid ColumnSpacing="0" RowSpacing="0" HeightRequest="110">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="180"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Date Block -->
+                    <VerticalStackLayout Grid.Column="0"
+                                         BackgroundColor="{StaticResource AccentColor}"
+                                         Padding="25,25"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center"
+                                         Spacing="0">
+                        <Label Text="{Binding FormattedDate, StringFormat='{0:MMM dd}'}"
+                               FontSize="26"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               Margin="0,2,0,0"/>
+                    </VerticalStackLayout>
+                    <!-- Time Block -->
+                    <Grid Grid.Column="1" Padding="18,0,18,0" VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                            <Label Text="Start" FontSize="12" TextColor="{StaticResource CardMainTextColor}" />
+                            <Label Text="{Binding FormattedStartTime}" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                            <Label Text="End" FontSize="12" TextColor="{StaticResource CardMainTextColor}" />
+                            <Label Text="{Binding FormattedEndTime}" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Grid>
+            </Frame>
 
-                <Label Text="End Date" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Label Text="{Binding FormattedEndDate}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Small"/>
-
-                <Label Text="Start Time" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Label Text="{Binding FormattedStartTime}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Small"/>
-
-                <Label Text="End Time" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Label Text="{Binding FormattedEndTime}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Small"/>
-
-
-                <VerticalStackLayout>
-                    <!-- Button to View Training Log -->
-                    <!--<Button Text="View Training Log"
-                            IsVisible="{Binding HasTrainingLog}"  
-                            Clicked="OnShowTrainingLogClicked"
-                            BackgroundColor="DodgerBlue"
-                            TextColor="White"
-                            Margin="0,20,0,10"/>-->     
-                    <Button Text="Update Event"
-                            Clicked="OnUpdateButtonClicked"
-                            BackgroundColor="DodgerBlue"
-                            TextColor="White"
-                            Margin="0,20,0,10"/>
-                    <Button Text="Back"
-                            Clicked="OnBackButtonClicked"
-                            BackgroundColor="DodgerBlue"
-                            TextColor="White"
-                            Margin="0,20,0,10"/>
+            <!-- Description -->
+            <Frame BackgroundColor="{StaticResource CardBackgroundColor}"
+                   CornerRadius="16"
+                   HasShadow="False"
+                   Padding="18,12"
+                   Margin="0,0,0,0"
+                   BorderColor="{StaticResource AccentColor}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Description:" Style="{StaticResource LabelCaptionStyle}" />
+                    <Label Text="{Binding Description}" 
+                           FontSize="16"
+                           TextColor="{StaticResource CardMainTextColor}"
+                           LineBreakMode="WordWrap"/>
                 </VerticalStackLayout>
+            </Frame>
 
-            </StackLayout>
+            <!-- Event Title (if you want to show it again, otherwise remove this) -->
+            <!--<Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />-->
+
+            <HorizontalStackLayout Spacing="18" HorizontalOptions="Center" Margin="0,12,0,0">
+                <Button Text="Update Event"
+                        Clicked="OnUpdateButtonClicked"
+                        BackgroundColor="{StaticResource AccentColor}"
+                        WidthRequest="150"
+                        CornerRadius="12"
+                        TextColor="White"
+                        FontAttributes="Bold"/>
+                <Button Text="Back"
+                        Clicked="OnBackButtonClicked"
+                        BackgroundColor="{StaticResource SecondaryButtonColor}"
+                        WidthRequest="150"
+                        CornerRadius="12"
+                        TextColor="White"
+                        FontAttributes="Bold"/>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
-    </ContentPage.Content>
+    </ScrollView>
 </ContentPage>

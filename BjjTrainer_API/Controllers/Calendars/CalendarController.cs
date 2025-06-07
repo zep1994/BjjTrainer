@@ -96,18 +96,8 @@ namespace BjjTrainer_API.Controllers.Calendar
                 return BadRequest(ModelState);
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized(new { Message = "User is not authorized." });
-
-            try
-            {
-                await _calendarService.UpdateEventAsync(eventId, model, userId);
-                return Ok(new { Message = "Event updated successfully." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = ex.Message });
-            }
+            await _calendarService.UpdateEventAsync(eventId, model, userId);
+            return Ok(new { Message = "Event updated successfully." });
         }
 
         // ******************************** DELETE EVENT ****************************************

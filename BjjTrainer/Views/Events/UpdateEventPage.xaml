@@ -4,33 +4,94 @@
              Title="Update Event"
              BackgroundColor="{StaticResource BackgroundColor}">
 
-    <ContentPage.Content>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <Label Text="Update Event" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+    <ContentPage.Resources>
+        <Style x:Key="FormLabelStyle" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}"/>
+            <Setter Property="Margin" Value="0,8,0,2"/>
+        </Style>
+        <Style x:Key="FormEntryStyle" TargetType="Entry">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="TextColor" Value="{StaticResource CardMainTextColor}"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="HeightRequest" Value="38"/>
+        </Style>
+        <Style x:Key="FormEditorStyle" TargetType="Editor">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="TextColor" Value="{StaticResource CardMainTextColor}"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="AutoSize" Value="TextChanges"/>
+            <Setter Property="HeightRequest" Value="80"/>
+        </Style>
+    </ContentPage.Resources>
 
-            <StackLayout Padding="20">
-                <Label Text="Title" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Entry Text="{Binding Title}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="24">
+            <!-- Accent Bar and Title -->
+            <Grid>
+                <BoxView HeightRequest="48"
+                         WidthRequest="6"
+                         VerticalOptions="Center"
+                         HorizontalOptions="Start"
+                         Color="{StaticResource AccentColor}"
+                         CornerRadius="3"/>
+                <Label Text="Update Event"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource PrimaryTextColor}"
+                       Margin="16,0,0,0"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"/>
+            </Grid>
 
-                <Label Text="Description" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <Editor Text="{Binding Description}" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
+            <!-- Form Card -->
+            <Frame BackgroundColor="{StaticResource CardBackgroundColor}"
+                   CornerRadius="16"
+                   HasShadow="True"
+                   Padding="20"
+                   Margin="0,0,0,0"
+                   BorderColor="{StaticResource AccentColor}">
+                <VerticalStackLayout Spacing="0">
+                    <Label Text="Title" Style="{StaticResource FormLabelStyle}" />
+                    <Entry Text="{Binding Title}" Style="{StaticResource FormEntryStyle}" />
 
-                <Label Text="Start Date" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <DatePicker Date="{Binding StartDate}" TextColor="{StaticResource PrimaryTextColor}"/>
+                    <Label Text="Description" Style="{StaticResource FormLabelStyle}" />
+                    <Editor Text="{Binding Description}" Style="{StaticResource FormEditorStyle}" />
 
-                <Label Text="End Date" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <DatePicker Date="{Binding EndDate}" TextColor="{StaticResource PrimaryTextColor}"/>
+                    <Label Text="Start Date" Style="{StaticResource FormLabelStyle}" />
+                    <DatePicker Date="{Binding StartDate}" TextColor="{StaticResource PrimaryTextColor}" Margin="0,0,0,8"/>
 
-                <Label Text="Start Time" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <TimePicker Time="{Binding StartTime}" />
+                    <Label Text="End Date" Style="{StaticResource FormLabelStyle}" />
+                    <DatePicker Date="{Binding EndDate}" TextColor="{StaticResource PrimaryTextColor}" Margin="0,0,0,8"/>
 
-                <Label Text="End Time" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium"/>
-                <TimePicker Time="{Binding EndTime}" TextColor="{StaticResource PrimaryTextColor}"/>
+                    <Label Text="Start Time" Style="{StaticResource FormLabelStyle}"/>
+                    <TimePicker Time="{Binding StartTime}" Margin="0,0,0,8" TextColor="{StaticResource PrimaryTextColor}"/>
 
-                <Button Text="Back To Calendar" Clicked="OnCalendarBackClicked" />
-                <Button Text="Save" Clicked="OnSaveEventClicked" />
-            </StackLayout>
+                    <Label Text="End Time" Style="{StaticResource FormLabelStyle}" />
+                    <TimePicker Time="{Binding EndTime}" TextColor="{StaticResource PrimaryTextColor}" Margin="0,0,0,8"/>
+                </VerticalStackLayout>
+            </Frame>
 
+            <!-- Action Buttons -->
+            <HorizontalStackLayout Spacing="18" HorizontalOptions="Center" Margin="0,12,0,0">
+                <Button Text="Back To Calendar"
+                        Clicked="OnCalendarBackClicked"
+                        BackgroundColor="{StaticResource SecondaryButtonColor}"
+                        WidthRequest="150"
+                        CornerRadius="12"
+                        TextColor="White"
+                        FontAttributes="Bold"/>
+                <Button Text="Save"
+                        Clicked="OnSaveEventClicked"
+                        BackgroundColor="{StaticResource AccentColor}"
+                        WidthRequest="150"
+                        CornerRadius="12"
+                        TextColor="White"
+                        FontAttributes="Bold"/>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
-    </ContentPage.Content>
+    </ScrollView>
 </ContentPage>

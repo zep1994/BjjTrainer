@@ -59,6 +59,15 @@ namespace BjjTrainer_API.Services_API.Calendars
             _context.CalendarEvents.Add(calendarEvent);
             await _context.SaveChangesAsync();
 
+            // Automatically add the creator to CalendarEventUsers
+            var eventUser = new CalendarEventUser
+            {
+                CalendarEventId = calendarEvent.Id,
+                UserId = userId
+            };
+            _context.CalendarEventUsers.Add(eventUser);
+            await _context.SaveChangesAsync();
+
             if (dto.IncludeTrainingLog)
             {
                 var trainingLog = new TrainingLog
@@ -92,7 +101,6 @@ namespace BjjTrainer_API.Services_API.Calendars
             return calendarEvent;
         }
 
-        // ******************************** UPDATE EVENT (BASIC) ****************************************
         public async Task UpdateEventAsync(int eventId, CalendarEvent model, string userId)
         {
             var user = await _context.ApplicationUsers
@@ -101,27 +109,24 @@ namespace BjjTrainer_API.Services_API.Calendars
             var calendarEvent = await _context.CalendarEvents
                 .FirstOrDefaultAsync(e => e.Id == eventId) ?? throw new Exception("Event not found.");
 
-            // Restrict students from updating school-wide events
             if (user.Role == UserRole.Student && calendarEvent.SchoolId != null)
             {
                 throw new Exception("Students can only update their personal events.");
             }
 
-            // Allow coaches to update events within their school
             if (user.Role == UserRole.Coach && calendarEvent.SchoolId != user.SchoolId)
             {
                 throw new Exception("You can only update events for your school.");
             }
 
-            // Update event details
             calendarEvent.Title = model.Title;
             calendarEvent.Description = model.Description;
             calendarEvent.StartDate = model.StartDate;
-            calendarEvent.StartTime = model.StartTime;
+            calendarEvent.StartTime = model.StartTime != null && TimeSpan.TryParse(model.StartTime.ToString(), out var st) ? st : null;
             calendarEvent.EndDate = model.EndDate;
-            calendarEvent.EndTime = model.EndTime;
+            calendarEvent.EndTime = model.EndTime != null && TimeSpan.TryParse(model.EndTime.ToString(), out var et) ? et : null;
             calendarEvent.IsAllDay = model.IsAllDay;
-
+            calendarEvent.SchoolId = model.SchoolId;
             await _context.SaveChangesAsync();
         }
 
