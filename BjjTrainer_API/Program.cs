@@ -36,6 +36,7 @@ builder.Services.AddScoped<TrainingService>();
 builder.Services.AddScoped<TrainingGoalService>();
 builder.Services.AddScoped<CalendarService>();
 builder.Services.AddScoped<SchoolService>();
+builder.Services.AddScoped<UserProgressService>();
 builder.Services.AddScoped<CoachService>();
 
 
@@ -70,18 +71,30 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowNextJs",
+        policy => policy
+            .WithOrigins("http://localhost:3000", "http://localhost:3001")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-// Other middleware and app configuration
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 
-//app.UseHttpsRedirection();
+// Enable CORS for Next.js
+app.UseCors("AllowNextJs");
+
 app.UseAuthentication();
-app.UseAuthorization(); 
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

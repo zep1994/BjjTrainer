@@ -61,6 +61,9 @@ namespace BjjTrainer_API.Migrations
                     b.Property<bool>("IncludeTrainingLog")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("InstructorId")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsAllDay")
                         .HasColumnType("boolean")
                         .HasAnnotation("Relational:JsonPropertyName", "isAllDay");
@@ -86,6 +89,8 @@ namespace BjjTrainer_API.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InstructorId");
 
                     b.HasIndex("SchoolId");
 
@@ -392,6 +397,34 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("Moves");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Schools.School", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Schools");
+                });
+
             modelBuilder.Entity("BjjTrainer_API.Models.Trainings.TrainingLog", b =>
                 {
                     b.Property<int>("Id")
@@ -582,34 +615,6 @@ namespace BjjTrainer_API.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("BjjTrainer_API.Models.Users.School", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Schools");
-                });
-
             modelBuilder.Entity("ApplicationUserLessonJoin", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", null)
@@ -627,13 +632,19 @@ namespace BjjTrainer_API.Migrations
 
             modelBuilder.Entity("BjjTrainer_API.Models.Calendars.CalendarEvent", b =>
                 {
-                    b.HasOne("BjjTrainer_API.Models.Users.School", "School")
+                    b.HasOne("BjjTrainer_API.Models.Users.ApplicationUser", "Instructor")
+                        .WithMany()
+                        .HasForeignKey("InstructorId");
+
+                    b.HasOne("BjjTrainer_API.Models.Schools.School", "School")
                         .WithMany()
                         .HasForeignKey("SchoolId");
 
                     b.HasOne("BjjTrainer_API.Models.Trainings.TrainingLog", "TrainingLog")
                         .WithOne("CalendarEvent")
                         .HasForeignKey("BjjTrainer_API.Models.Calendars.CalendarEvent", "TrainingLogId");
+
+                    b.Navigation("Instructor");
 
                     b.Navigation("School");
 
@@ -794,7 +805,7 @@ namespace BjjTrainer_API.Migrations
 
             modelBuilder.Entity("BjjTrainer_API.Models.Users.ApplicationUser", b =>
                 {
-                    b.HasOne("BjjTrainer_API.Models.Users.School", "School")
+                    b.HasOne("BjjTrainer_API.Models.Schools.School", "School")
                         .WithMany("Users")
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -849,6 +860,11 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("UserTrainingGoalMoves");
                 });
 
+            modelBuilder.Entity("BjjTrainer_API.Models.Schools.School", b =>
+                {
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("BjjTrainer_API.Models.Trainings.TrainingLog", b =>
                 {
                     b.Navigation("CalendarEvent");
@@ -865,11 +881,6 @@ namespace BjjTrainer_API.Migrations
                     b.Navigation("TrainingGoals");
 
                     b.Navigation("TrainingLogs");
-                });
-
-            modelBuilder.Entity("BjjTrainer_API.Models.Users.School", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,7 +13,8 @@ namespace BjjTrainer_API.Models.Users
     {
         Student,
         Coach,
-        Head_Coach,
+        Instructor,
+        Owner,
         Admin
     }
 

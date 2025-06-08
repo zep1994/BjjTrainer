@@ -30,7 +30,8 @@ namespace BjjTrainer_API.Services_API.Calendars
                     StartTime = e.StartTime,
                     EndDate = e.EndDate,
                     EndTime = e.EndTime,
-                    TrainingLogId = e.TrainingLogId
+                    TrainingLogId = e.TrainingLogId,
+                    InstructorId = e.InstructorId 
                 })
                 .FirstOrDefaultAsync();
 
@@ -127,6 +128,7 @@ namespace BjjTrainer_API.Services_API.Calendars
             calendarEvent.EndTime = model.EndTime != null && TimeSpan.TryParse(model.EndTime.ToString(), out var et) ? et : null;
             calendarEvent.IsAllDay = model.IsAllDay;
             calendarEvent.SchoolId = model.SchoolId;
+            calendarEvent.InstructorId = model.InstructorId;
             await _context.SaveChangesAsync();
         }
 
@@ -199,9 +201,18 @@ namespace BjjTrainer_API.Services_API.Calendars
 
         public async Task<List<CalendarEvent>> GetEventsForUserAsync(string userId)
         {
-            var events = await _context.CalendarEventUsers
-                .Where(eu => eu.UserId == userId)
-                .Select(eu => eu.CalendarEvent)
+            var user = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                throw new Exception("User not found.");
+
+            var userSchoolId = user.SchoolId;
+
+            // Events the user is directly attached to, or events for their school
+            var events = await _context.CalendarEvents
+                .Where(e =>
+                    e.CalendarEventUsers.Any(eu => eu.UserId == userId) ||
+                    (userSchoolId != null && e.SchoolId == userSchoolId)
+                )
                 .ToListAsync();
 
             return events;
@@ -271,6 +282,14 @@ namespace BjjTrainer_API.Services_API.Calendars
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        // ******************************** GET UPCOMING EVENTS COUNT ****************************************
+        public async Task<int> GetUpcomingEventsCountAsync(int schoolId, DateTime start, DateTime end)
+        {
+            return await _context.CalendarEvents
+                .Where(e => e.SchoolId == schoolId && e.StartDate >= start && e.StartDate < end)
+                .CountAsync();
         }
     }
 }

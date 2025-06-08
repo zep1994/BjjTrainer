@@ -1,4 +1,6 @@
-﻿using BjjTrainer.Services.Events;
+﻿using BjjTrainer.Models.DTO.TrainingLog;
+using BjjTrainer.Services.Events;
+using BjjTrainer.Services.Trainings;
 using MvvmHelpers;
 
 namespace BjjTrainer.ViewModels.Events
@@ -16,6 +18,7 @@ namespace BjjTrainer.ViewModels.Events
         public string FormattedStartTime { get; set; }
         public string FormattedEndTime { get; set; }
         public string TrainingLogId { get; set; }
+        public TrainingLogDto? StudentTrainingLog { get; set; }
 
         public bool IsAllDay { get; set; }
 
@@ -65,6 +68,33 @@ namespace BjjTrainer.ViewModels.Events
             {
                 Console.WriteLine($"Error loading event details: {ex.Message}");
             }
+        }
+
+        public async Task<bool> CheckInToEventAsync()
+        {
+            try
+            {
+                var success = await _eventService.CheckInToEventAsync(EventId);
+                return success;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> CheckInAndLoadLogAsync()
+        {
+            var logId = await _eventService.CheckInToEventAsync(EventId);
+            if (logId)
+            {
+                // Fetch the log details
+                var trainingService = new TrainingService();
+                StudentTrainingLog = await trainingService.GetTrainingLogByIdAsync(EventId); // Assuming EventId is used to fetch the log
+                OnPropertyChanged(nameof(StudentTrainingLog));
+                return true;
+            }
+            return false;
         }
     }
 }

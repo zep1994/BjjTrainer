@@ -1,5 +1,5 @@
 ﻿using BjjTrainer_API.Models.DTO.UserDtos;
-using BjjTrainer_API.Services_API.Trainings;
+using BjjTrainer_API.Services_API.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BjjTrainer_API.Controllers.Users
@@ -8,11 +8,11 @@ namespace BjjTrainer_API.Controllers.Users
     [Route("api/[controller]")]
     public class UserProgressController : ControllerBase
     {
-        private readonly TrainingService _trainingService;
+        private readonly UserProgressService _userProgressService;
 
-        public UserProgressController(TrainingService trainingService)
+        public UserProgressController(UserProgressService userProgressService)
         {
-            _trainingService = trainingService;
+            _userProgressService = userProgressService;
         }
 
         [HttpGet("{userId}/progress")]
@@ -20,7 +20,7 @@ namespace BjjTrainer_API.Controllers.Users
         {
             try
             {
-                var progress = await _trainingService.GetUserProgressAsync(userId);
+                var progress = await _userProgressService.GetUserProgressAsync(userId);
                 return Ok(progress);
             }
             catch (Exception ex)

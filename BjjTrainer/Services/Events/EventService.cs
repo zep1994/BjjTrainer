@@ -1,6 +1,4 @@
 ﻿using BjjTrainer.Models.DTO.Events;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -135,6 +133,16 @@ namespace BjjTrainer.Services.Events
             {
                 throw new Exception($"Failed to retrieve events: {ex.Message}");
             }
+        }
+
+        // CHECK-IN TO EVENT
+        public async Task<bool> CheckInToEventAsync(int eventId)
+        {
+            AttachAuthorizationHeader();
+            var response = await HttpClient.PostAsync(
+                $"Calendar/events/{eventId}/checkin", null);
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace BjjTrainer_API.Controllers.Users
             {
                 UserName = model.Username,
                 Email = model.Email,
-                SchoolId = model.SchoolId,
+                SchoolId = model.SchoolId > 0 ? model.SchoolId : null,
                 Role = model.Role
             };
 
@@ -52,7 +52,7 @@ namespace BjjTrainer_API.Controllers.Users
             }
 
             // Enroll the user in school events if a SchoolId is provided
-            if (model.SchoolId != null)
+            if (model.SchoolId != null && model.SchoolId > 0)
             {
                 await _userService.EnrollUserInSchoolEvents(user.Id, model.SchoolId.Value);
             }

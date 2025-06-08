@@ -10,7 +10,7 @@
         public TimeSpan EndTime { get; set; }
         public string ApplicationUserId { get; set; }
         public bool IsAllDay { get; set; }
-        public int? SchoolId { get; set; }
+        public int? SchoolId { get; set; } = null;
         public bool IncludeTrainingLog { get; set; } = false;
 
         public List<int> MoveIds { get; set; } = [];
