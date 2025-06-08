@@ -23,4 +23,16 @@ public partial class ShowEventPage : ContentPage
     {
         await Navigation.PushAsync(new UpdateEventPage(_viewModel.EventId));
     }
+
+    private async void OnCheckInButtonClicked(object sender, EventArgs e)
+    {
+        if (await _viewModel.CheckInToEventAsync())
+        {
+            await Application.Current.MainPage.DisplayAlert("Success", "Check-in successful!", "OK");
+        }
+        else
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", "Check-in failed.", "OK");
+        }
+    }
 }

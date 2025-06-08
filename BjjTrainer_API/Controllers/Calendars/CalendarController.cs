@@ -3,7 +3,6 @@ using BjjTrainer_API.Models.DTO.Calendars;
 using BjjTrainer_API.Services_API.Calendars;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Controllers.Calendar
 {

@@ -151,6 +151,24 @@
                         </CollectionView>
                     </VerticalStackLayout>
                 </Frame>
+
+                <!-- Training Log Section -->
+                <Frame IsVisible="{Binding StudentTrainingLog, Converter={StaticResource NullToBoolConverter}}">
+                    <VerticalStackLayout>
+                        <Label Text="Your Training Log" FontAttributes="Bold" FontSize="20"/>
+                        <Label Text="{Binding StudentTrainingLog.Date, StringFormat='Date: {0:MMM dd, yyyy}'}"/>
+                        <Label Text="{Binding StudentTrainingLog.TrainingTime, StringFormat='Time: {0} min'}"/>
+                        <!-- List moves -->
+                        <CollectionView ItemsSource="{Binding StudentTrainingLog.Moves}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Text="{Binding Name}" />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>
