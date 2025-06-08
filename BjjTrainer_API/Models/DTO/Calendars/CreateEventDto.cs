@@ -21,10 +21,10 @@ namespace BjjTrainer_API.Models.DTO.Calendars
 
         // Is this a training session?
         public bool IncludeTrainingLog { get; set; } = false;
-        public int? TrainingLogId { get; set; }
-
 
         // Moves selected by the coach (optional)
-        public List<int> MoveIds { get; set; } = [];
+        public List<int> MoveIds { get; set; } = new();
+
+        public string? InstructorId { get; set; } // <-- Add this
     }
 }

@@ -10,9 +10,7 @@
         public TimeSpan? EndTime { get; set; }
         public bool? IsAllDay { get; set; }
         public int? SchoolId { get; set; }
-
-        // Add TrainingLogId to DTO
         public int? TrainingLogId { get; set; }
+        public string? InstructorId { get; set; }
     }
-
 }

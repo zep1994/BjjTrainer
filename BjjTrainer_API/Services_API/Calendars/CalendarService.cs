@@ -30,7 +30,8 @@ namespace BjjTrainer_API.Services_API.Calendars
                     StartTime = e.StartTime,
                     EndDate = e.EndDate,
                     EndTime = e.EndTime,
-                    TrainingLogId = e.TrainingLogId
+                    TrainingLogId = e.TrainingLogId,
+                    InstructorId = e.InstructorId 
                 })
                 .FirstOrDefaultAsync();
 
@@ -127,6 +128,7 @@ namespace BjjTrainer_API.Services_API.Calendars
             calendarEvent.EndTime = model.EndTime != null && TimeSpan.TryParse(model.EndTime.ToString(), out var et) ? et : null;
             calendarEvent.IsAllDay = model.IsAllDay;
             calendarEvent.SchoolId = model.SchoolId;
+            calendarEvent.InstructorId = model.InstructorId;
             await _context.SaveChangesAsync();
         }
 

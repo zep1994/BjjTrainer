@@ -137,7 +137,8 @@ namespace BjjTrainer_API.Services_API.Coaches
                 EndDate = dto.EndDate,
                 EndTime = dto.EndTime,
                 IsAllDay = dto.IsAllDay,
-                SchoolId = coach.SchoolId // Always set to coach's school
+                SchoolId = coach.SchoolId, 
+                InstructorId = dto.InstructorId
             };
 
             _context.CalendarEvents.Add(calendarEvent);

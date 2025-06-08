@@ -36,6 +36,7 @@ builder.Services.AddScoped<TrainingService>();
 builder.Services.AddScoped<TrainingGoalService>();
 builder.Services.AddScoped<CalendarService>();
 builder.Services.AddScoped<SchoolService>();
+builder.Services.AddScoped<UserProgressService>();
 builder.Services.AddScoped<CoachService>();
 
 

@@ -10,20 +10,19 @@ using System.Security.Claims;
 
 namespace BjjTrainer_API.Controllers.Coaches
 {
-    [Route("api/[Controller]")]
     [ApiController]
-    public class CoachController : ControllerBase
+    [Route("api/[Controller]")]
+    public class CoachController(
+        CoachService coachService,
+        TrainingService trainingService,
+        UserService userService,
+        UserProgressService userProgressService
+    ) : ControllerBase
     {
-        private readonly CoachService _coachService;
-        private readonly TrainingService _trainingService;
-        private readonly UserService _userService;
-
-        public CoachController(CoachService coachService, TrainingService trainingService, UserService userService)
-        {
-            _coachService = coachService;
-            _trainingService = trainingService;
-            _userService = userService;
-        }
+        private readonly CoachService _coachService = coachService;
+        private readonly TrainingService _trainingService = trainingService;
+        private readonly UserService _userService = userService;
+        private readonly UserProgressService _userProgressService = userProgressService;
 
         [HttpGet("events/full/{schoolId}")]
         public async Task<ActionResult<List<CoachEventDto>>> GetPastEventsWithLogs(int schoolId)
@@ -185,6 +184,35 @@ namespace BjjTrainer_API.Controllers.Coaches
             if (user == null)
                 return NotFound("User not found or not in your school.");
             return Ok(user);
+        }
+
+        [HttpGet("school/students/progress")]
+        [Authorize]
+        public async Task<IActionResult> GetStudentsWithProgress()
+        {
+            var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var students = await _coachService.GetSchoolUsersAsync(coachId);
+
+            // Only students
+            var studentUsers = students.Where(u => u.Role == UserRole.Student).ToList();
+
+            var progressList = new List<object>();
+            foreach (var student in studentUsers)
+            {
+                var progress = await _userProgressService.GetUserProgressAsync(student.Id);
+                progressList.Add(new
+                {
+                    student.Id,
+                    student.UserName,
+                    student.Email,
+                    student.Belt,
+                    student.BeltStripes,
+                    student.ProfilePictureUrl,
+                    Progress = progress
+                });
+            }
+
+            return Ok(progressList);
         }
     }
 }
