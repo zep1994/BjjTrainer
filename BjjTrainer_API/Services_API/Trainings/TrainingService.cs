@@ -125,7 +125,7 @@ namespace BjjTrainer_API.Services_API.Trainings
                 ApplicationUserId = log.ApplicationUserId,
                 IsCoachLog = log.IsCoachLog,
                 CalendarEventId = log.CalendarEventId,
-                MoveIds = log.TrainingLogMoves.Select(m => m.MoveId).ToList()
+                MoveIds = [.. log.TrainingLogMoves.Select(m => m.MoveId)]
             };
         }
 

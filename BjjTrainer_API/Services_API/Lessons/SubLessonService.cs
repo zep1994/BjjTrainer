@@ -50,7 +50,7 @@ namespace BjjTrainer_API.Services_API.Lessons
                 {
                     Id = subLesson.Id,
                     Title = subLesson.Title,
-                    Moves = subLesson.SubLessonMoves.Select(m => new Move
+                    Moves = [.. subLesson.SubLessonMoves.Select(m => new Move
                     {
                         Id = m.Move.Id,
                         Name = m.Move.Name,
@@ -64,7 +64,7 @@ namespace BjjTrainer_API.Services_API.Lessons
                         LegalInCompetitions = m.Move.LegalInCompetitions,
                         CounterStrategies = m.Move.CounterStrategies,
                         Tags = m.Move.Tags
-                    }).ToList()
+                    })]
                 };
             }
             catch (Exception ex)

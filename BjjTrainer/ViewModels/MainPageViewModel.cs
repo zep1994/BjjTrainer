@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels
 {
-    public class MainPageViewModel : BaseViewModel
+    public partial class MainPageViewModel : BaseViewModel
     {
         private readonly TrainingService _trainingService;
         private readonly EventService _eventService;
@@ -32,32 +32,67 @@ namespace BjjTrainer.ViewModels
         public int TotalGoalsAchieved { get; private set; }
         public int TotalMoves { get; private set; }
 
+        public string UserName { get; private set; }
+        public string Email { get; private set; }
+        public string Belt { get; private set; }
+        public int BeltStripes { get; private set; }
+        public string ProfilePictureUrl { get; private set; }
+        public string PreferredTrainingStyle { get; private set; }
+
         public MainPageViewModel()
         {
             _trainingService = new TrainingService();
             _eventService = new EventService();
             _userProgressService = new UserProgressService();
             _moveService = new MoveService();
-            _trainingGoalService = new TrainingGoalService(); 
-
-            LoadData();
+            _trainingGoalService = new TrainingGoalService();
         }
 
-        private async void LoadData()
+        public async Task InitializeAsync()
         {
+            IsBusy = true;
             try
             {
-                IsBusy = true;
+                await LoadUserInfoAsync();
                 await LoadUserProgressAsync();
                 await LoadGoalsAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading data: {ex.Message}");
             }
             finally
             {
                 IsBusy = false;
+            }
+        }
+
+        private async Task LoadUserInfoAsync()
+        {
+            try
+            {
+                var userId = Preferences.Get("UserId", string.Empty);
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    var userService = new UserService();
+                    var user = await userService.GetUserByIdAsync(userId);
+                    if (user != null)
+                    {
+                        UserName = user.UserName;
+                        Email = user.Email;
+                        Belt = user.Belt;
+                        BeltStripes = user.BeltStripes;
+                        ProfilePictureUrl = user.ProfilePictureUrl;
+                        PreferredTrainingStyle = user.PreferredTrainingStyle;
+
+                        OnPropertyChanged(nameof(UserName));
+                        OnPropertyChanged(nameof(Email));
+                        OnPropertyChanged(nameof(Belt));
+                        OnPropertyChanged(nameof(BeltStripes));
+                        OnPropertyChanged(nameof(ProfilePictureUrl));
+                        OnPropertyChanged(nameof(PreferredTrainingStyle));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading user info: {ex.Message}");
             }
         }
 
@@ -67,7 +102,6 @@ namespace BjjTrainer.ViewModels
             {
                 var userProgress = await _userProgressService.GetUserProgressAsync();
 
-                // Assign progress data
                 TotalTrainingTime = userProgress.TotalTrainingTime;
                 TotalRoundsRolled = userProgress.TotalRoundsRolled;
                 TotalSubmissions = userProgress.TotalSubmissions;
@@ -78,10 +112,8 @@ namespace BjjTrainer.ViewModels
                 TotalGoalsAchieved = userProgress.TotalGoalsAchieved;
                 TotalMoves = userProgress.TotalMoves;
 
-                // Clear existing data
                 MovesPerformed.Clear();
 
-                // Add fetched moves to the collection
                 foreach (var move in userProgress.MovesPerformed)
                 {
                     MovesPerformed.Add(move);
@@ -111,16 +143,23 @@ namespace BjjTrainer.ViewModels
                 IsBusy = true;
                 var goals = await _trainingGoalService.GetTrainingGoalsAsync();
 
-                Console.WriteLine($"Goals Count: {goals?.Count()}");
-
-                TrainingGoals.Clear();
-
-                foreach (var goal in goals)
+                if (goals != null)
                 {
-                    TrainingGoals.Add(goal);
-                }
+                    Console.WriteLine($"Goals Count: {goals.Count()}");
 
-                OnPropertyChanged(nameof(TrainingGoals));
+                    TrainingGoals.Clear();
+
+                    foreach (var goal in goals)
+                    {
+                        TrainingGoals.Add(goal);
+                    }
+
+                    OnPropertyChanged(nameof(TrainingGoals));
+                }
+                else
+                {
+                    Console.WriteLine("Goals list is null.");
+                }
             }
             catch (Exception ex)
             {
@@ -131,22 +170,5 @@ namespace BjjTrainer.ViewModels
                 IsBusy = false;
             }
         }
-
-
-
-        //private async void LoadTopMoves()
-        //{
-        //    try
-        //    {
-        //        var topMoves = _moveService.GetAllMovesAsync();
-        //        Console.WriteLine($"Top Moves: {topMoves}");
-
-        //        Tp
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error: {ex.Message}");
-        //    }
-        //}
     }
 }

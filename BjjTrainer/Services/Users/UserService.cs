@@ -27,7 +27,6 @@ namespace BjjTrainer.Services.Users
                 {
                     SetAuthToken(result.Token);
 
-                    // Fetch SchoolId after successful login
                     await FetchAndStoreSchoolId(result.Token);
 
                     return result.Token;
@@ -118,7 +117,6 @@ namespace BjjTrainer.Services.Users
                 Preferences.Set("UserId", userId);
                 Preferences.Set("IsLoggedIn", true);
 
-                // Extract user role from the token if available
                 var handler = new JwtSecurityTokenHandler();
                 var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
                 var role = jsonToken?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
@@ -130,7 +128,7 @@ namespace BjjTrainer.Services.Users
             }
         }
 
-        public async Task<User> GetUserByIdAsync(string userId)
+        public async Task<User?> GetUserByIdAsync(string userId)
         {
             try
             {
@@ -139,20 +137,18 @@ namespace BjjTrainer.Services.Users
                 if (response.IsSuccessStatusCode)
                 {
                     var user = await response.Content.ReadFromJsonAsync<User>();
-                    return user;
+                    return user; 
                 }
                 else
                 {
-                    // Optionally handle different response statuses
                     System.Diagnostics.Debug.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                // Handle exceptions (e.g., log them or show alerts)
                 System.Diagnostics.Debug.WriteLine($"Exception in GetUserByIdAsync: {ex.Message}");
-                return null;
+                return null; 
             }
         }
 
@@ -161,13 +157,11 @@ namespace BjjTrainer.Services.Users
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
 
-            // Log all claims to inspect the available claim types
             foreach (var claim in jsonToken.Claims)
             {
                 Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
             }
 
-            // Look for the "nameidentifier" claim with the URI, which holds the user ID
             var userId = jsonToken.Claims
                 .FirstOrDefault(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 
@@ -177,13 +171,13 @@ namespace BjjTrainer.Services.Users
 
         public class ErrorResponse
         {
-            public List<string> Errors { get; set; }
+            public List<string> Errors { get; set; } = new List<string>();
         }
 
 
         public async Task<bool> LogoutAsync()
         {
-            Preferences.Remove("AuthToken"); // Remove token from storage
+            Preferences.Remove("AuthToken");
             Preferences.Set("IsLoggedIn", false);
             var response = await HttpClient.PostAsync("auth/logout", null);
             return response.IsSuccessStatusCode;

@@ -7,7 +7,7 @@ using MvvmHelpers;
 
 namespace BjjTrainer.ViewModels.TrainingGoals;
 
-public class UpdateTrainingGoalViewModel : BaseViewModel
+public partial class UpdateTrainingGoalViewModel : BaseViewModel
 {
     private readonly TrainingGoalService _trainingGoalService;
     private readonly MoveService _moveService;
@@ -43,7 +43,7 @@ public class UpdateTrainingGoalViewModel : BaseViewModel
 
                 foreach (var move in allMoves)
                 {
-                    move.IsSelected = goal.MoveIds.Contains(move.Id);
+                    move.IsSelected = goal.Moves.Select(m => m.MoveId).Contains(move.Id);
                     Moves.Add(move);
                 }
 

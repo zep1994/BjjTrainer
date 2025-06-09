@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.TrainingGoals;
 
-public class ShowTrainingGoalViewModel : BaseViewModel
+public partial class ShowTrainingGoalViewModel : BaseViewModel
 {
     private readonly TrainingGoalService _trainingGoalService;
 
@@ -35,9 +35,12 @@ public class ShowTrainingGoalViewModel : BaseViewModel
             Notes = goal.Notes;
 
             Moves.Clear();
-            foreach (var move in goal.Moves)
+            foreach (var trainingGoalMove in goal.Moves)
             {
-                Moves.Add(move);
+                if (trainingGoalMove.Move != null)
+                {
+                    Moves.Add(trainingGoalMove.Move);
+                }
             }
 
             OnPropertyChanged(nameof(GoalDate));

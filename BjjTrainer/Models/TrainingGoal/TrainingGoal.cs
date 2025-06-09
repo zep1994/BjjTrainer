@@ -7,6 +7,6 @@ namespace BjjTrainer.Models.TrainingGoal
         public int Id { get; set; }
         public DateTime GoalDate { get; set; }
         public string Notes { get; set; } = string.Empty;
-        public List<UserTrainingGoalMove> UserTrainingGoalMoves { get; set; }
+        public ICollection<UserTrainingGoalMove>? UserTrainingGoalMoves { get; set; }
     }
 }

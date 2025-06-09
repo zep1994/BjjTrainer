@@ -4,14 +4,14 @@ namespace BjjTrainer.ViewModels
 {
     public partial class AppShellViewModel : BaseViewModel
     {
-        private string _profileImage;
+        private string _profileImage = string.Empty; 
         public string ProfileImage
         {
             get => _profileImage;
             set => SetProperty(ref _profileImage, value);
         }
 
-        private string _title;
+        private string _title = string.Empty; 
         public string Title
         {
             get => _title;

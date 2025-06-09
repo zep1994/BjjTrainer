@@ -163,7 +163,7 @@ namespace BjjTrainer_API.Data
 
             modelBuilder.Entity<UserTrainingGoalMove>()
                 .HasOne(utgm => utgm.Move)
-                .WithMany(m => m.UserTrainingGoalMoves)
+                .WithMany() // or .WithMany(m => m.UserTrainingGoalMoves) if navigation exists
                 .HasForeignKey(utgm => utgm.MoveId);
 
             // Configure one-to-many relationship with ApplicationUser

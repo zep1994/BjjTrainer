@@ -1,6 +1,5 @@
 ﻿using BjjTrainer.Models.DTO.TrainingLog;
 using BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves;
-using System.Collections.ObjectModel;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;

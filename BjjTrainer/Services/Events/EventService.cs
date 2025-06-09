@@ -17,11 +17,18 @@ namespace BjjTrainer.Services.Events
                 var json = JsonSerializer.Serialize(newEvent);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // Send POST request to the specified URL
                 var response = await HttpClient.PostAsync("calendar/events/create", content);
 
                 if (response.IsSuccessStatusCode)
                 {
+                    var eventJson = await response.Content.ReadAsStringAsync();
+                    var deserializedEvent = JsonSerializer.Deserialize<CalendarEventDto>(eventJson);
+
+                    if (deserializedEvent == null)
+                    {
+                        throw new Exception("Failed to deserialize the event data.");
+                    }
+
                     return true;
                 }
 
@@ -35,7 +42,7 @@ namespace BjjTrainer.Services.Events
         }
 
         // SHOW
-        public async Task<CalendarEventDto> GetEventByIdAsync(int eventId)
+        public async Task<CalendarEventDto?> GetEventByIdAsync(int eventId)
         {
             try
             {
@@ -118,16 +125,17 @@ namespace BjjTrainer.Services.Events
                     Console.WriteLine($"Raw JSON Response: {jsonResponse}");
                     try
                     {
-                        return JsonSerializer.Deserialize<List<CalendarEventDto>>(jsonResponse);
+                        var events = JsonSerializer.Deserialize<List<CalendarEventDto>>(jsonResponse);
+                        return events ?? new List<CalendarEventDto>(); 
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Deserialization error: {ex.Message}");
-                        return [];
+                        return new List<CalendarEventDto>(); 
                     }
                 }
 
-                return [];  // Return empty list if request fails
+                return new List<CalendarEventDto>(); 
             }
             catch (Exception ex)
             {

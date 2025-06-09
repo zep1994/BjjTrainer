@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BjjTrainer.ViewModels"
              x:Class="BjjTrainer.Views.TrainingGoals.TrainingGoalListPage"
+             x:Name="TrainingGoalListPageRoot"
              BackgroundColor="{StaticResource BackgroundColor}"
              Title="Training Goals">
 
@@ -24,32 +26,25 @@
                     </Label.FormattedText>
                 </Label>
 
-                <!-- Add New Goal Button (Modern Floating Style) -->
-                <Frame Padding="0"
-                       Margin="0,0,0,10"
-                       HasShadow="True"
-                       BackgroundColor="Transparent"
-                       BorderColor="Transparent"
-                       HorizontalOptions="End">
-                    <Button Text="＋ New Goal"
-                            Clicked="OnSaveGoalClicked"
-                            BackgroundColor="{StaticResource AccentBlue}"
-                            TextColor="White"
-                            FontSize="20"
-                            FontAttributes="Bold"
-                            CornerRadius="24"
-                            HeightRequest="56"
-                            WidthRequest="180"
-                            HorizontalOptions="End"
-                            StyleClass="ModernButton">
-                        <Button.Shadow>
-                            <Shadow Brush="{StaticResource AccentBlue}"
-                                    Offset="0,4"
-                                    Radius="16"
-                                    Opacity="0.25" />
-                        </Button.Shadow>
-                    </Button>
-                </Frame>
+                <!-- Add New Goal Button -->
+                <Button Text="＋ New Goal"
+                        Command="{Binding AddNewGoalCommand}"
+                        BackgroundColor="{StaticResource AccentBlue}"
+                        TextColor="White"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        CornerRadius="24"
+                        HeightRequest="56"
+                        WidthRequest="180"
+                        HorizontalOptions="End"
+                        StyleClass="ModernButton">
+                    <Button.Shadow>
+                        <Shadow Brush="{StaticResource AccentBlue}"
+                                Offset="0,4"
+                                Radius="16"
+                                Opacity="0.25" />
+                    </Button.Shadow>
+                </Button>
 
                 <!-- List of Training Goals -->
                 <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
@@ -74,10 +69,27 @@
                                     <Label Text="{Binding GoalDate, StringFormat='Goal Date: {0:MMMM dd, yyyy}'}"
                                            FontSize="14"
                                            TextColor="{StaticResource CardSubTextColor}" />
+                                    <CollectionView ItemsSource="{Binding UserTrainingGoalMoves}" SelectionMode="None">
+                                        <CollectionView.ItemsLayout>
+                                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                                        </CollectionView.ItemsLayout>
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <HorizontalStackLayout Spacing="8">
+                                                    <Label Text="{Binding Move.Name}"
+                                                           FontSize="14"
+                                                           TextColor="{StaticResource CardMainTextColor}" />
+                                                    <Label Text="{Binding PracticeCount, StringFormat='x{0}'}"
+                                                           FontSize="14"
+                                                           TextColor="{StaticResource CardSubTextColor}" />
+                                                </HorizontalStackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
                                     <HorizontalStackLayout Spacing="12" HorizontalOptions="End">
                                         <Button Text="View"
+                                                Command="{Binding BindingContext.ViewGoalCommand, Source={x:Reference Name=TrainingGoalListPageRoot}}"
                                                 CommandParameter="{Binding Id}"
-                                                Clicked="OnViewGoalClicked"
                                                 BackgroundColor="{StaticResource AccentGreen}"
                                                 TextColor="White"
                                                 FontSize="16"
@@ -86,8 +98,8 @@
                                                 HeightRequest="44"
                                                 WidthRequest="100" />
                                         <Button Text="Delete"
+                                                Command="{Binding BindingContext.DeleteGoalCommand, Source={x:Reference Name=TrainingGoalListPageRoot}}"
                                                 CommandParameter="{Binding Id}"
-                                                Clicked="OnDeleteGoalClicked"
                                                 BackgroundColor="{StaticResource AccentRed}"
                                                 TextColor="White"
                                                 FontSize="16"

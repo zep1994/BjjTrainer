@@ -1,6 +1,4 @@
-﻿using BjjTrainer_API.Models.DTO.Moves;
-
-namespace BjjTrainer_API.Models.DTO.UserDtos
+﻿namespace BjjTrainer_API.Models.DTO.UserDtos
 {
     public class UserProgressDto
     {

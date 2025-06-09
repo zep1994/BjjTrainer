@@ -19,7 +19,7 @@ public partial class UpdateTrainingGoalPage : ContentPage
         if (success)
         {
             await DisplayAlert("Success", "Training goal updated successfully.", "OK");
-            await Navigation.PopAsync(); // Navigate back to the previous page
+            await Navigation.PopAsync(); 
         }
         else
         {

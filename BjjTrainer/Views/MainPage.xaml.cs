@@ -12,5 +12,12 @@ namespace BjjTrainer.Views
             _viewModel = new MainPageViewModel();
             BindingContext = _viewModel;
         }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (BindingContext is MainPageViewModel vm)
+                await vm.InitializeAsync();
+        }
     }
 }

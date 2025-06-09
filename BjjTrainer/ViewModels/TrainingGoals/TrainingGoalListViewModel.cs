@@ -1,30 +1,50 @@
 ﻿using BjjTrainer.Models.TrainingGoal;
 using BjjTrainer.Services.TrainingGoals;
+using BjjTrainer.Views.TrainingGoals;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
-using Command = Microsoft.Maui.Controls.Command; // Specify the Command namespace to resolve ambiguity
+using Command = Microsoft.Maui.Controls.Command; 
 
 namespace BjjTrainer.ViewModels.TrainingGoals;
 
-public class TrainingGoalListViewModel : BaseViewModel
+public partial class TrainingGoalListViewModel : BaseViewModel
 {
     private readonly TrainingGoalService _trainingGoalService;
+    private INavigation _navigation;
 
     public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = [];
 
     public Command AddNewGoalCommand { get; }
+    public Command<int> DeleteGoalCommand { get; }
+    public Command<int> ViewGoalCommand { get; }
 
-    public TrainingGoalListViewModel()
+    public TrainingGoalListViewModel(INavigation navigation)
     {
+        _navigation = navigation;
         _trainingGoalService = new TrainingGoalService();
+        AddNewGoalCommand = new Command(OnAddNewGoal);
+        DeleteGoalCommand = new Command<int>(async (id) => await DeleteGoalAsync(id));
+        ViewGoalCommand = new Command<int>(OnViewGoal);
 
         Task.Run(async () => await LoadGoalsAsync());
+    }
+
+    public async Task LoadGoalsAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            var goals = await _trainingGoalService.GetTrainingGoalsAsync();
+            TrainingGoals.Clear();
+            foreach (var goal in goals)
+                TrainingGoals.Add(goal);
+        }
+        finally { IsBusy = false; }
     }
 
     public async Task DeleteGoalAsync(int goalId)
     {
         IsBusy = true;
-
         try
         {
             var success = await _trainingGoalService.DeleteTrainingGoalAsync(goalId);
@@ -32,44 +52,19 @@ public class TrainingGoalListViewModel : BaseViewModel
             {
                 var goalToRemove = TrainingGoals.FirstOrDefault(g => g.Id == goalId);
                 if (goalToRemove != null)
-                {
                     TrainingGoals.Remove(goalToRemove);
-                }
             }
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error deleting goal: {ex.Message}");
-        }
-        finally
-        {
-            IsBusy = false;
-        }
+        finally { IsBusy = false; }
     }
 
-    public async Task LoadGoalsAsync()
+    private async void OnAddNewGoal()
     {
-        IsBusy = true;
-
-        try
-        {
-            var goals = await _trainingGoalService.GetTrainingGoalsAsync();
-            Console.WriteLine($"Loaded {goals.Count} training goals.");
-
-            TrainingGoals.Clear();
-            foreach (var goal in goals)
-            {
-                TrainingGoals.Add(goal);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading training goals: {ex.Message}");
-        }
-        finally
-        {
-            IsBusy = false;
-        }
+        await _navigation.PushAsync(new TrainingGoalPage());
     }
 
+    private async void OnViewGoal(int goalId)
+    {
+        await _navigation.PushAsync(new ShowTrainingGoalPage(goalId));
+    }
 }

@@ -31,16 +31,22 @@ namespace BjjTrainer_API.Services_API.Goals
                 Id = goal.Id,
                 GoalDate = goal.GoalDate,
                 Notes = goal.Notes,
-                MoveIds = goal.UserTrainingGoalMoves.Select(tgm => tgm.MoveId).ToList(),
-                Moves = goal.UserTrainingGoalMoves.Select(tgm => new MoveDto
-                {
-                    Id = tgm.Move.Id,
-                    Name = tgm.Move.Name,
-                    TrainingLogCount = tgm.Move.TrainingLogCount
-                }).ToList()
+                MoveIds = [.. goal.UserTrainingGoalMoves.Select(tgm => tgm.MoveId)], 
+                Moves = [.. goal.UserTrainingGoalMoves
+                    .Where(tgm => tgm.Move != null)
+                    .Select(tgm => new TrainingGoalMoveDto
+                    {
+                        MoveId = tgm.Move!.Id,
+                        PracticeCount = tgm.PracticeCount,
+                        Move = new MoveDto
+                        {
+                            Id = tgm.Move.Id,
+                            Name = tgm.Move.Name,
+                            TrainingLogCount = tgm.Move.TrainingLogCount
+                        }
+                    })] 
             };
         }
-
 
         public async Task AddTrainingGoalAsync(CreateTrainingGoalDto dto)
         {
@@ -48,18 +54,19 @@ namespace BjjTrainer_API.Services_API.Goals
             {
                 ApplicationUserId = dto.ApplicationUserId,
                 GoalDate = dto.GoalDate,
-                Notes = dto.Notes
+                Notes = dto.Notes ?? string.Empty
             };
 
             _context.TrainingGoals.Add(goal);
             await _context.SaveChangesAsync();
 
-            foreach (var moveId in dto.MoveIds)
+            foreach (var move in dto.Moves)
             {
                 _context.UserTrainingGoalMoves.Add(new UserTrainingGoalMove
                 {
                     TrainingGoalId = goal.Id,
-                    MoveId = moveId
+                    MoveId = move.MoveId,
+                    PracticeCount = move.PracticeCount
                 });
             }
 
@@ -84,20 +91,18 @@ namespace BjjTrainer_API.Services_API.Goals
             if (goal == null)
                 throw new Exception("Training goal not found.");
 
-            // Update goal fields
             goal.GoalDate = dto.GoalDate;
-            goal.Notes = dto.Notes;
+            goal.Notes = dto.Notes ?? string.Empty;
 
-            // Remove existing moves
             _context.UserTrainingGoalMoves.RemoveRange(goal.UserTrainingGoalMoves);
 
-            // Add updated moves
-            foreach (var moveId in dto.MoveIds)
+            foreach (var move in dto.Moves)
             {
                 _context.UserTrainingGoalMoves.Add(new UserTrainingGoalMove
                 {
                     TrainingGoalId = goal.Id,
-                    MoveId = moveId
+                    MoveId = move.MoveId,
+                    PracticeCount = move.PracticeCount
                 });
             }
 

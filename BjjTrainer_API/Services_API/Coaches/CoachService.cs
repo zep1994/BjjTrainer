@@ -51,16 +51,16 @@ namespace BjjTrainer_API.Services_API.Coaches
                 EndTime = ev.EndTime,
                 IsAllDay = ev.IsAllDay,
                 SchoolId = ev.SchoolId,
-                CheckIns = ev.CalendarEventCheckIns.Select(c => new CheckInDto
+                CheckIns = [.. ev.CalendarEventCheckIns.Select(c => new CheckInDto
                 {
                     UserName = c.User.UserName,
                     CheckInTime = c.CheckInTime
-                }).ToList(),
-                Moves = ev.TrainingLog != null ? ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
+                })],
+                Moves = ev.TrainingLog != null ? [.. ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
                 {
                     Id = tlm.Move.Id,
                     Name = tlm.Move.Name
-                }).ToList() : new List<LogMoveDto>()
+                })] : new List<LogMoveDto>()
             }).ToList();
 
             return result;
@@ -98,16 +98,16 @@ namespace BjjTrainer_API.Services_API.Coaches
                 EndTime = ev.EndTime,
                 IsAllDay = ev.IsAllDay,
                 SchoolId = ev.SchoolId,
-                CheckIns = ev.CalendarEventCheckIns.Select(c => new CheckInDto
+                CheckIns = [.. ev.CalendarEventCheckIns.Select(c => new CheckInDto
                 {
                     UserName = c.User.UserName,
                     CheckInTime = c.CheckInTime
-                }).ToList(),
-                Moves = ev.TrainingLog != null ? ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
+                })],
+                Moves = ev.TrainingLog != null ? [.. ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
                 {
                     Id = tlm.Move.Id,
                     Name = tlm.Move.Name
-                }).ToList() : new List<LogMoveDto>()
+                })] : new List<LogMoveDto>()
             };
         }
 

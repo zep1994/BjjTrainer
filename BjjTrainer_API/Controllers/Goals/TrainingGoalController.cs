@@ -29,12 +29,14 @@ namespace BjjTrainer_API.Controllers.Goals
             }
         }
 
-
         [HttpPost("create")]
         public async Task<IActionResult> CreateGoal([FromBody] CreateTrainingGoalDto dto)
         {
-            if (dto == null || !dto.MoveIds.Any())
+            if (dto == null || dto.Moves == null || !dto.Moves.Any())
                 return BadRequest("A training goal must include at least one move.");
+
+            if (dto.Moves.Any(m => m.PracticeCount <= 0))
+                return BadRequest("Each move must have a practice count greater than zero.");
 
             try
             {
@@ -64,8 +66,11 @@ namespace BjjTrainer_API.Controllers.Goals
         [HttpPut("{goalId}")]
         public async Task<IActionResult> UpdateGoal(int goalId, [FromBody] CreateTrainingGoalDto dto)
         {
-            if (dto == null || !dto.MoveIds.Any())
+            if (dto == null || dto.Moves == null || !dto.Moves.Any())
                 return BadRequest("A training goal must include at least one move.");
+
+            if (dto.Moves.Any(m => m.PracticeCount <= 0))
+                return BadRequest("Each move must have a practice count greater than zero.");
 
             try
             {

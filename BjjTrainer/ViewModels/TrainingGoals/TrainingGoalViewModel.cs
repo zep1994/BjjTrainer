@@ -7,14 +7,14 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.TrainingGoals;
 
-public class TrainingGoalViewModel : BaseViewModel
+public partial class TrainingGoalViewModel : BaseViewModel
 {
     private readonly TrainingGoalService _trainingGoalService;
     private readonly MoveService _moveService;
 
     public DateTime GoalDate { get; set; } = DateTime.Today;
-    public string Notes { get; set; }
-    public ObservableCollection<Move> Moves { get; set; } = [];
+    public string Notes { get; set; } = string.Empty; 
+    public ObservableCollection<Move> Moves { get; set; } = new ObservableCollection<Move>(); 
 
     public TrainingGoalViewModel()
     {
@@ -39,7 +39,10 @@ public class TrainingGoalViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load moves: {ex.Message}", "OK");
+            if (Application.Current?.MainPage != null) 
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load moves: {ex.Message}", "OK");
+            }
         }
         finally
         {
@@ -48,49 +51,56 @@ public class TrainingGoalViewModel : BaseViewModel
     }
 
     public async Task<bool> SaveGoalAsync()
-{
-    if (IsBusy) return false;
-    IsBusy = true;
-
-    try
     {
-        // Validate data
-        if (string.IsNullOrWhiteSpace(Notes) || GoalDate == DateTime.Today)
-        {
-            await Application.Current.MainPage.DisplayAlert("Validation Error", "Please fill in all required fields.", "OK");
-            return false;
-        }
+        if (IsBusy) return false;
+        IsBusy = true;
 
-        var selectedMoveIds = Moves.Where(m => m.IsSelected).Select(m => m.Id).ToList();
-
-        if (!selectedMoveIds.Any())
+        try
         {
-            await Application.Current.MainPage.DisplayAlert("Validation Error", "Please select at least one move.", "OK");
-            return false;
-        }
+            if (string.IsNullOrWhiteSpace(Notes) || GoalDate == DateTime.Today)
+            {
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Validation Error", "Please fill in all required fields.", "OK");
+                }
+                return false;
+            }
+
+            var selectedMoveIds = Moves.Where(m => m.IsSelected).Select(m => m.Id).ToList();
+
+            if (!selectedMoveIds.Any())
+            {
+                if (Application.Current?.MainPage != null) 
+                {
+                    await Application.Current.MainPage.DisplayAlert("Validation Error", "Please select at least one move.", "OK");
+                }
+                return false;
+            }
 
             var utcGoalDate = DateTime.SpecifyKind(GoalDate, DateTimeKind.Utc);
 
             var dto = new CreateTrainingGoalDto
+            {
+                ApplicationUserId = Preferences.Get("UserId", string.Empty),
+                GoalDate = utcGoalDate,
+                Notes = Notes,
+                MoveIds = selectedMoveIds
+            };
+
+            var result = await _trainingGoalService.CreateTrainingGoalAsync(dto);
+            return result;
+        }
+        catch (Exception ex)
         {
-            ApplicationUserId = Preferences.Get("UserId", string.Empty),
-            GoalDate = utcGoalDate, 
-            Notes = Notes,
-            MoveIds = selectedMoveIds
-        };
-
-        var result = await _trainingGoalService.CreateTrainingGoalAsync(dto);
-        return result;
+            if (Application.Current?.MainPage != null) 
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to save training goal: {ex.Message}", "OK");
+            }
+            return false;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
-    catch (Exception ex)
-    {
-        await Application.Current.MainPage.DisplayAlert("Error", $"Failed to save training goal: {ex.Message}", "OK");
-        return false;
-    }
-    finally
-    {
-        IsBusy = false;
-    }
-}
-
 }
