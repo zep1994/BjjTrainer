@@ -14,6 +14,6 @@ namespace BjjTrainer_API.Models.DTO.TrainingGoals
         [Column(TypeName = "date")]
         public DateTime GoalDate { get; set; }
         public string? Notes { get; set; } = string.Empty;
-        public List<CreateTrainingGoalMoveDto> Moves { get; set; } = new List<CreateTrainingGoalMoveDto>();
+        public List<CreateTrainingGoalMoveDto> Moves { get; set; } = [];
     }
 }

@@ -23,7 +23,7 @@ namespace BjjTrainer_API.Models.DTO.Calendars
         public bool IncludeTrainingLog { get; set; } = false;
 
         // Moves selected by the coach (optional)
-        public List<int> MoveIds { get; set; } = new();
+        public List<int> MoveIds { get; set; } = [];
 
         public string? InstructorId { get; set; } // <-- Add this
     }

@@ -60,7 +60,7 @@ namespace BjjTrainer_API.Services_API.Coaches
                 {
                     Id = tlm.Move.Id,
                     Name = tlm.Move.Name
-                })] : new List<LogMoveDto>()
+                })] : []
             }).ToList();
 
             return result;
@@ -107,7 +107,7 @@ namespace BjjTrainer_API.Services_API.Coaches
                 {
                     Id = tlm.Move.Id,
                     Name = tlm.Move.Name
-                })] : new List<LogMoveDto>()
+                })] : []
             };
         }
 
@@ -203,7 +203,7 @@ namespace BjjTrainer_API.Services_API.Coaches
         {
             var coach = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
             if (coach == null || coach.SchoolId == null)
-                return new List<ApplicationUser>();
+                return [];
             return await _context.ApplicationUsers.Where(u => u.SchoolId == coach.SchoolId).ToListAsync();
         }
 

@@ -44,7 +44,7 @@ namespace BjjTrainer_API.Services_API.Users
                         WeeklyTrainingHours = 0,
                         AverageSessionLength = 0,
                         FavoriteMoveThisMonth = "No data available",
-                        MovesPerformed = new List<MoveDto>()
+                        MovesPerformed = []
                     };
                 }
 
