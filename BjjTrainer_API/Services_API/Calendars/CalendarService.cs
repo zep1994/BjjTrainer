@@ -8,14 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Services_API.Calendars
 {
-    public class CalendarService
+    public class CalendarService(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
-
-        public CalendarService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // ******************************** GET EVENT BY ID ****************************************
         public async Task<CalendarEventDto> GetEventByIdAsync(int eventId)
@@ -60,7 +55,6 @@ namespace BjjTrainer_API.Services_API.Calendars
             _context.CalendarEvents.Add(calendarEvent);
             await _context.SaveChangesAsync();
 
-            // Automatically add the creator to CalendarEventUsers
             var eventUser = new CalendarEventUser
             {
                 CalendarEventId = calendarEvent.Id,
@@ -83,7 +77,6 @@ namespace BjjTrainer_API.Services_API.Calendars
                 _context.TrainingLogs.Add(trainingLog);
                 await _context.SaveChangesAsync();
 
-                // Attach only selected moves to the training log
                 if (dto.MoveIds.Any())
                 {
                     foreach (var moveId in dto.MoveIds)
@@ -174,7 +167,7 @@ namespace BjjTrainer_API.Services_API.Calendars
             await _context.SaveChangesAsync();
 
             // Clone moves from the coach's training log (if they exist)
-            if (calendarEvent.TrainingLog != null)
+            if (calendarEvent.TrainingLog?.TrainingLogMoves != null)
             {
                 foreach (var move in calendarEvent.TrainingLog.TrainingLogMoves)
                 {
@@ -207,7 +200,6 @@ namespace BjjTrainer_API.Services_API.Calendars
 
             var userSchoolId = user.SchoolId;
 
-            // Events the user is directly attached to, or events for their school
             var events = await _context.CalendarEvents
                 .Where(e =>
                     e.CalendarEventUsers.Any(eu => eu.UserId == userId) ||
@@ -252,7 +244,6 @@ namespace BjjTrainer_API.Services_API.Calendars
             if (calendarEvent == null)
                 throw new Exception("Event not found.");
 
-            // Prevent deletion of past events
             if (calendarEvent.EndDate < DateTime.UtcNow)
                 throw new Exception("Cannot delete past events.");
 

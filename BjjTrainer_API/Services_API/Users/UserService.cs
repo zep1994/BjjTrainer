@@ -15,15 +15,19 @@ namespace BjjTrainer_API.Services_API.Users
         private readonly ApplicationDbContext _context = context;
         private readonly IConfiguration _configuration = configuration;
 
-        // Fetch user by ID
-        public async Task<ApplicationUser> GetUserByIdAsync(string userId)
+        public async Task<ApplicationUser?> GetUserByIdAsync(string userId)
         {
             var user = await _context.ApplicationUsers
                 .Include(u => u.Lessons)
                 .Include(u => u.Moves)
                 .FirstOrDefaultAsync(u => u.Id == userId);
-            if (user == null) Console.WriteLine("Error: The User Id could not be fuond");
-            return user;
+
+            if (user == null)
+            {
+                Console.WriteLine("Error: The User Id could not be found");
+            }
+
+            return user; 
         }
 
 
@@ -173,6 +177,16 @@ namespace BjjTrainer_API.Services_API.Users
             return (accessToken, refreshToken.Token);
         }
 
+        private string GetJwtSecretKey()
+        {
+            var secretKey = _configuration["Jwt:SecretKey"];
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new InvalidOperationException("Jwt:SecretKey is not configured in the application settings.");
+            }
+            return secretKey;
+        }
+
         private string GenerateAccessToken(string userId)
         {
             var claims = new[]
@@ -180,7 +194,7 @@ namespace BjjTrainer_API.Services_API.Users
                 new Claim(ClaimTypes.NameIdentifier, userId)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GetJwtSecretKey()));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
@@ -216,18 +230,11 @@ namespace BjjTrainer_API.Services_API.Users
 
             if (existingToken == null || existingToken.IsExpired) return null;
 
-            // Revoke the old refresh token and generate new tokens
             existingToken.Revoked = DateTime.UtcNow;
             var tokens = await GenerateTokensAsync(existingToken.UserId);
 
             await _context.SaveChangesAsync();
             return tokens;
-        }
-
-        private async Task<bool> IsUserCoach(string userId)
-        {
-            var user = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == userId);
-            return user?.Role == UserRole.Coach;
         }
     }
 }

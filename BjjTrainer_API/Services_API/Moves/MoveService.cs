@@ -5,14 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Services_API.Moves
 {
-    public class MoveService
+    public class MoveService(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
-
-        public MoveService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // ******************************** GET ALL MOVES ********************************
         public async Task<List<MoveDto>> GetAllMovesAsync()
@@ -22,14 +17,14 @@ namespace BjjTrainer_API.Services_API.Moves
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = m.Description,
-                    SkillLevel = m.SkillLevel,
-                    Tags = m.Tags
+                    Description = m.Description ?? string.Empty, 
+                    SkillLevel = m.SkillLevel ?? string.Empty,  
+                    Tags = m.Tags ?? new List<string>()         
                 }).ToListAsync();
         }
 
         // ******************************** GET MOVE BY ID ********************************
-        public async Task<MoveDto> GetMoveByIdAsync(int id)
+        public async Task<MoveDto?> GetMoveByIdAsync(int id) 
         {
             var move = await _context.Moves
                 .Include(m => m.SubLessonMoves)
@@ -42,10 +37,10 @@ namespace BjjTrainer_API.Services_API.Moves
             {
                 Id = move.Id,
                 Name = move.Name,
-                Description = move.Description,
-                Content = move.Content,
-                SkillLevel = move.SkillLevel,
-                Tags = move.Tags
+                Description = move.Description ?? string.Empty,
+                Content = move.Content ?? string.Empty,
+                SkillLevel = move.SkillLevel ?? string.Empty,
+                Tags = move.Tags ?? new List<string>()
             };
         }
 
@@ -61,8 +56,8 @@ namespace BjjTrainer_API.Services_API.Moves
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = m.Description,
-                    SkillLevel = m.SkillLevel
+                    Description = m.Description ?? string.Empty, 
+                    SkillLevel = m.SkillLevel ?? string.Empty    
                 }).ToListAsync();
         }
 
@@ -114,10 +109,10 @@ namespace BjjTrainer_API.Services_API.Moves
                 {
                     Id = slm.Move.Id,
                     Name = slm.Move.Name,
-                    Description = slm.Move.Description,
-                    Content = slm.Move.Content,
-                    SkillLevel = slm.Move.SkillLevel,
-                    Tags = slm.Move.Tags
+                    Description = slm.Move.Description ?? string.Empty, 
+                    Content = slm.Move.Content ?? string.Empty,         
+                    SkillLevel = slm.Move.SkillLevel ?? string.Empty,   
+                    Tags = slm.Move.Tags ?? new List<string>()          
                 })
                 .ToListAsync();
         }
