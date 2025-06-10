@@ -50,8 +50,16 @@ namespace BjjTrainer.ViewModels
             }
             catch (Exception ex)
             {
-                // Handle any exceptions, such as displaying an alert
-                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+                // Ensure Application.Current and MainPage are not null before accessing them
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+                }
+                else
+                {
+                    // Log or handle the case where Application.Current or MainPage is null
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
             }
             finally
             {

@@ -8,7 +8,7 @@ namespace BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves
         private bool _isSelected;
 
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public bool IsSelected
         {
@@ -23,9 +23,9 @@ namespace BjjTrainer.Models.Moves.BjjTrainer.Models.DTO.Moves
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

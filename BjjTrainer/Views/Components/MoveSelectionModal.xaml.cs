@@ -9,7 +9,7 @@ namespace BjjTrainer.Views.Components
 {
     public partial class MoveSelectionModal : ContentPage
     {
-        public MoveSelectionViewModel ViewModel { get; private set; }
+        public MoveSelectionViewModel ViewModel { get; private set; } = null!; // Use null-forgiving operator to suppress warning
         private readonly TrainingService _trainingService;
         private ObservableCollection<UpdateMoveDto> _selectedMoves;
         private readonly int _logId;

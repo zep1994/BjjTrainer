@@ -6,17 +6,15 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.Coaches
 {
-    public partial class CoachViewModel : ObservableObject
+    public partial class CoachViewModel(CoachService coachService) : ObservableObject
     {
-        private readonly CoachService _coachService;
-
-        public CoachViewModel(CoachService coachService)
+        private readonly CoachService _coachService = coachService;
+        private ObservableCollection<CoachEventDto>? _pastEvents;
+        public ObservableCollection<CoachEventDto>? PastEvents
         {
-            _coachService = coachService;
+            get => _pastEvents;
+            set => SetProperty(ref _pastEvents, value);
         }
-
-        [ObservableProperty]
-        private ObservableCollection<CoachEventDto> pastEvents;
 
         [RelayCommand]
         public async Task LoadPastEvents(int schoolId)

@@ -10,42 +10,44 @@ namespace BjjTrainer.ViewModels
     public partial class SubLessonDetailsViewModel : BaseViewModel
     {
         private readonly SubLessonService _subLessonService;
-        private SubLessonDetailsDto _subLessonDetails;
-        private MoveDto _selectedMove;
-
+        private SubLessonDetailsDto? _subLessonDetails;
+        private MoveDto? _selectedMove;
 
         public ICommand BackToLessonsCommand { get; }
 
-
-        public SubLessonDetailsDto SubLessonDetails
+        public SubLessonDetailsDto? SubLessonDetails
         {
             get => _subLessonDetails;
             set
             {
                 _subLessonDetails = value;
-                OnPropertyChanged(nameof(SubLessonDetails)); // Trigger UI update
+                OnPropertyChanged(nameof(SubLessonDetails));
             }
         }
 
-        public MoveDto SelectedMove
+        public MoveDto? SelectedMove
         {
             get => _selectedMove;
             set
             {
                 _selectedMove = value;
-                OnPropertyChanged(nameof(SelectedMove)); // Trigger UI update
+                OnPropertyChanged(nameof(SelectedMove));
             }
         }
 
         public SubLessonDetailsViewModel(int subLessonId)
         {
             _subLessonService = new SubLessonService();
+            BackToLessonsCommand = new Command(OnBackToLessons); // Initialize the command
             SubLessonDetails = new SubLessonDetailsDto(); // Default value to avoid null bindings
-            BackToLessonsCommand = new Command(OnBackToLessons);
             _ = LoadSubLessonDetailsAsync(subLessonId);
         }
 
-        // File: SubLessonDetailsViewModel.cs
+        private void OnBackToLessons()
+        {
+            // Logic for navigating back to lessons
+        }
+
         public async Task LoadSubLessonDetailsAsync(int subLessonId)
         {
             try
@@ -60,7 +62,7 @@ namespace BjjTrainer.ViewModels
                 }
 
                 Debug.WriteLine($"SubLesson Title: {SubLessonDetails.Title}");
-                if (SubLessonDetails.Moves == null || !SubLessonDetails.Moves.Any())
+                if (SubLessonDetails.Moves == null || SubLessonDetails.Moves.Count == 0)
                 {
                     Debug.WriteLine("No moves available.");
                     SubLessonDetails.Moves = [];
@@ -72,16 +74,15 @@ namespace BjjTrainer.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to load sublesson details.", "OK");
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to load sublesson details.", "OK");
+                }
+                else
+                {
+                    Debug.WriteLine("MainPage is null. Cannot display alert.");
+                }
             }
-        }
-
-
-
-        private async void OnBackToLessons()
-        {
-            // Logic for navigating back to the lessons page (can use Navigation.PopAsync() or other means depending on app structure)
-            await Application.Current.MainPage.Navigation.PopAsync();
         }
     }
 }

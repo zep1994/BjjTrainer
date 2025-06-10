@@ -20,7 +20,7 @@ namespace BjjTrainer_API.Services_API.Lessons
                                  .ToListAsync();
         }
 
-        public async Task<LessonSection> GetSectionByIdAsync(int id)
+        public async Task<LessonSection?> GetSectionByIdAsync(int id)
         {
             return await _context.LessonSections.FindAsync(id);
         }

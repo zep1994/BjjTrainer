@@ -9,21 +9,20 @@ namespace BjjTrainer.Services.Users
 {
     public class UserService : ApiService
     {
-        private string accessToken;
-        private string refreshToken;
+        private string? accessToken;
+        private string? refreshToken;
 
         public async Task<string> LoginAsync(string username, string password)
         {
             username = "Coach1";
             password = "securePassword1!";
             var loginModel = new { Username = username, Password = password };
-            //var loginModel = new { Username = username, Password = password };
             var response = await HttpClient.PostAsJsonAsync("auth/login", loginModel);
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-                if (result != null)
+                if (result != null && !string.IsNullOrEmpty(result.Token))
                 {
                     SetAuthToken(result.Token);
 
@@ -157,6 +156,11 @@ namespace BjjTrainer.Services.Users
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
 
+            if (jsonToken == null)
+            {
+                throw new ArgumentNullException(nameof(jsonToken), "The token could not be parsed as a JwtSecurityToken.");
+            }
+
             foreach (var claim in jsonToken.Claims)
             {
                 Console.WriteLine($"Claim Type: {claim.Type}, Value: {claim.Value}");
@@ -166,7 +170,6 @@ namespace BjjTrainer.Services.Users
                 .FirstOrDefault(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 
             return userId ?? string.Empty;
-
         }
 
         public class ErrorResponse
@@ -191,11 +194,18 @@ namespace BjjTrainer.Services.Users
                 accessToken = newTokens.AccessToken;
                 refreshToken = newTokens.RefreshToken;
             }
-            return accessToken;
+
+            // Ensure accessToken is not null before returning
+            return accessToken ?? throw new InvalidOperationException("Access token is null.");
         }
 
-        private bool IsTokenExpired(string token)
+        private bool IsTokenExpired(string? token)
         {
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new ArgumentNullException(nameof(token), "Token cannot be null or empty.");
+            }
+
             var jwtHandler = new JwtSecurityTokenHandler();
             var jwtToken = jwtHandler.ReadToken(token) as JwtSecurityToken;
             return jwtToken?.ValidTo < DateTime.UtcNow;

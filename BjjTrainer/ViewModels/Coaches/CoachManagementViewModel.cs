@@ -5,9 +5,9 @@ using MvvmHelpers;
 public class CoachManagementViewModel : BaseViewModel
 {
     private readonly SchoolService _schoolService;
-    private School _coachSchool;
+    private School? _coachSchool;
 
-    public School CoachSchool
+    public School? CoachSchool
     {
         get => _coachSchool;
         set

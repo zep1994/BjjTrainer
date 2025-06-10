@@ -17,7 +17,10 @@ namespace BjjTrainer.Services.Lessons
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
-            return await response.Content.ReadFromJsonAsync<List<SubLesson>>(options);
+            var subLessons = await response.Content.ReadFromJsonAsync<List<SubLesson>>(options);
+
+            // Ensure the return value is not null
+            return subLessons ?? new List<SubLesson>();
         }
 
         public async Task<SubLessonDetailsDto> GetSubLessonDetailsByIdAsync(int subLessonId)
@@ -30,7 +33,10 @@ namespace BjjTrainer.Services.Lessons
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
-            return await response.Content.ReadFromJsonAsync<SubLessonDetailsDto>(options);
+            var subLessonDetails = await response.Content.ReadFromJsonAsync<SubLessonDetailsDto>(options);
+
+            // Ensure the return value is not null
+            return subLessonDetails ?? throw new InvalidOperationException("SubLessonDetailsDto cannot be null.");
         }
     }
 }

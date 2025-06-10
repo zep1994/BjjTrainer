@@ -8,7 +8,7 @@ namespace BjjTrainer.ViewModels
     public partial class SubLessonViewModel : BaseViewModel
     {
         private readonly SubLessonService _subLessonService;
-        private ObservableCollection<SubLesson> _subLessons;
+        private ObservableCollection<SubLesson> _subLessons = new ObservableCollection<SubLesson>(); // Initialize to avoid null
 
         public ObservableCollection<SubLesson> SubLessons
         {
@@ -16,7 +16,7 @@ namespace BjjTrainer.ViewModels
             set => SetProperty(ref _subLessons, value); // Ensure this is an ObservableCollection
         }
 
-        public string SectionTitle { get; set; }
+        public string SectionTitle { get; set; } = string.Empty; // Initialize to avoid null
 
         public SubLessonViewModel(int lessonSectionId)
         {
@@ -33,8 +33,16 @@ namespace BjjTrainer.ViewModels
             }
             catch (Exception ex)
             {
-                // You can add logging here
-                await Application.Current.MainPage.DisplayAlert("Error",$"{ex}", "OK");
+                // Ensure Application.Current and Application.Current.MainPage are not null
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", $"{ex}", "OK");
+                }
+                else
+                {
+                    // Handle the case where MainPage is null (e.g., log the error)
+                    System.Diagnostics.Debug.WriteLine($"Error: {ex}");
+                }
             }
         }
     }

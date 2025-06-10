@@ -2,7 +2,6 @@
 using BjjTrainer_API.Models.DTO.Coaches;
 using BjjTrainer_API.Models.Users;
 using BjjTrainer_API.Services_API.Coaches;
-using BjjTrainer_API.Services_API.Trainings;
 using BjjTrainer_API.Services_API.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +13,10 @@ namespace BjjTrainer_API.Controllers.Coaches
     [Route("api/[Controller]")]
     public class CoachController(
         CoachService coachService,
-        TrainingService trainingService,
-        UserService userService,
         UserProgressService userProgressService
     ) : ControllerBase
     {
         private readonly CoachService _coachService = coachService;
-        private readonly TrainingService _trainingService = trainingService;
-        private readonly UserService _userService = userService;
         private readonly UserProgressService _userProgressService = userProgressService;
 
         [HttpGet("events/full/{schoolId}")]
@@ -124,6 +119,9 @@ namespace BjjTrainer_API.Controllers.Coaches
         public async Task<IActionResult> GetSchoolUsers()
         {
             var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId))
+                return Unauthorized("User is not authenticated.");
+
             var users = await _coachService.GetSchoolUsersAsync(coachId);
             return Ok(users.Select(u => new
             {
@@ -146,6 +144,9 @@ namespace BjjTrainer_API.Controllers.Coaches
         public async Task<IActionResult> AddUsersByEmail([FromBody] List<string> emails)
         {
             var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId)) // Ensure coachId is not null or empty
+                return Unauthorized("User is not authenticated.");
+
             var result = await _coachService.AddUsersToSchoolByEmailAsync(coachId, emails);
             return Ok(result);
         }
@@ -156,6 +157,9 @@ namespace BjjTrainer_API.Controllers.Coaches
         public async Task<IActionResult> ChangeUserRole(string userId, [FromBody] string newRole)
         {
             var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId)) // Ensure coachId is not null or empty
+                return Unauthorized("User is not authenticated.");
+
             var result = await _coachService.ChangeUserRoleAsync(coachId, userId, newRole);
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -168,6 +172,9 @@ namespace BjjTrainer_API.Controllers.Coaches
         public async Task<IActionResult> RemoveUserFromSchool(string userId)
         {
             var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId)) // Ensure coachId is not null or empty
+                return Unauthorized("User is not authenticated.");
+
             var result = await _coachService.RemoveUserFromSchoolAsync(coachId, userId);
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -180,6 +187,9 @@ namespace BjjTrainer_API.Controllers.Coaches
         public async Task<IActionResult> GetUserDetails(string userId)
         {
             var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId)) // Ensure coachId is not null or empty
+                return Unauthorized("User is not authenticated.");
+
             var user = await _coachService.GetUserDetailsAsync(coachId, userId);
             if (user == null)
                 return NotFound("User not found or not in your school.");
@@ -191,6 +201,9 @@ namespace BjjTrainer_API.Controllers.Coaches
         public async Task<IActionResult> GetStudentsWithProgress()
         {
             var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId)) // Ensure coachId is not null or empty
+                return Unauthorized("User is not authenticated.");
+
             var students = await _coachService.GetSchoolUsersAsync(coachId);
 
             // Only students

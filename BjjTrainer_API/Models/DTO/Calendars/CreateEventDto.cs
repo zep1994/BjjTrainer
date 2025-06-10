@@ -5,7 +5,7 @@ namespace BjjTrainer_API.Models.DTO.Calendars
     public class CreateEventDto
     {
         [Required]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         public string? Description { get; set; }
 

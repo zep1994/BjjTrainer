@@ -5,8 +5,8 @@ namespace BjjTrainer_API.Models.DTO.Calendars
 {
     public class PastEventDetailsDto
     {
-        public CalendarEvent Event { get; set; }
-        public List<CheckInDetailsDto> CheckIns { get; set; }
+        public CalendarEvent? Event { get; set; }
+        public List<CheckInDetailsDto>? CheckIns { get; set; }
         public TrainingLogDto? TrainingLog { get; set; }
     }
 }

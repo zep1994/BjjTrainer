@@ -9,6 +9,6 @@ namespace BjjTrainer_API.Models.Users
         public int TotalTaps { get; set; }
         public int TotalMoves { get; set; }
         public double TotalTrainingTime { get; set; }
-        public List<MoveProgressModel> Moves { get; set; }
+        public List<MoveProgressModel>? Moves { get; set; }
     }
 }

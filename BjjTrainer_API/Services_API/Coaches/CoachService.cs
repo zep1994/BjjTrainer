@@ -126,6 +126,9 @@ namespace BjjTrainer_API.Services_API.Coaches
             if (coach.SchoolId == null)
                 throw new Exception("Coach must be assigned to a school to create events.");
 
+            if (dto.Title == null)
+                throw new ArgumentNullException(nameof(dto.Title), "Event title cannot be null.");
+
             var calendarEvent = new CalendarEvent
             {
                 Title = dto.Title,

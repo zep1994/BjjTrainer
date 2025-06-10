@@ -12,7 +12,8 @@ namespace BjjTrainer.Services.Coaches
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<List<CoachEventDto>>();
+                var result = await response.Content.ReadFromJsonAsync<List<CoachEventDto>>();
+                return result ?? new List<CoachEventDto>(); // Ensure a non-null return value
             }
 
             throw new Exception($"Failed to retrieve past events: {await response.Content.ReadAsStringAsync()}");
@@ -25,7 +26,12 @@ namespace BjjTrainer.Services.Coaches
 
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<CoachEventDto>();
+                var result = await response.Content.ReadFromJsonAsync<CoachEventDto>();
+                if (result == null)
+                {
+                    throw new Exception("Event details response was null.");
+                }
+                return result;
             }
 
             throw new Exception($"Failed to retrieve event details: {await response.Content.ReadAsStringAsync()}");

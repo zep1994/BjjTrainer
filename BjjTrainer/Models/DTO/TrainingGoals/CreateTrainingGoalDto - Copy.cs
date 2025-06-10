@@ -8,7 +8,7 @@
 
     public class UpdateTrainingGoalDto
     {
-        public string ApplicationUserId { get; set; }
+        public string? ApplicationUserId { get; set; }
         public DateTime GoalDate { get; set; }
         public string? Notes { get; set; }
         public List<UpdateTrainingGoalMoveDto>? Moves { get; set; } = [];

@@ -26,13 +26,20 @@ public partial class ShowEventPage : ContentPage
 
     private async void OnCheckInButtonClicked(object sender, EventArgs e)
     {
-        if (await _viewModel.CheckInToEventAsync())
+        if (Application.Current?.MainPage != null) // Null-check added to avoid CS8602
         {
-            await Application.Current.MainPage.DisplayAlert("Success", "Check-in successful!", "OK");
+            if (await _viewModel.CheckInToEventAsync())
+            {
+                await Application.Current.MainPage.DisplayAlert("Success", "Check-in successful!", "OK");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Check-in failed.", "OK");
+            }
         }
         else
         {
-            await Application.Current.MainPage.DisplayAlert("Error", "Check-in failed.", "OK");
+            Console.WriteLine("Application.Current or MainPage is null.");
         }
     }
 }

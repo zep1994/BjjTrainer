@@ -9,8 +9,13 @@ namespace BjjTrainer.ViewModels.Coaches
     {
         private readonly CoachService _coachService;
 
-        [ObservableProperty]
-        private CoachEventDto selectedEvent = new(); // Ensure initialization to prevent binding issues
+        private CoachEventDto _selectedEvent = new(); // Backing field for the property
+
+        public CoachEventDto SelectedEvent
+        {
+            get => _selectedEvent;
+            set => SetProperty(ref _selectedEvent, value);
+        }
 
         public CoachEventDetailViewModel()
         {
@@ -30,7 +35,7 @@ namespace BjjTrainer.ViewModels.Coaches
                 var eventDetails = await _coachService.GetEventDetailsAsync(eventId);
                 if (eventDetails != null)
                 {
-                    SelectedEvent = eventDetails;
+                    this.SelectedEvent = eventDetails;
                 }
             }
             catch (Exception ex)

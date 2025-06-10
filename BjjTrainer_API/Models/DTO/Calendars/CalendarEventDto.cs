@@ -3,7 +3,7 @@
     public class CalendarEventDto
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string? Title { get; set; }
         public DateTime? StartDate { get; set; }
         public TimeSpan? StartTime { get; set; }
         public DateTime? EndDate { get; set; }

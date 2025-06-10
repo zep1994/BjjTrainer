@@ -7,23 +7,15 @@ using System.Text;
 
 namespace BjjTrainer_API.Services_API.Users
 {
-    public class JwtTokenService
+    public class JwtTokenService(IConfiguration configuration, ApplicationDbContext context)
     {
-        private readonly string _secretKey;
-        private readonly string _issuer;
-        private readonly string _audience;
-        private readonly ApplicationDbContext _context;
-
-        public JwtTokenService(IConfiguration configuration, ApplicationDbContext context)
-        {
-            _secretKey = configuration["Jwt:SecretKey"];
-            _issuer = configuration["Jwt:Issuer"];
-            _audience = configuration["Jwt:Audience"];
-            _context = context;
-        }
+        private readonly string _secretKey = configuration["Jwt:SecretKey"];
+        private readonly string _issuer = configuration["Jwt:Issuer"];
+        private readonly string _audience = configuration["Jwt:Audience"];
+        private readonly ApplicationDbContext _context = context;
 
         // Get the refresh token based on the token value
-        public RefreshToken GetRefreshToken(string token) =>
+        public RefreshToken? GetRefreshToken(string token) =>
             _context.RefreshTokens.SingleOrDefault(rt => rt.Token == token && rt.IsActive);
 
 
@@ -50,11 +42,11 @@ namespace BjjTrainer_API.Services_API.Users
                 return null; // User not found
             }
 
-            // Generate new access token
+            // Updated code to handle potential null reference for user.UserName
             var newAccessToken = GenerateToken(new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, user.Id),
-                new(ClaimTypes.Name, user.UserName),
+                new(ClaimTypes.Name, user.UserName ?? string.Empty), 
                 new(ClaimTypes.Role, user.Role.ToString())
             });
 

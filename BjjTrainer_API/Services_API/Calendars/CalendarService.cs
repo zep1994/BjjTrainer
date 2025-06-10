@@ -39,6 +39,9 @@ namespace BjjTrainer_API.Services_API.Calendars
         // ******************************** CREATE EVENT ****************************************
         public async Task<CalendarEvent> CreateEventAsync(string userId, CreateEventDto dto)
         {
+            if (dto.Title == null)
+                throw new ArgumentNullException(nameof(dto.Title), "Event title cannot be null.");
+
             var user = await _context.ApplicationUsers
                 .FirstOrDefaultAsync(u => u.Id == userId)
                 ?? throw new Exception("User not found.");

@@ -60,7 +60,7 @@ namespace BjjTrainer_API.Controllers.Users
             var token = _jwtTokenService.GenerateToken(new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, user.Id),
-                new(ClaimTypes.Name, user.UserName),
+                new(ClaimTypes.Name, user.UserName ?? string.Empty), // Fix: Ensure non-null value
                 new(ClaimTypes.Role, user.Role.ToString()),
                 new("SchoolId", user.SchoolId?.ToString() ?? string.Empty)
             });
@@ -82,11 +82,11 @@ namespace BjjTrainer_API.Controllers.Users
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty), // Fix: Ensure non-null value
                 new(ClaimTypes.Role, user.Role.ToString())
             };
 
-            var token = _jwtTokenService.GenerateToken(claims); 
+            var token = _jwtTokenService.GenerateToken(claims);
             return Ok(new { Token = token });
         }
 
@@ -94,9 +94,16 @@ namespace BjjTrainer_API.Controllers.Users
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshToken refreshTokenDto)
         {
+            if (string.IsNullOrWhiteSpace(refreshTokenDto.Token))
+            {
+                return BadRequest("Refresh token is required.");
+            }
+
             var newTokens = await _jwtTokenService.RefreshTokenAsync(refreshTokenDto.Token);
             if (newTokens == null)
+            {
                 return Unauthorized("Invalid or expired refresh token.");
+            }
 
             return Ok(newTokens);
         }
@@ -111,17 +118,16 @@ namespace BjjTrainer_API.Controllers.Users
 
     public class RegisterModel
     {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public int? SchoolId { get; set; } 
-        public UserRole Role { get; set; } = UserRole.Student; 
-
+        public required string Username { get; set; } 
+        public required string Email { get; set; }    
+        public required string Password { get; set; } 
+        public int? SchoolId { get; set; }
+        public UserRole Role { get; set; } = UserRole.Student;
     }
 
     public class LoginModel
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public required string Username { get; set; } 
+        public required string Password { get; set; } 
     }
 }

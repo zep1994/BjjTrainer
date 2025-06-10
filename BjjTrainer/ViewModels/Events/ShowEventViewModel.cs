@@ -11,13 +11,13 @@ namespace BjjTrainer.ViewModels.Events
         public int EventId { get; }
 
         // Properties for Event Details
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string FormattedDate { get; set; }
-        public string FormattedEndDate { get; set; }
-        public string FormattedStartTime { get; set; }
-        public string FormattedEndTime { get; set; }
-        public string TrainingLogId { get; set; }
+        public new string? Title { get; set; }
+        public string Description { get; set; } = string.Empty; 
+        public string FormattedDate { get; set; } = string.Empty; 
+        public string FormattedEndDate { get; set; } = string.Empty; 
+        public string FormattedStartTime { get; set; } = "00:00"; 
+        public string FormattedEndTime { get; set; } = "00:00"; 
+        public string TrainingLogId { get; set; } = string.Empty; 
         public TrainingLogDto? StudentTrainingLog { get; set; }
 
         public bool IsAllDay { get; set; }
@@ -39,8 +39,8 @@ namespace BjjTrainer.ViewModels.Events
                 {
                     Console.WriteLine($"Loaded Event Details: {eventDetails.Title}");
 
-                    Title = eventDetails.Title;
-                    Description = eventDetails.Description;
+                    Title = eventDetails.Title ?? string.Empty; // Fix for CS8601
+                    Description = eventDetails.Description ?? string.Empty; // Fix for CS8601
                     FormattedDate = eventDetails.StartDate?.ToString("MMMM dd, yyyy") ?? string.Empty;
                     FormattedEndDate = eventDetails.EndDate?.ToString("MMMM dd, yyyy") ?? string.Empty;
 

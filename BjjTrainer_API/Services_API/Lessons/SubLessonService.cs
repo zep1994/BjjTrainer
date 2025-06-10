@@ -41,30 +41,33 @@ namespace BjjTrainer_API.Services_API.Lessons
             {
                 var subLesson = await _context.SubLessons
                     .Include(sl => sl.SubLessonMoves)
-                    .ThenInclude(slm => slm.Move)
+                    .ThenInclude(slm => slm.Move!) // Adjust nullability handling
+                    .AsQueryable() // Ensure compatibility with IEnumerable
                     .FirstOrDefaultAsync(sl => sl.Id == id);
 
-                if (subLesson == null) return null;
+                if (subLesson == null || subLesson.SubLessonMoves == null) return null;
 
                 return new SubLessonDetailsDto
                 {
                     Id = subLesson.Id,
                     Title = subLesson.Title,
-                    Moves = [.. subLesson.SubLessonMoves.Select(m => new Move
-                    {
-                        Id = m.Move.Id,
-                        Name = m.Move.Name,
-                        Description = m.Move.Description,
-                        Content = m.Move.Content,
-                        SkillLevel = m.Move.SkillLevel,
-                        Category = m.Move.Category,
-                        StartingPosition = m.Move.StartingPosition,
-                        History = m.Move.History,
-                        Scenarios = m.Move.Scenarios,
-                        LegalInCompetitions = m.Move.LegalInCompetitions,
-                        CounterStrategies = m.Move.CounterStrategies,
-                        Tags = m.Move.Tags
-                    })]
+                    Moves = subLesson.SubLessonMoves
+                        .Where(m => m.Move != null) // Ensure Move is not null
+                        .Select(m => new Move
+                        {
+                            Id = m.Move!.Id,
+                            Name = m.Move.Name,
+                            Description = m.Move.Description,
+                            Content = m.Move.Content,
+                            SkillLevel = m.Move.SkillLevel,
+                            Category = m.Move.Category,
+                            StartingPosition = m.Move.StartingPosition,
+                            History = m.Move.History,
+                            Scenarios = m.Move.Scenarios,
+                            LegalInCompetitions = m.Move.LegalInCompetitions,
+                            CounterStrategies = m.Move.CounterStrategies,
+                            Tags = m.Move.Tags
+                        }).ToList()
                 };
             }
             catch (Exception ex)
@@ -103,11 +106,18 @@ namespace BjjTrainer_API.Services_API.Lessons
             return true;
         }
 
-        // Get a specific SubLesson by ID
+        // Update the method to handle the nullability issue
         public async Task<SubLesson> GetSubLessonByIdAsync(int id)
         {
             var subLesson = await _context.SubLessons
                                  .FirstOrDefaultAsync(sl => sl.Id == id);
+
+            // Ensure a non-null value is returned
+            if (subLesson == null)
+            {
+                throw new InvalidOperationException($"SubLesson with Id {id} not found.");
+            }
+
             return subLesson;
         }
 
