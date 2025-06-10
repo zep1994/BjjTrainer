@@ -40,7 +40,7 @@ namespace BjjTrainer_API.Services_API.Moves
                 Description = move.Description ?? string.Empty,
                 Content = move.Content ?? string.Empty,
                 SkillLevel = move.SkillLevel ?? string.Empty,
-                Tags = move.Tags ?? new List<string>()
+                Tags = move.Tags ?? []
             };
         }
 

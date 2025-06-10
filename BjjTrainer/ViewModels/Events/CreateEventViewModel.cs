@@ -43,8 +43,8 @@ namespace BjjTrainer.ViewModels.Events
             }
         }
 
-        public ObservableCollection<Move> AvailableMoves { get; set; } = new();
-        public ObservableCollection<Move> SelectedMoves { get; set; } = new();
+        public ObservableCollection<Move> AvailableMoves { get; set; } = [];
+        public ObservableCollection<Move> SelectedMoves { get; set; } = [];
 
         public CreateEventViewModel()
         {
@@ -87,7 +87,7 @@ namespace BjjTrainer.ViewModels.Events
             dto.ApplicationUserId = Preferences.Get("UserId", string.Empty);
 
             // Defensive: Ensure MoveIds is not null
-            dto.MoveIds ??= new List<int>();
+            dto.MoveIds ??= [];
 
             // Call the API
             try

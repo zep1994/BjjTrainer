@@ -10,7 +10,7 @@ namespace BjjTrainer.ViewModels.Users
     {
         private readonly UserProgressService _userProgressService;
 
-        public ObservableCollection<MoveDto> MovesPerformed { get; set; } = new ObservableCollection<MoveDto>();
+        public ObservableCollection<MoveDto> MovesPerformed { get; set; } = [];
 
         private string _totalTrainingTime = string.Empty;
         public string TotalTrainingTime

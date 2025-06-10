@@ -76,14 +76,15 @@
         </Setter>
     </Style>
 
-    <!-- Shell -->
+    <!-- Shell TabBar Style -->
     <Style TargetType="Shell">
-        <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
-        <Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}" />
-        <Setter Property="Shell.TitleColor" Value="{StaticResource Secondary}" />
+        <Setter Property="Shell.BackgroundColor" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="Shell.TitleColor" Value="{StaticResource PrimaryTextColor}" />
         <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
-        <Setter Property="Shell.TabBarForegroundColor" Value="White" />
-        <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource Tertiary}" />
+        <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource White}" />
+        <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource Tertiary}" />
+        <Setter Property="Shell.TabBarDisabledColor" Value="{StaticResource Gray600}" />
     </Style>
 
     <!-- Entry -->
@@ -124,9 +125,9 @@
     <!-- Tabs -->
     <Style TargetType="TabbedPage">
         <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />
-        <Setter Property="BarTextColor" Value="White" />
-        <Setter Property="UnselectedTabColor" Value="{StaticResource SecondaryButtonColor}" />
-        <Setter Property="SelectedTabColor" Value="{StaticResource SecondaryButtonColor}" />
+        <Setter Property="BarTextColor" Value="{StaticResource White}" />
+        <Setter Property="UnselectedTabColor" Value="{StaticResource White}" />
+        <Setter Property="SelectedTabColor" Value="{StaticResource Tertiary}" />
     </Style>
 
     <!-- CheckBox -->

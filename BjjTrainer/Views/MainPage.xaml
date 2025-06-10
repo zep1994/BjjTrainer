@@ -12,330 +12,267 @@
             <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}"/>
             <Setter Property="HasShadow" Value="True"/>
             <Setter Property="Margin" Value="4"/>
-            <Setter Property="WidthRequest" Value="150"/>
-            <Setter Property="HeightRequest" Value="70"/>
         </Style>
+
+        <!-- Modern Card Style -->
+        <Style x:Key="ModernCard" TargetType="Frame">
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}"/>
+            <Setter Property="HasShadow" Value="True"/>
+            <Setter Property="Margin" Value="8,12"/>
+            <Setter Property="BorderColor" Value="{StaticResource AccentColor}"/>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow Brush="{StaticResource AccentColor}" Opacity="0.3" Offset="0,6" Radius="16"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ChartAxisLabelStyle" TargetType="Chart:ChartAxisLabelStyle">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="{StaticResource PrimaryTextColor}" />
+        </Style>
+        <!-- Vibrant Chart Palette -->
+        <x:Array x:Key="VibrantPalette" Type="{x:Type Color}">
+            <Color>#4F8CFF</Color>
+            <Color>#00E6A2</Color>
+            <Color>#FF5C8D</Color>
+            <Color>#FFD93D</Color>
+            <Color>#FF7F50</Color>
+        </x:Array>
+
+        <!-- DataTemplate resources for different chart types -->
+        <DataTemplate x:Key="LineChartTemplate">
+            <Chart:SfCartesianChart BackgroundColor="Transparent">
+                <Chart:SfCartesianChart.XAxes>
+                    <Chart:CategoryAxis LabelPlacement="OnTicks" />
+                </Chart:SfCartesianChart.XAxes>
+                <Chart:SfCartesianChart.YAxes>
+                    <Chart:NumericalAxis
+                        LabelStyle="{StaticResource ChartAxisLabelStyle}" 
+                        ShowMajorGridLines="False"
+                        LabelRotation="0" />
+                </Chart:SfCartesianChart.YAxes>
+                <Chart:LineSeries
+                    ItemsSource="{Binding MovesMonthlyUsage}"
+                    XBindingPath="Date"
+                    YBindingPath="Count"
+                    StrokeWidth="2"
+                    ShowDataLabels="True"/>
+            </Chart:SfCartesianChart>
+        </DataTemplate>
+        <DataTemplate x:Key="BarChartTemplate">
+            <Chart:SfCartesianChart BackgroundColor="Transparent">
+                <Chart:SfCartesianChart.XAxes>
+                    <Chart:CategoryAxis LabelPlacement="OnTicks" />
+                </Chart:SfCartesianChart.XAxes>
+                <Chart:SfCartesianChart.YAxes>
+                    <Chart:NumericalAxis
+                        LabelStyle="{StaticResource ChartAxisLabelStyle}" 
+                        ShowMajorGridLines="False"
+                        LabelRotation="0" />
+                </Chart:SfCartesianChart.YAxes>
+                <Chart:ColumnSeries
+                    ItemsSource="{Binding Data}"
+                    XBindingPath="Date"
+                    YBindingPath="Value"
+                    Fill="{StaticResource AccentColor}"
+                    ShowDataLabels="True"/>
+            </Chart:SfCartesianChart>
+        </DataTemplate>
+        <DataTemplate x:Key="AreaChartTemplate">
+            <Chart:SfCartesianChart BackgroundColor="Transparent">
+                <Chart:SfCartesianChart.XAxes>
+                    <Chart:CategoryAxis LabelPlacement="OnTicks" />
+                </Chart:SfCartesianChart.XAxes>
+                <Chart:SfCartesianChart.YAxes>
+                    <Chart:NumericalAxis
+                        LabelStyle="{StaticResource ChartAxisLabelStyle}" 
+                        ShowMajorGridLines="False"
+                        LabelRotation="0" />
+                </Chart:SfCartesianChart.YAxes>
+                <Chart:AreaSeries
+                    ItemsSource="{Binding MovesMonthlyUsage}"
+                    XBindingPath="Date"
+                    YBindingPath="Count"
+                    Fill="{StaticResource AccentColor}"
+                    StrokeWidth="2"
+                    ShowDataLabels="True"/>
+            </Chart:SfCartesianChart>
+        </DataTemplate>
     </ContentPage.Resources>
 
     <ContentPage.Content>
         <ScrollView>
-            <VerticalStackLayout Spacing="18" Padding="16">
+            <VerticalStackLayout Spacing="24" Padding="18">
 
-                <!-- User Info Card -->
-                <Frame Padding="16" CornerRadius="16" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}">
-                    <HorizontalStackLayout Spacing="16" VerticalOptions="Center">
-                        <Image Source="{Binding ProfilePictureUrl}" WidthRequest="64" HeightRequest="64" Aspect="AspectFill" 
-                               VerticalOptions="Center" HorizontalOptions="Start"
-                               Clip="EllipseGeometry Center=32,32 RadiusX=32 RadiusY=32"/>
-                        <VerticalStackLayout>
-                            <Label Text="{Binding UserName}" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
-                            <Label Text="{Binding Belt, StringFormat='Belt: {0}'}" FontSize="14" TextColor="{StaticResource SecondaryTextColor}" />
-                            <Label Text="{Binding PreferredTrainingStyle, StringFormat='Style: {0}'}" FontSize="14" TextColor="{StaticResource SecondaryTextColor}" />
-                        </VerticalStackLayout>
-                    </HorizontalStackLayout>
-                </Frame>
+                <!-- Graph Navigation Section -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" Margin="0,0,0,8">
+                    <Button Text="&#x25C0;" Command="{Binding PreviousGraphCommand}" StyleClass="NavButton"/>
+                    <Label Text="{Binding CurrentGraphTitle}" />
+                    <Button Text="&#x25B6;" Command="{Binding NextGraphCommand}" StyleClass="NavButton"/>
+                </HorizontalStackLayout>
 
-                <!-- Summary Cards -->
-                <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center" Margin="0,0,0,8">
-                    <!-- Training Time Card -->
-                    <Frame StyleClass="SummaryCard"
-                           BackgroundColor="{StaticResource PrimaryColor}"
-                           HasShadow="True"
-                           CornerRadius="18"
-                           Padding="0"
-                           Margin="6"
-                           BorderColor="{StaticResource PrimaryTextColor}">
-                        <Grid Padding="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <!-- Icon -->
-                            <Image Source="icon_time.png"
-                                   WidthRequest="32"
-                                   HeightRequest="32"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="Center"
-                                   Margin="16,0,8,0"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0"/>
-                            <!-- Title -->
-                            <Label Text="Training Time"
-                                   FontAttributes="Bold"
-                                   FontSize="13"
-                                   TextColor="White"
-                                   Opacity="0.8"
-                                   VerticalOptions="Start"
-                                   Grid.Row="0"
-                                   Grid.Column="1"
-                                   Margin="0,16,16,0"/>
-                            <!-- Value -->
-                            <Label Text="{Binding TotalTrainingTime, StringFormat='{0} min'}"
-                                   FontSize="22"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   VerticalOptions="End"
-                                   Grid.Row="1"
-                                   Grid.Column="1"
-                                   Margin="0,0,16,16"/>
-                            <!-- Bottom Border -->
-                            <BoxView HeightRequest="3"
-                                     Color="White"
-                                     HorizontalOptions="Fill"
-                                     VerticalOptions="End"
-                                     Grid.Row="2"
-                                     Grid.ColumnSpan="2"
-                                     Margin="0,0,0,0"/>
-                        </Grid>
-                    </Frame>
-                    <!-- Rounds Card -->
-                    <Frame StyleClass="SummaryCard"
-                           BackgroundColor="{StaticResource AccentColor}"
-                           HasShadow="True"
-                           CornerRadius="18"
-                           Padding="0"
-                           Margin="6"
-                           BorderColor="{StaticResource PrimaryTextColor}">
-                        <Grid Padding="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Image Source="icon_rounds.png"
-                                   WidthRequest="32"
-                                   HeightRequest="32"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="Center"
-                                   Margin="16,0,8,0"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0"/>
-                            <Label Text="Rounds"
-                                   FontAttributes="Bold"
-                                   FontSize="13"
-                                   TextColor="White"
-                                   Opacity="0.8"
-                                   VerticalOptions="Start"
-                                   Grid.Row="0"
-                                   Grid.Column="1"
-                                   Margin="0,16,16,0"/>
-                            <Label Text="{Binding TotalRoundsRolled}"
-                                   FontSize="22"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   VerticalOptions="End"
-                                   Grid.Row="1"
-                                   Grid.Column="1"
-                                   Margin="0,0,16,16"/>
-                            <BoxView HeightRequest="3"
-                                     Color="White"
-                                     HorizontalOptions="Fill"
-                                     VerticalOptions="End"
-                                     Grid.Row="2"
-                                     Grid.ColumnSpan="2"
-                                     Margin="0,0,0,0"/>
-                        </Grid>
-                    </Frame>
-                    <!-- Submissions Card -->
-                    <Frame StyleClass="SummaryCard"
-                           BackgroundColor="{StaticResource SuccessColor}"
-                           HasShadow="True"
-                           CornerRadius="18"
-                           Padding="0"
-                           Margin="6"
-                           BorderColor="{StaticResource PrimaryTextColor}">
-                        <Grid Padding="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Image Source="icon_submissions.png"
-                                   WidthRequest="32"
-                                   HeightRequest="32"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="Center"
-                                   Margin="16,0,8,0"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0"/>
-                            <Label Text="Submissions"
-                                   FontAttributes="Bold"
-                                   FontSize="13"
-                                   TextColor="White"
-                                   Opacity="0.8"
-                                   VerticalOptions="Start"
-                                   Grid.Row="0"
-                                   Grid.Column="1"
-                                   Margin="0,16,16,0"/>
-                            <Label Text="{Binding TotalSubmissions}"
-                                   FontSize="22"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   VerticalOptions="End"
-                                   Grid.Row="1"
-                                   Grid.Column="1"
-                                   Margin="0,0,16,16"/>
-                            <BoxView HeightRequest="3"
-                                     Color="White"
-                                     HorizontalOptions="Fill"
-                                     VerticalOptions="End"
-                                     Grid.Row="2"
-                                     Grid.ColumnSpan="2"
-                                     Margin="0,0,0,0"/>
-                        </Grid>
-                    </Frame>
-                    <!-- Taps Card -->
-                    <Frame StyleClass="SummaryCard"
-                           BackgroundColor="{StaticResource ErrorColor}"
-                           HasShadow="True"
-                           CornerRadius="18"
-                           Padding="0"
-                           Margin="6"
-                           BorderColor="{StaticResource PrimaryTextColor}">
-                        <Grid Padding="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Image Source="icon_taps.png"
-                                   WidthRequest="32"
-                                   HeightRequest="32"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="Center"
-                                   Margin="16,0,8,0"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0"/>
-                            <Label Text="Taps"
-                                   FontAttributes="Bold"
-                                   FontSize="13"
-                                   TextColor="White"
-                                   Opacity="0.8"
-                                   VerticalOptions="Start"
-                                   Grid.Row="0"
-                                   Grid.Column="1"
-                                   Margin="0,16,16,0"/>
-                            <Label Text="{Binding TotalTaps}"
-                                   FontSize="22"
-                                   FontAttributes="Bold"
-                                   TextColor="White"
-                                   VerticalOptions="End"
-                                   Grid.Row="1"
-                                   Grid.Column="1"
-                                   Margin="0,0,16,16"/>
-                            <BoxView HeightRequest="3"
-                                     Color="White"
-                                     HorizontalOptions="Fill"
-                                     VerticalOptions="End"
-                                     Grid.Row="2"
-                                     Grid.ColumnSpan="2"
-                                     Margin="0,0,0,0"/>
-                        </Grid>
-                    </Frame>
-                </FlexLayout>
-
-                <!-- Weekly Progress Graphs (swipable) -->
-                <Label Text="Weekly Progress" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
-                <CollectionView ItemsSource="{Binding Graphs}" ItemsLayout="HorizontalList" HeightRequest="280">
-                    <CollectionView.ItemTemplate>
+                <!-- Carousel Graphs -->
+                <CarouselView ItemsSource="{Binding Graphs}" Position="{Binding CurrentGraphIndex, Mode=TwoWay}" HeightRequest="260">
+                    <CarouselView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Padding="10" Margin="5" CornerRadius="14" BackgroundColor="{StaticResource CardBackgroundColor}" HasShadow="True">
+                            <Frame Style="{StaticResource ModernCard}">
                                 <VerticalStackLayout>
-                                    <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
-                                    <Chart:SfCartesianChart>
+                                    <Chart:SfCartesianChart BackgroundColor="Transparent" HeightRequest="260">
                                         <Chart:SfCartesianChart.XAxes>
-                                            <Chart:CategoryAxis LabelPlacement="OnTicks" Interval="1" ShowMajorGridLines="False"/>
+                                            <Chart:CategoryAxis LabelPlacement="OnTicks" />
                                         </Chart:SfCartesianChart.XAxes>
                                         <Chart:SfCartesianChart.YAxes>
-                                            <Chart:NumericalAxis ShowMajorGridLines="False"/>
+                                            <Chart:NumericalAxis
+                                                LabelStyle="{StaticResource ChartAxisLabelStyle}" 
+                                                ShowMajorGridLines="False"
+                                                LabelRotation="0" />
                                         </Chart:SfCartesianChart.YAxes>
-                                        <Chart:ColumnSeries ItemsSource="{Binding Data}"
-                                                            XBindingPath="Day"
-                                                            YBindingPath="Value"
-                                                            EnableTooltip="True">
-                                            <Chart:ColumnSeries.DataLabelSettings>
-                                                <Chart:CartesianDataLabelSettings />
-                                            </Chart:ColumnSeries.DataLabelSettings>
-                                        </Chart:ColumnSeries>
+                                        <Chart:ColumnSeries
+                                            ItemsSource="{Binding Data}"
+                                            XBindingPath="DateLabel"
+                                            YBindingPath="Value"
+                                            Fill="{StaticResource AccentColor}"
+                                            ShowDataLabels="True"/>
                                     </Chart:SfCartesianChart>
                                 </VerticalStackLayout>
                             </Frame>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
 
-                <!-- Moves Performed Pie Chart -->
-                <Label Text="Moves Performed" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
-                <Frame Padding="10" CornerRadius="14" BackgroundColor="{StaticResource CardBackgroundColor}" HasShadow="True">
-                    <Chart:SfCircularChart>
-                        <Chart:SfCircularChart.Title>
-                            <Label Text="Distribution" HorizontalTextAlignment="Center" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium" FontAttributes="Bold" />
-                        </Chart:SfCircularChart.Title>
-                        <Chart:SfCircularChart.TooltipBehavior>
-                            <Chart:ChartTooltipBehavior />
-                        </Chart:SfCircularChart.TooltipBehavior>
-                        <Chart:PieSeries ItemsSource="{Binding MovesPerformed}"
-                                         XBindingPath="Name" YBindingPath="TrainingLogCount"
-                                         ExplodeIndex="0" Stroke="White" StrokeWidth="2"
-                                         ShowDataLabels="True" EnableTooltip="True"
-                                         StartAngle="270" EndAngle="630">
-                            <Chart:PieSeries.DataLabelSettings>
-                                <Chart:CircularDataLabelSettings UseSeriesPalette="True" LabelPlacement="Outer">
-                                    <Chart:CircularDataLabelSettings.LabelStyle>
-                                        <Chart:ChartDataLabelStyle LabelFormat="0.##'%'"/>
-                                    </Chart:CircularDataLabelSettings.LabelStyle>
-                                </Chart:CircularDataLabelSettings>
-                            </Chart:PieSeries.DataLabelSettings>
-                        </Chart:PieSeries>
-                    </Chart:SfCircularChart>
-                </Frame>
-
-                <!-- Weekly Summary Section -->
-                <Frame Padding="14" CornerRadius="14" BackgroundColor="{StaticResource CardBackgroundColor}" HasShadow="True">
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Past Week Summary" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Text="{Binding WeeklyTrainingTimeSum, StringFormat='Total Training Time: {0} min'}"/>
-                        <Label Text="{Binding WeeklyRoundsRolledSum, StringFormat='Total Rounds Rolled: {0}'}"/>
-                        <Label Text="{Binding WeeklySubmissionsSum, StringFormat='Total Submissions: {0}'}"/>
-                        <Label Text="{Binding WeeklyTapsSum, StringFormat='Total Taps: {0}'}"/>
+                <!-- Totals Card for Past 7 Days -->
+                <Frame Style="{StaticResource ModernCard}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Totals (Past 7 Days)" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource AccentColor}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding WeeklyTrainingTimeSum, StringFormat='Training Time: {0} min'}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}"/>
+                        <Label Text="{Binding WeeklyRoundsRolledSum, StringFormat='Rounds Rolled: {0}'}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}"/>
+                        <Label Text="{Binding WeeklySubmissionsSum, StringFormat='Submissions: {0}'}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}"/>
+                        <Label Text="{Binding WeeklyTapsSum, StringFormat='Taps: {0}'}" FontSize="16" TextColor="{StaticResource PrimaryTextColor}"/>
                     </VerticalStackLayout>
                 </Frame>
 
-                <!-- Goals Section -->
-                <Label Text="Training Goals" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
-                <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame BorderColor="Gray" CornerRadius="10" Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackgroundColor}">
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding GoalDate, StringFormat='{0:MMMM dd, yyyy}'}" FontAttributes="Bold" FontSize="16" />
-                                    <Label Text="{Binding Notes}" FontSize="14" />
-                                    <Label Text="Moves:" FontAttributes="Bold" />
-                                    <CollectionView ItemsSource="{Binding UserTrainingGoalMoves}" SelectionMode="None">
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Label Text="{Binding Name}" FontSize="14" />
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
-                                </VerticalStackLayout>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+
+                <!-- Best Moves of All Time Pie Chart -->
+                <Label Text="Best Moves of All Time" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource AccentColor}" HorizontalOptions="Center" />
+                <Frame Style="{StaticResource ModernCard}">
+                    <VerticalStackLayout>
+                        <Chart:SfCircularChart BackgroundColor="Transparent">
+                            <Chart:SfCircularChart.Title>
+                                <Label Text="Move Usage Distribution" HorizontalTextAlignment="Center" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium" FontAttributes="Bold" />
+                            </Chart:SfCircularChart.Title>
+                            <Chart:SfCircularChart.TooltipBehavior>
+                                <Chart:ChartTooltipBehavior />
+                            </Chart:SfCircularChart.TooltipBehavior>
+                            <Chart:PieSeries ItemsSource="{Binding MovesPerformed}"
+                                                XBindingPath="Name" YBindingPath="TrainingLogCount"
+                                                ExplodeIndex="0" Stroke="White" StrokeWidth="2"
+                                                ShowDataLabels="True" EnableTooltip="True"
+                                                StartAngle="270" EndAngle="630">
+                                <Chart:PieSeries.DataLabelSettings>
+                                    <Chart:CircularDataLabelSettings UseSeriesPalette="True" LabelPlacement="Outer">
+                                        <Chart:CircularDataLabelSettings.LabelStyle>
+                                            <Chart:ChartDataLabelStyle FontSize="16" FontAttributes="Bold" TextColor="{StaticResource AccentColor}"/>
+                                        </Chart:CircularDataLabelSettings.LabelStyle>
+                                    </Chart:CircularDataLabelSettings>
+                                </Chart:PieSeries.DataLabelSettings>
+                            </Chart:PieSeries>
+                        </Chart:SfCircularChart>
+                        <!-- Stylish Top Moves Chips -->
+                        <HorizontalStackLayout Spacing="8" Margin="0,12,0,0" HorizontalOptions="Center">
+                            <CollectionView ItemsSource="{Binding MovesPerformed}" ItemsLayout="HorizontalList" HeightRequest="48">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame Padding="10,4" Margin="2" BackgroundColor="{StaticResource AccentColor}" CornerRadius="24" HasShadow="False">
+                                            <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="White"/>
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Best Moves of the Month (Vertical Column Chart, per Syncfusion MAUI docs) -->
+                <Label Text="Best Moves of the Month" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource AccentColor}" HorizontalOptions="Center" />
+                <Frame Style="{StaticResource ModernCard}">
+                    <VerticalStackLayout>
+                        <Chart:SfCartesianChart BackgroundColor="Transparent" HeightRequest="260">
+                            <Chart:SfCartesianChart.XAxes>
+                                <Chart:CategoryAxis
+                                    LabelStyle="{StaticResource ChartAxisLabelStyle}"
+                                    ShowMajorGridLines="False"
+                                    LabelRotation="0" />
+                            </Chart:SfCartesianChart.XAxes>
+                            <Chart:SfCartesianChart.YAxes>
+                                <Chart:NumericalAxis ShowMajorGridLines="False" />
+                            </Chart:SfCartesianChart.YAxes>
+                            <Chart:ColumnSeries
+                                ItemsSource="{Binding MovesPerformed}"
+                                XBindingPath="Name"
+                                YBindingPath="TrainingLogCount"
+                                Fill="{StaticResource AccentColor}"
+                                ShowDataLabels="True"
+                                Stroke="White"
+                                StrokeWidth="1">
+                                <Chart:ColumnSeries.DataLabelSettings>
+                                    <Chart:CartesianDataLabelSettings LabelPlacement="Outer">
+                                        <Chart:CartesianDataLabelSettings.LabelStyle>
+                                            <Chart:ChartDataLabelStyle FontSize="14" FontAttributes="Bold" TextColor="{StaticResource AccentColor}" />
+                                        </Chart:CartesianDataLabelSettings.LabelStyle>
+                                    </Chart:CartesianDataLabelSettings>
+                                </Chart:ColumnSeries.DataLabelSettings>
+                            </Chart:ColumnSeries>
+                        </Chart:SfCartesianChart>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Moves Usage Over the Month Section -->
+                <Label Text="Moves Usage Over the Month" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource AccentColor}" HorizontalOptions="Center" Margin="0,16,0,0"/>
+                <Picker x:Name="ChartTypePicker"
+                        Title="Select Chart Type"
+                        ItemsSource="{Binding ChartTypes}"
+                        SelectedItem="{Binding SelectedChartType, Mode=TwoWay}"
+                        Margin="0,0,0,8"
+                        TextColor="{StaticResource AccentColor}"
+                        FontAttributes="Bold"/>
+                <ContentView>
+                    <ContentView.Content>
+                        <Chart:SfCartesianChart BackgroundColor="Transparent" HeightRequest="260">
+                            <Chart:SfCartesianChart.XAxes>
+                                <Chart:CategoryAxis LabelPlacement="OnTicks" />
+                            </Chart:SfCartesianChart.XAxes>
+                            <Chart:SfCartesianChart.YAxes>
+                                <Chart:NumericalAxis
+                                    LabelStyle="{StaticResource ChartAxisLabelStyle}" 
+                                    ShowMajorGridLines="False"
+                                    LabelRotation="0" />
+                            </Chart:SfCartesianChart.YAxes>
+                            <Chart:ColumnSeries
+                                ItemsSource="{Binding MovesMonthlyUsage}"
+                                XBindingPath="Date"
+                                YBindingPath="Count"
+                                Fill="{StaticResource AccentColor}"
+                                ShowDataLabels="True"/>
+                        </Chart:SfCartesianChart>
+                    </ContentView.Content>
+                </ContentView>
+
+                <!-- Month's Highlights Card with Modern Border -->
+                <Frame Style="{StaticResource ModernCard}" BorderColor="{StaticResource AccentColor}" Margin="0,0,0,24">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="This Month's Highlights" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource AccentColor}" HorizontalOptions="Center"/>
+                        <BoxView HeightRequest="2" Color="{StaticResource AccentColor}" HorizontalOptions="Fill" Margin="0,0,0,8"/>
+                        <Label Text="{Binding FavoriteMoveThisMonth, StringFormat='Favorite Move: {0}'}" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding MostTrainedTimeOneDayThisMonth, StringFormat='Most Trained Time (1 Day): {0} min'}" FontSize="16" FontAttributes="Italic" TextColor="{StaticResource CardSubTextColor}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding WeeklyTrainingHours, StringFormat='Weekly Training Hours: {0:F1}'}" FontSize="16" TextColor="{StaticResource CardMainTextColor}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding AverageSessionLength, StringFormat='Avg. Session Length: {0:F1} min'}" FontSize="16" TextColor="{StaticResource CardMainTextColor}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding TotalGoalsAchieved, StringFormat='Goals Achieved: {0}'}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource AccentColor}" HorizontalOptions="Center"/>
+                        <Label Text="{Binding TotalMoves, StringFormat='Moves Associated with Goals: {0}'}" FontSize="16" TextColor="{StaticResource CardMainTextColor}" HorizontalOptions="Center"/>
+                        <BoxView HeightRequest="3" Color="{StaticResource AccentColor}" HorizontalOptions="Fill" Margin="0,12,0,0"/>
+                    </VerticalStackLayout>
+                </Frame>
 
             </VerticalStackLayout>
         </ScrollView>

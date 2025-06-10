@@ -54,12 +54,12 @@ namespace BjjTrainer_API.Services_API.Coaches
                 {
                     UserName = c.User?.UserName ?? "Unknown",
                     CheckInTime = c.CheckInTime
-                }).ToList() ?? new List<CheckInDto>(),
+                }).ToList() ?? [],
                 Moves = ev.TrainingLog?.TrainingLogMoves?.Select(tlm => new LogMoveDto
                 {
                     Id = tlm.Move?.Id ?? 0,
                     Name = tlm.Move?.Name ?? "Unknown"
-                }).ToList() ?? new List<LogMoveDto>()
+                }).ToList() ?? []
             }).ToList();
 
             return result;
@@ -100,12 +100,12 @@ namespace BjjTrainer_API.Services_API.Coaches
                 {
                     UserName = c.User?.UserName ?? "Unknown",
                     CheckInTime = c.CheckInTime
-                }).ToList() ?? new List<CheckInDto>(),
+                }).ToList() ?? [],
                 Moves = ev.TrainingLog?.TrainingLogMoves?.Select(tlm => new LogMoveDto
                 {
                     Id = tlm.Move?.Id ?? 0,
                     Name = tlm.Move?.Name ?? "Unknown"
-                }).ToList() ?? new List<LogMoveDto>()
+                }).ToList() ?? []
             };
         }
 

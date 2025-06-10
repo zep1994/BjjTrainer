@@ -8,6 +8,8 @@ using BjjTrainer.Services.Trainings;
 using BjjTrainer.Services.Users;
 using MvvmHelpers;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input; 
 
 namespace BjjTrainer.ViewModels
 {
@@ -21,7 +23,7 @@ namespace BjjTrainer.ViewModels
 
         public ObservableCollection<MoveDto> MovesPerformed { get; set; } = [];
         public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = [];
-        public ObservableCollection<GraphViewModel> Graphs { get; } = new();
+        public ObservableCollection<GraphViewModel> Graphs { get; } = [];
 
         // Properties for User Progress
         public double? TotalTrainingTime { get; private set; }
@@ -41,15 +43,39 @@ namespace BjjTrainer.ViewModels
         public string? ProfilePictureUrl { get; private set; }
         public string? PreferredTrainingStyle { get; private set; }
 
-        public ObservableCollection<DailyUserProgressDto> DailyTrainingTime { get; } = new();
-        public ObservableCollection<DailyUserProgressDto> DailyRoundsRolled { get; } = new();
-        public ObservableCollection<DailyUserProgressDto> DailySubmissions { get; } = new();
-        public ObservableCollection<DailyUserProgressDto> DailyTaps { get; } = new();
+        public ObservableCollection<DailyUserProgressDto> DailyTrainingTime { get; } = [];
+        public ObservableCollection<DailyUserProgressDto> DailyRoundsRolled { get; } = [];
+        public ObservableCollection<DailyUserProgressDto> DailySubmissions { get; } = [];
+        public ObservableCollection<DailyUserProgressDto> DailyTaps { get; } = [];
 
         public double WeeklyTrainingTimeSum => DailyTrainingTime.Sum(x => x.Value);
         public double WeeklyRoundsRolledSum => DailyRoundsRolled.Sum(x => x.Value);
         public double WeeklySubmissionsSum => DailySubmissions.Sum(x => x.Value);
         public double WeeklyTapsSum => DailyTaps.Sum(x => x.Value);
+
+        public double MostTrainedTimeOneDayThisMonth =>
+            DailyTrainingTime
+                .Where(x => x.Date.Month == DateTime.Now.Month && x.Date.Year == DateTime.Now.Year)
+                .OrderByDescending(x => x.Value)
+                .FirstOrDefault()?.Value ?? 0;
+
+        private int _currentGraphIndex;
+        public int CurrentGraphIndex
+        {
+            get => _currentGraphIndex;
+            set
+            {
+                if (SetProperty(ref _currentGraphIndex, value))
+                    OnPropertyChanged(nameof(CurrentGraphTitle));
+            }
+        }
+
+        public string CurrentGraphTitle => Graphs.Count > 0 && CurrentGraphIndex >= 0 && CurrentGraphIndex < Graphs.Count
+            ? Graphs[CurrentGraphIndex].Title ?? string.Empty
+            : string.Empty;
+
+        public ICommand NextGraphCommand { get; }
+        public ICommand PreviousGraphCommand { get; }
 
         public MainPageViewModel()
         {
@@ -58,6 +84,9 @@ namespace BjjTrainer.ViewModels
             _userProgressService = new UserProgressService();
             _moveService = new MoveService();
             _trainingGoalService = new TrainingGoalService();
+
+            NextGraphCommand = new RelayCommand(NextGraph, CanGoNext);
+            PreviousGraphCommand = new RelayCommand(PreviousGraph, CanGoPrevious);
         }
 
         public async Task InitializeAsync()
@@ -137,7 +166,7 @@ namespace BjjTrainer.ViewModels
                 TotalTaps = userProgress.TotalTaps;
                 WeeklyTrainingHours = userProgress.WeeklyTrainingHours;
                 AverageSessionLength = userProgress.AverageSessionLength;
-                FavoriteMoveThisMonth = userProgress.FavoriteMoveThisMonth ?? string.Empty; // Fix for CS8601
+                FavoriteMoveThisMonth = userProgress.FavoriteMoveThisMonth ?? string.Empty; 
                 TotalGoalsAchieved = userProgress.TotalGoalsAchieved;
                 TotalMoves = userProgress.TotalMoves;
 
@@ -174,7 +203,7 @@ namespace BjjTrainer.ViewModels
 
                 if (goals != null)
                 {
-                    Console.WriteLine($"Goals Count: {goals.Count()}");
+                    Console.WriteLine($"Goals Count: {goals.Count}"); 
 
                     TrainingGoals.Clear();
 
@@ -198,6 +227,38 @@ namespace BjjTrainer.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        private void NextGraph()
+        {
+            if (CurrentGraphIndex < Graphs.Count - 1)
+                CurrentGraphIndex++;
+        }
+
+        private void PreviousGraph()
+        {
+            if (CurrentGraphIndex > 0)
+                CurrentGraphIndex--;
+        }
+
+        private bool CanGoNext() => CurrentGraphIndex < Graphs.Count - 1;
+        private bool CanGoPrevious() => CurrentGraphIndex > 0;
+
+        private static List<DailyUserProgressDto> GenerateLast7DaysData(Func<DateTime, double> valueSelector)
+        {
+            var today = DateTime.Today;
+            var data = new List<DailyUserProgressDto>();
+            // Oldest (6 days ago) to newest (today)
+            for (int i = 6; i >= 0; i--)
+            {
+                var date = today.AddDays(-i);
+                data.Add(new DailyUserProgressDto
+                {
+                    Date = date,
+                    Value = valueSelector(date)
+                });
+            }
+            return data;
         }
     }
 }

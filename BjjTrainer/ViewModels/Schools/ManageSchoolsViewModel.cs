@@ -11,7 +11,7 @@ namespace BjjTrainer.ViewModels.Schools
     {
         private readonly SchoolService _schoolService;
 
-        public ObservableCollection<School> Schools { get; set; } = new();
+        public ObservableCollection<School> Schools { get; set; } = [];
 
         public ICommand CreateSchoolCommand { get; }
         public ICommand EditSchoolCommand { get; }

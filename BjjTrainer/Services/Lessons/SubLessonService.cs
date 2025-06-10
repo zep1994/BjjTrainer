@@ -20,7 +20,7 @@ namespace BjjTrainer.Services.Lessons
             var subLessons = await response.Content.ReadFromJsonAsync<List<SubLesson>>(options);
 
             // Ensure the return value is not null
-            return subLessons ?? new List<SubLesson>();
+            return subLessons ?? [];
         }
 
         public async Task<SubLessonDetailsDto> GetSubLessonDetailsByIdAsync(int subLessonId)

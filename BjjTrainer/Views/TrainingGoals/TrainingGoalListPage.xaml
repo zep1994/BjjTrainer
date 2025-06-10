@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:BjjTrainer.ViewModels"
-             x:Class="BjjTrainer.Views.TrainingGoals.TrainingGoalListPage"
-             x:Name="TrainingGoalListPageRoot"
-             BackgroundColor="{StaticResource BackgroundColor}"
-             Title="Training Goals">
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:local="clr-namespace:BjjTrainer.ViewModels"
+                x:Class="BjjTrainer.Views.TrainingGoals.TrainingGoalListPage"
+                x:Name="TrainingGoalListPageRoot"
+                BackgroundColor="{StaticResource BackgroundColor}"
+                Title="Training Goals">
 
     <ContentPage.Content>
         <ScrollView>
@@ -13,11 +13,11 @@
 
                 <!-- Page Title -->
                 <Label Text="Your Training Goals"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       TextColor="{StaticResource AccentColor}"
-                       HorizontalOptions="Center"
-                       Margin="0,10,0,10">
+                        FontSize="28"
+                        FontAttributes="Bold"
+                        TextColor="{StaticResource AccentColor}"
+                        HorizontalOptions="Center"
+                        Margin="0,10,0,10">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Your " FontAttributes="Bold" />
@@ -54,21 +54,21 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame CornerRadius="16"
-                                   Padding="16"
-                                   Margin="0,4"
-                                   BackgroundColor="{StaticResource CardBackgroundColor}"
-                                   BorderColor="{StaticResource CardBorderColor}"
-                                   HasShadow="True">
+                                    Padding="16"
+                                    Margin="0,4"
+                                    BackgroundColor="{StaticResource CardBackgroundColor}"
+                                    BorderColor="{StaticResource CardBorderColor}"
+                                    HasShadow="True">
                                 <VerticalStackLayout Spacing="12">
                                     <Label Text="{Binding Notes}"
-                                           FontAttributes="Bold"
-                                           FontSize="18"
-                                           TextColor="{StaticResource CardMainTextColor}"
-                                           LineBreakMode="WordWrap"
-                                           MaxLines="2" />
+                                            FontAttributes="Bold"
+                                            FontSize="18"
+                                            TextColor="{StaticResource CardMainTextColor}"
+                                            LineBreakMode="WordWrap"
+                                            MaxLines="2" />
                                     <Label Text="{Binding GoalDate, StringFormat='Goal Date: {0:MMMM dd, yyyy}'}"
-                                           FontSize="14"
-                                           TextColor="{StaticResource CardSubTextColor}" />
+                                            FontSize="14"
+                                            TextColor="{StaticResource CardSubTextColor}" />
                                     <CollectionView ItemsSource="{Binding UserTrainingGoalMoves}" SelectionMode="None">
                                         <CollectionView.ItemsLayout>
                                             <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
@@ -77,11 +77,11 @@
                                             <DataTemplate>
                                                 <HorizontalStackLayout Spacing="8">
                                                     <Label Text="{Binding Move.Name}"
-                                                           FontSize="14"
-                                                           TextColor="{StaticResource CardMainTextColor}" />
+                                                            FontSize="14"
+                                                            TextColor="{StaticResource CardMainTextColor}" />
                                                     <Label Text="{Binding PracticeCount, StringFormat='x{0}'}"
-                                                           FontSize="14"
-                                                           TextColor="{StaticResource CardSubTextColor}" />
+                                                            FontSize="14"
+                                                            TextColor="{StaticResource CardSubTextColor}" />
                                                 </HorizontalStackLayout>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>

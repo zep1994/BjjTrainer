@@ -10,7 +10,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
         private readonly TrainingService _trainingService;
         private readonly INavigation? _navigation; 
 
-        public ObservableCollection<TrainingLogDto> TrainingLogs { get; set; } = new();
+        public ObservableCollection<TrainingLogDto> TrainingLogs { get; set; } = [];
 
         // Public Parameterless Constructor
         public TrainingLogListViewModel()

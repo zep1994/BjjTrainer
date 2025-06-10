@@ -11,7 +11,7 @@ public partial class UpdateTrainingLogViewModel : BaseViewModel
 {
     private readonly TrainingService _trainingService;
 
-    public ObservableCollection<UpdateMoveDto> Moves { get; set; } = new();
+    public ObservableCollection<UpdateMoveDto> Moves { get; set; } = [];
 
     private DateTime _date;
     public DateTime Date
@@ -118,7 +118,7 @@ public partial class UpdateTrainingLogViewModel : BaseViewModel
                 Moves.Clear();
 
                 // Get IDs of moves that were trained in this session
-                var trainedMoveIds = log.Moves?.Select(m => m.Id).ToHashSet() ?? new HashSet<int>();
+                var trainedMoveIds = log.Moves?.Select(m => m.Id).ToHashSet() ?? [];
 
                 // Add all moves, preselecting those that were trained
                 foreach (var move in allMoves)

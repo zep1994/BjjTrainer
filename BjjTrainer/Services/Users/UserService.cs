@@ -174,7 +174,7 @@ namespace BjjTrainer.Services.Users
 
         public class ErrorResponse
         {
-            public List<string> Errors { get; set; } = new List<string>();
+            public List<string> Errors { get; set; } = [];
         }
 
 
