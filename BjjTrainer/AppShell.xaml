@@ -77,10 +77,6 @@
             <ShellContent Route="UserProgressPage" ContentTemplate="{DataTemplate users:UserProgressPage}" />
         </Tab>
 
-        <Tab Title="Lessons" Icon="lessons.png">
-            <ShellContent Route="LessonsPage" ContentTemplate="{DataTemplate lessons:LessonsPage}" />
-        </Tab>
-
         <Tab Title="Moves" Icon="moves.png">
             <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
         </Tab>
@@ -98,8 +94,6 @@
                Route="UserProfilePage" />
     </TabBar>
     
-    <ShellContent Title="Lessons" Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />
-    <ShellContent Title="SubLessons" Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
     <ShellContent Title="My Lessons" Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
     <ShellContent Title="My Goals" Route="TrainingGoalPage" ContentTemplate="{DataTemplate goals:TrainingGoalPage}" />
     <ShellContent Title="Update Training Log" Route="UpdateTrainingLogPage" ContentTemplate="{DataTemplate train:UpdateTrainingLogPage}" />

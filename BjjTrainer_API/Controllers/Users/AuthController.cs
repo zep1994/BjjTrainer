@@ -19,10 +19,10 @@ namespace BjjTrainer_API.Controllers.Users
 
 
         public AuthController(UserManager<ApplicationUser> userManager,
-                              SignInManager<ApplicationUser> signInManager,
-                              JwtTokenService jwtTokenService,
-                              UserService userService,
-                              ILogger<AuthController> logger)
+                                    SignInManager<ApplicationUser> signInManager,
+                                    JwtTokenService jwtTokenService,
+                                    UserService userService,
+                                    ILogger<AuthController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;

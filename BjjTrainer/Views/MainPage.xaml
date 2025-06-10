@@ -5,133 +5,256 @@
              x:Class="BjjTrainer.Views.MainPage"
              BackgroundColor="{StaticResource BackgroundColor}">
 
+    <ContentPage.Resources>
+        <Style x:Key="SummaryCard" TargetType="Frame">
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}"/>
+            <Setter Property="HasShadow" Value="True"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="WidthRequest" Value="150"/>
+            <Setter Property="HeightRequest" Value="70"/>
+        </Style>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <ScrollView>
-            <VerticalStackLayout Spacing="20" Padding="10">
-                <VerticalStackLayout Spacing="10" Padding="10">
+            <VerticalStackLayout Spacing="18" Padding="16">
 
-                    <Label Text="User Progress" FontSize="24" HorizontalOptions="Center" />
-
-                    <!-- Progress Details -->
-                    <Frame BorderColor="Gray" Padding="10" CornerRadius="10">
+                <!-- User Info Card -->
+                <Frame Padding="16" CornerRadius="16" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}">
+                    <HorizontalStackLayout Spacing="16" VerticalOptions="Center">
+                        <Image Source="{Binding ProfilePictureUrl}" WidthRequest="64" HeightRequest="64" Aspect="AspectFill" 
+                               VerticalOptions="Center" HorizontalOptions="Start"
+                               Clip="EllipseGeometry Center=32,32 RadiusX=32 RadiusY=32"/>
                         <VerticalStackLayout>
-                            <Label Text="Total Training Time:" FontAttributes="Bold" />
-                            <Label Text="{Binding TotalTrainingTime}" />
-
-                            <Label Text="Total Rounds Rolled:" FontAttributes="Bold" />
-                            <Label Text="{Binding TotalRoundsRolled}" />
-
-                            <Label Text="Total Submissions:" FontAttributes="Bold" />
-                            <Label Text="{Binding TotalSubmissions}" />
-
-                            <Label Text="Total Taps:" FontAttributes="Bold" />
-                            <Label Text="{Binding TotalTaps}" />
-
-                            <Label Text="Total Goals Achieved:" FontAttributes="Bold" />
-                            <Label Text="{Binding TotalGoalsAchieved}" />
-
-                            <Label Text="Total Moves Associated with Goals:" FontAttributes="Bold" />
-                            <Label Text="{Binding TotalMoves}" />
-
+                            <Label Text="{Binding UserName}" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}" />
+                            <Label Text="{Binding Belt, StringFormat='Belt: {0}'}" FontSize="14" TextColor="{StaticResource SecondaryTextColor}" />
+                            <Label Text="{Binding PreferredTrainingStyle, StringFormat='Style: {0}'}" FontSize="14" TextColor="{StaticResource SecondaryTextColor}" />
                         </VerticalStackLayout>
-                    </Frame>
-
-                    <!-- Moves Performed Chart -->
-                    <Label Text="Top Moves Performed" FontSize="24" HorizontalOptions="Center" FontAttributes="Bold" />
-                    <Chart:SfCircularChart>
-                        <Chart:SfCircularChart.Title>
-                            <Border StrokeShape="RoundRectangle 8"
-                            Stroke="#199CB3" BackgroundColor="#199CB3" StrokeThickness="3">
-                                <Label Text="Moves Performed Distribution" 
-                               HorizontalTextAlignment="Center" TextColor="White"
-                               FontSize="Medium" FontAttributes="Bold" />
-                            </Border>
-                        </Chart:SfCircularChart.Title>
-
-                        <Chart:SfCircularChart.TooltipBehavior>
-                            <Chart:ChartTooltipBehavior />
-                        </Chart:SfCircularChart.TooltipBehavior>
-
-                        <Chart:PieSeries ItemsSource="{Binding MovesPerformed}"
-                                 XBindingPath="Name" YBindingPath="TrainingLogCount"
-                                 ExplodeIndex="0" Stroke="White" StrokeWidth="2"
-                                 ShowDataLabels="True" EnableTooltip="True"
-                                 StartAngle="270" EndAngle="630">
-
-                            <Chart:PieSeries.DataLabelSettings>
-                                <Chart:CircularDataLabelSettings UseSeriesPalette="True" LabelPlacement="Outer">
-                                    <Chart:CircularDataLabelSettings.LabelStyle>
-                                        <Chart:ChartDataLabelStyle LabelFormat="0.##'%'"/>
-                                    </Chart:CircularDataLabelSettings.LabelStyle>
-                                </Chart:CircularDataLabelSettings>
-                            </Chart:PieSeries.DataLabelSettings>
-                        </Chart:PieSeries>
-                    </Chart:SfCircularChart>
-
-
-                    <!-- Top Moves List -->
-                    <CollectionView ItemsSource="{Binding TopMoves}" BackgroundColor="{StaticResource CardBackgroundColor}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Padding="10" Margin="5" CornerRadius="8">
-                                    <VerticalStackLayout>
-                                        <Label Text="{Binding MoveName}" FontSize="18" TextColor="{StaticResource PrimaryTextColor}" />
-                                        <Label Text="{Binding UsagePercentage, StringFormat='Usage: {0}%'}" FontSize="14" TextColor="{StaticResource SecondaryTextColor}" />
-                                    </VerticalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-
-                <!-- Training Information Section -->
-                <Label Text="Training Summary" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
-
-                <Frame BorderColor="Gray" Padding="15" CornerRadius="10">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Weekly Training Hours:" FontAttributes="Bold" />
-                        <Label Text="{Binding WeeklyTrainingHours}" />
-
-                        <Label Text="Average Session Length (min):" FontAttributes="Bold" />
-                        <Label Text="{Binding AverageSessionLength}" />
-
-                        <Label Text="Favorite Move This Month:" FontAttributes="Bold" />
-                        <Label Text="{Binding FavoriteMoveThisMonth}" />
-                    </VerticalStackLayout>
+                    </HorizontalStackLayout>
                 </Frame>
 
-                <!-- Goals Section -->
-                <VerticalStackLayout Spacing="10" Padding="10">
-                    <Label Text="Training Goals" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame BorderColor="Gray" CornerRadius="10" Padding="10" Margin="5">
-                                    <VerticalStackLayout>
-                                        <Label Text="{Binding GoalDate, StringFormat='{0:MMMM dd, yyyy}'}" FontAttributes="Bold" FontSize="16" />
-                                        <Label Text="{Binding Notes}" FontSize="14" />
-                                        <Label Text="Moves:" FontAttributes="Bold" />
-                                        <CollectionView ItemsSource="{Binding UserTrainingGoalMoves}" SelectionMode="None">
-                                            <CollectionView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Label Text="{Binding Name}" FontSize="14" />
-                                                </DataTemplate>
-                                            </CollectionView.ItemTemplate>
-                                        </CollectionView>
-                                    </VerticalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
+                <!-- Summary Cards -->
+                <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center" Margin="0,0,0,8">
+                    <!-- Training Time Card -->
+                    <Frame StyleClass="SummaryCard"
+                           BackgroundColor="{StaticResource PrimaryColor}"
+                           HasShadow="True"
+                           CornerRadius="18"
+                           Padding="0"
+                           Margin="6"
+                           BorderColor="{StaticResource PrimaryTextColor}">
+                        <Grid Padding="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!-- Icon -->
+                            <Image Source="icon_time.png"
+                                   WidthRequest="32"
+                                   HeightRequest="32"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="16,0,8,0"
+                                   Grid.RowSpan="2"
+                                   Grid.Column="0"/>
+                            <!-- Title -->
+                            <Label Text="Training Time"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="White"
+                                   Opacity="0.8"
+                                   VerticalOptions="Start"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="0,16,16,0"/>
+                            <!-- Value -->
+                            <Label Text="{Binding TotalTrainingTime, StringFormat='{0} min'}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="End"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Margin="0,0,16,16"/>
+                            <!-- Bottom Border -->
+                            <BoxView HeightRequest="3"
+                                     Color="White"
+                                     HorizontalOptions="Fill"
+                                     VerticalOptions="End"
+                                     Grid.Row="2"
+                                     Grid.ColumnSpan="2"
+                                     Margin="0,0,0,0"/>
+                        </Grid>
+                    </Frame>
+                    <!-- Rounds Card -->
+                    <Frame StyleClass="SummaryCard"
+                           BackgroundColor="{StaticResource AccentColor}"
+                           HasShadow="True"
+                           CornerRadius="18"
+                           Padding="0"
+                           Margin="6"
+                           BorderColor="{StaticResource PrimaryTextColor}">
+                        <Grid Padding="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="icon_rounds.png"
+                                   WidthRequest="32"
+                                   HeightRequest="32"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="16,0,8,0"
+                                   Grid.RowSpan="2"
+                                   Grid.Column="0"/>
+                            <Label Text="Rounds"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="White"
+                                   Opacity="0.8"
+                                   VerticalOptions="Start"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="0,16,16,0"/>
+                            <Label Text="{Binding TotalRoundsRolled}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="End"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Margin="0,0,16,16"/>
+                            <BoxView HeightRequest="3"
+                                     Color="White"
+                                     HorizontalOptions="Fill"
+                                     VerticalOptions="End"
+                                     Grid.Row="2"
+                                     Grid.ColumnSpan="2"
+                                     Margin="0,0,0,0"/>
+                        </Grid>
+                    </Frame>
+                    <!-- Submissions Card -->
+                    <Frame StyleClass="SummaryCard"
+                           BackgroundColor="{StaticResource SuccessColor}"
+                           HasShadow="True"
+                           CornerRadius="18"
+                           Padding="0"
+                           Margin="6"
+                           BorderColor="{StaticResource PrimaryTextColor}">
+                        <Grid Padding="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="icon_submissions.png"
+                                   WidthRequest="32"
+                                   HeightRequest="32"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="16,0,8,0"
+                                   Grid.RowSpan="2"
+                                   Grid.Column="0"/>
+                            <Label Text="Submissions"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="White"
+                                   Opacity="0.8"
+                                   VerticalOptions="Start"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="0,16,16,0"/>
+                            <Label Text="{Binding TotalSubmissions}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="End"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Margin="0,0,16,16"/>
+                            <BoxView HeightRequest="3"
+                                     Color="White"
+                                     HorizontalOptions="Fill"
+                                     VerticalOptions="End"
+                                     Grid.Row="2"
+                                     Grid.ColumnSpan="2"
+                                     Margin="0,0,0,0"/>
+                        </Grid>
+                    </Frame>
+                    <!-- Taps Card -->
+                    <Frame StyleClass="SummaryCard"
+                           BackgroundColor="{StaticResource ErrorColor}"
+                           HasShadow="True"
+                           CornerRadius="18"
+                           Padding="0"
+                           Margin="6"
+                           BorderColor="{StaticResource PrimaryTextColor}">
+                        <Grid Padding="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="icon_taps.png"
+                                   WidthRequest="32"
+                                   HeightRequest="32"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="16,0,8,0"
+                                   Grid.RowSpan="2"
+                                   Grid.Column="0"/>
+                            <Label Text="Taps"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   TextColor="White"
+                                   Opacity="0.8"
+                                   VerticalOptions="Start"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="0,16,16,0"/>
+                            <Label Text="{Binding TotalTaps}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   VerticalOptions="End"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   Margin="0,0,16,16"/>
+                            <BoxView HeightRequest="3"
+                                     Color="White"
+                                     HorizontalOptions="Fill"
+                                     VerticalOptions="End"
+                                     Grid.Row="2"
+                                     Grid.ColumnSpan="2"
+                                     Margin="0,0,0,0"/>
+                        </Grid>
+                    </Frame>
+                </FlexLayout>
 
-                <!-- Swipable Graphs Section -->
-                <CollectionView ItemsSource="{Binding Graphs}" ItemsLayout="HorizontalList" HeightRequest="300" Margin="0,20,0,0">
+                <!-- Weekly Progress Graphs (swipable) -->
+                <Label Text="Weekly Progress" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+                <CollectionView ItemsSource="{Binding Graphs}" ItemsLayout="HorizontalList" HeightRequest="280">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Padding="10" Margin="5" CornerRadius="10" BackgroundColor="{StaticResource CardBackgroundColor}">
+                            <Frame Padding="10" Margin="5" CornerRadius="14" BackgroundColor="{StaticResource CardBackgroundColor}" HasShadow="True">
                                 <VerticalStackLayout>
-                                    <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
                                     <Chart:SfCartesianChart>
                                         <Chart:SfCartesianChart.XAxes>
                                             <Chart:CategoryAxis LabelPlacement="OnTicks" Interval="1" ShowMajorGridLines="False"/>
@@ -140,7 +263,7 @@
                                             <Chart:NumericalAxis ShowMajorGridLines="False"/>
                                         </Chart:SfCartesianChart.YAxes>
                                         <Chart:ColumnSeries ItemsSource="{Binding Data}"
-                                                            XBindingPath="Date"
+                                                            XBindingPath="Day"
                                                             YBindingPath="Value"
                                                             EnableTooltip="True">
                                             <Chart:ColumnSeries.DataLabelSettings>
@@ -154,17 +277,66 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
+                <!-- Moves Performed Pie Chart -->
+                <Label Text="Moves Performed" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Frame Padding="10" CornerRadius="14" BackgroundColor="{StaticResource CardBackgroundColor}" HasShadow="True">
+                    <Chart:SfCircularChart>
+                        <Chart:SfCircularChart.Title>
+                            <Label Text="Distribution" HorizontalTextAlignment="Center" TextColor="{StaticResource PrimaryTextColor}" FontSize="Medium" FontAttributes="Bold" />
+                        </Chart:SfCircularChart.Title>
+                        <Chart:SfCircularChart.TooltipBehavior>
+                            <Chart:ChartTooltipBehavior />
+                        </Chart:SfCircularChart.TooltipBehavior>
+                        <Chart:PieSeries ItemsSource="{Binding MovesPerformed}"
+                                         XBindingPath="Name" YBindingPath="TrainingLogCount"
+                                         ExplodeIndex="0" Stroke="White" StrokeWidth="2"
+                                         ShowDataLabels="True" EnableTooltip="True"
+                                         StartAngle="270" EndAngle="630">
+                            <Chart:PieSeries.DataLabelSettings>
+                                <Chart:CircularDataLabelSettings UseSeriesPalette="True" LabelPlacement="Outer">
+                                    <Chart:CircularDataLabelSettings.LabelStyle>
+                                        <Chart:ChartDataLabelStyle LabelFormat="0.##'%'"/>
+                                    </Chart:CircularDataLabelSettings.LabelStyle>
+                                </Chart:CircularDataLabelSettings>
+                            </Chart:PieSeries.DataLabelSettings>
+                        </Chart:PieSeries>
+                    </Chart:SfCircularChart>
+                </Frame>
+
                 <!-- Weekly Summary Section -->
-                <Frame BorderColor="Gray" Padding="15" CornerRadius="10" Margin="0,10,0,0">
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Past Week Summary" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+                <Frame Padding="14" CornerRadius="14" BackgroundColor="{StaticResource CardBackgroundColor}" HasShadow="True">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Past Week Summary" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Text="{Binding WeeklyTrainingTimeSum, StringFormat='Total Training Time: {0} min'}"/>
                         <Label Text="{Binding WeeklyRoundsRolledSum, StringFormat='Total Rounds Rolled: {0}'}"/>
                         <Label Text="{Binding WeeklySubmissionsSum, StringFormat='Total Submissions: {0}'}"/>
                         <Label Text="{Binding WeeklyTapsSum, StringFormat='Total Taps: {0}'}"/>
                     </VerticalStackLayout>
                 </Frame>
-                
+
+                <!-- Goals Section -->
+                <Label Text="Training Goals" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+                <CollectionView ItemsSource="{Binding TrainingGoals}" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Gray" CornerRadius="10" Padding="10" Margin="5" BackgroundColor="{StaticResource CardBackgroundColor}">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding GoalDate, StringFormat='{0:MMMM dd, yyyy}'}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding Notes}" FontSize="14" />
+                                    <Label Text="Moves:" FontAttributes="Bold" />
+                                    <CollectionView ItemsSource="{Binding UserTrainingGoalMoves}" SelectionMode="None">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Label Text="{Binding Name}" FontSize="14" />
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>
