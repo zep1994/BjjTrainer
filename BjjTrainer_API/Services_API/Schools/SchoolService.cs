@@ -16,17 +16,15 @@ namespace BjjTrainer_API.Services_API.Schools
 
         public async Task<School?> GetSchoolByCoachIdAsync(string coachId)
         {
-            // Find the coach and retrieve their school ID
             var coach = await _context.ApplicationUsers
-                .Include(u => u.School) // Ensure the School relationship is loaded
+                .Include(u => u.School) 
                 .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
 
             if (coach == null || coach.SchoolId == null)
             {
-                return null; // Coach does not exist or is not assigned to a school
+                return null;
             }
 
-            // Fetch and return the school details
             return await _context.Schools.FirstOrDefaultAsync(s => s.Id == coach.SchoolId);
         }
 
@@ -56,7 +54,6 @@ namespace BjjTrainer_API.Services_API.Schools
             _context.Schools.Add(school);
             await _context.SaveChangesAsync();
 
-            // Assign the newly created school to the coach
             coach.SchoolId = school.Id;
             _context.ApplicationUsers.Update(coach);
             await _context.SaveChangesAsync();
@@ -98,13 +95,13 @@ namespace BjjTrainer_API.Services_API.Schools
 
             if (coach == null || coach.SchoolId != schoolId)
             {
-                return false; // Ensure the coach is authorized to manage this school
+                return false; 
             }
 
             var school = await _context.Schools.Include(s => s.Users).FirstOrDefaultAsync(s => s.Id == schoolId);
             if (school == null || school.Users.Any())
             {
-                return false; // School does not exist or has associated users
+                return false; 
             }
 
             _context.Schools.Remove(school);
@@ -122,7 +119,7 @@ namespace BjjTrainer_API.Services_API.Schools
                 if (coach == null || coach.SchoolId == null)
                 {
                     Console.WriteLine("Error: Coach is not assigned to a school.");
-                    return new List<ApplicationUser>();
+                    return [];
                 }
 
                 var students = await _context.ApplicationUsers

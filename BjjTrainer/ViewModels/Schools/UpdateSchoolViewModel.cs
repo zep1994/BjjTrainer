@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using BjjTrainer.Models.Schools;
+﻿using BjjTrainer.Models.Schools;
 using BjjTrainer.Services.Schools;
 using MvvmHelpers;
 
@@ -8,7 +7,7 @@ namespace BjjTrainer.ViewModels.Schools
     public class UpdateSchoolViewModel : BaseViewModel
     {
         private readonly SchoolService _schoolService;
-        private School _school;
+        private School _school = null!; // Initialize with null-forgiving operator
 
         public School School
         {

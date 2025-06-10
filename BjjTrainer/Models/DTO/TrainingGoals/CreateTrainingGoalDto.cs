@@ -8,7 +8,7 @@
 
     public class CreateTrainingGoalDto
     {
-        public string ApplicationUserId { get; set; }
+        public string? ApplicationUserId { get; set; }
         public DateTime GoalDate { get; set; }
         public string? Notes { get; set; }
         public List<int>? MoveIds { get; set; } 

@@ -58,14 +58,20 @@ namespace BjjTrainer.ViewModels.TrainingLogs
 
                 if (string.IsNullOrEmpty(userId))
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "User not authenticated. Please log in.", "OK");
+                    if (Application.Current?.MainPage != null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error", "User not authenticated. Please log in.", "OK");
+                    }
                     return false;
                 }
 
                 var selectedMoves = Moves.Where(m => m.IsSelected).Select(m => m.Id).ToList();
                 if (!selectedMoves.Any())
                 {
-                    await Application.Current.MainPage.DisplayAlert("Message", "Are you sure you did not train any moves?", "OK");
+                    if (Application.Current?.MainPage != null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Message", "Are you sure you did not train any moves?", "OK");
+                    }
                 }
 
                 var trainingLog = new CreateTrainingLogDto
@@ -77,7 +83,7 @@ namespace BjjTrainer.ViewModels.TrainingLogs
                     Submissions = Submissions ?? 0,
                     Taps = Taps ?? 0,
                     Notes = Notes ?? "",
-                    SelfAssessment = SelfAssessment,
+                    SelfAssessment = SelfAssessment ?? string.Empty, // Fix for CS8601
                     MoveIds = selectedMoves ?? []
                 };
 
@@ -85,13 +91,19 @@ namespace BjjTrainer.ViewModels.TrainingLogs
 
                 if (success)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Success", "Training log submitted successfully!", "OK");
+                    if (Application.Current?.MainPage != null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Success", "Training log submitted successfully!", "OK");
+                    }
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to submit training log: {ex.Message}", "OK");
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", $"Failed to submit training log: {ex.Message}", "OK");
+                }
             }
             finally
             {

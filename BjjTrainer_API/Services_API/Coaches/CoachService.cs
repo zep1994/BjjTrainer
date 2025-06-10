@@ -22,7 +22,6 @@ namespace BjjTrainer_API.Services_API.Coaches
 
         public async Task<List<CoachEventDto>> GetPastEventsWithLogs(string coachId, int schoolId)
         {
-            // Ensure only coaches can access this data
             var coach = await _context.ApplicationUsers
                 .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
 
@@ -51,16 +50,16 @@ namespace BjjTrainer_API.Services_API.Coaches
                 EndTime = ev.EndTime,
                 IsAllDay = ev.IsAllDay,
                 SchoolId = ev.SchoolId,
-                CheckIns = [.. ev.CalendarEventCheckIns.Select(c => new CheckInDto
+                CheckIns = ev.CalendarEventCheckIns?.Select(c => new CheckInDto
                 {
-                    UserName = c.User.UserName,
+                    UserName = c.User?.UserName ?? "Unknown",
                     CheckInTime = c.CheckInTime
-                })],
-                Moves = ev.TrainingLog != null ? [.. ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
+                }).ToList() ?? new List<CheckInDto>(),
+                Moves = ev.TrainingLog?.TrainingLogMoves?.Select(tlm => new LogMoveDto
                 {
-                    Id = tlm.Move.Id,
-                    Name = tlm.Move.Name
-                })] : new List<LogMoveDto>()
+                    Id = tlm.Move?.Id ?? 0,
+                    Name = tlm.Move?.Name ?? "Unknown"
+                }).ToList() ?? new List<LogMoveDto>()
             }).ToList();
 
             return result;
@@ -68,7 +67,6 @@ namespace BjjTrainer_API.Services_API.Coaches
 
         public async Task<CoachEventDto?> GetEventDetailsAsync(int eventId, string coachId)
         {
-            // Ensure only coaches can access this data
             var coach = await _context.ApplicationUsers
                 .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
 
@@ -98,16 +96,16 @@ namespace BjjTrainer_API.Services_API.Coaches
                 EndTime = ev.EndTime,
                 IsAllDay = ev.IsAllDay,
                 SchoolId = ev.SchoolId,
-                CheckIns = [.. ev.CalendarEventCheckIns.Select(c => new CheckInDto
+                CheckIns = ev.CalendarEventCheckIns?.Select(c => new CheckInDto
                 {
-                    UserName = c.User.UserName,
+                    UserName = c.User?.UserName ?? "Unknown",
                     CheckInTime = c.CheckInTime
-                })],
-                Moves = ev.TrainingLog != null ? [.. ev.TrainingLog.TrainingLogMoves.Select(tlm => new LogMoveDto
+                }).ToList() ?? new List<CheckInDto>(),
+                Moves = ev.TrainingLog?.TrainingLogMoves?.Select(tlm => new LogMoveDto
                 {
-                    Id = tlm.Move.Id,
-                    Name = tlm.Move.Name
-                })] : new List<LogMoveDto>()
+                    Id = tlm.Move?.Id ?? 0,
+                    Name = tlm.Move?.Name ?? "Unknown"
+                }).ToList() ?? new List<LogMoveDto>()
             };
         }
 
@@ -128,6 +126,9 @@ namespace BjjTrainer_API.Services_API.Coaches
             if (coach.SchoolId == null)
                 throw new Exception("Coach must be assigned to a school to create events.");
 
+            if (dto.Title == null)
+                throw new ArgumentNullException(nameof(dto.Title), "Event title cannot be null.");
+
             var calendarEvent = new CalendarEvent
             {
                 Title = dto.Title,
@@ -137,7 +138,7 @@ namespace BjjTrainer_API.Services_API.Coaches
                 EndDate = dto.EndDate,
                 EndTime = dto.EndTime,
                 IsAllDay = dto.IsAllDay,
-                SchoolId = coach.SchoolId, 
+                SchoolId = coach.SchoolId,
                 InstructorId = dto.InstructorId
             };
 
@@ -163,7 +164,7 @@ namespace BjjTrainer_API.Services_API.Coaches
                 _context.TrainingLogs.Add(trainingLog);
                 await _context.SaveChangesAsync();
 
-                if (dto.MoveIds != null && dto.MoveIds.Any())
+                if (dto.MoveIds?.Count > 0)
                 {
                     foreach (var moveId in dto.MoveIds)
                     {
@@ -178,7 +179,6 @@ namespace BjjTrainer_API.Services_API.Coaches
                 }
             }
 
-            await _context.SaveChangesAsync();
             return calendarEvent;
         }
 
@@ -189,10 +189,8 @@ namespace BjjTrainer_API.Services_API.Coaches
 
             var calendarEvent = await _context.CalendarEvents
                 .Include(e => e.CalendarEventUsers)
-                .FirstOrDefaultAsync(e => e.Id == eventId && e.SchoolId == coach.SchoolId);
-
-            if (calendarEvent == null)
-                throw new Exception("Event not found or not authorized.");
+                .FirstOrDefaultAsync(e => e.Id == eventId && e.SchoolId == coach.SchoolId)
+                ?? throw new Exception("Event not found or not authorized.");
 
             _context.CalendarEventUsers.RemoveRange(calendarEvent.CalendarEventUsers);
             _context.CalendarEvents.Remove(calendarEvent);
@@ -203,7 +201,7 @@ namespace BjjTrainer_API.Services_API.Coaches
         {
             var coach = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
             if (coach == null || coach.SchoolId == null)
-                return new List<ApplicationUser>();
+                return [];
             return await _context.ApplicationUsers.Where(u => u.SchoolId == coach.SchoolId).ToListAsync();
         }
 

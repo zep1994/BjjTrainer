@@ -5,7 +5,7 @@ namespace BjjTrainer_API.Models.DTO.Calendars
     public class CreateEventDto
     {
         [Required]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         public string? Description { get; set; }
 
@@ -23,7 +23,7 @@ namespace BjjTrainer_API.Models.DTO.Calendars
         public bool IncludeTrainingLog { get; set; } = false;
 
         // Moves selected by the coach (optional)
-        public List<int> MoveIds { get; set; } = new();
+        public List<int> MoveIds { get; set; } = [];
 
         public string? InstructorId { get; set; } // <-- Add this
     }

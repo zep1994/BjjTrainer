@@ -34,8 +34,6 @@ namespace BjjTrainer.Services.Lessons
                 Debug.WriteLine($"Error fetching lessons: {ex.Message}");
                 return [];
             }
-            Console.WriteLine("There was No Found Error");
-            return [];
         }
 
         public async Task<List<LessonSection>> GetLessonSectionsAsync(int lessonId)

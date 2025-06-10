@@ -7,14 +7,14 @@ namespace BjjTrainer.ViewModels.Users
     {
         private readonly UserService _userService;
 
-        private string username;
+        private string username = string.Empty; 
         public string Username
         {
             get => username;
             set => SetProperty(ref username, value);
         }
 
-        private string email;
+        private string email = string.Empty; 
         public string Email
         {
             get => email;
@@ -42,14 +42,14 @@ namespace BjjTrainer.ViewModels.Users
             set => SetProperty(ref trainingHoursThisWeek, value);
         }
 
-        private string preferredTrainingStyle;
+        private string preferredTrainingStyle = string.Empty; 
         public string PreferredTrainingStyle
         {
             get => preferredTrainingStyle;
             set => SetProperty(ref preferredTrainingStyle, value);
         }
 
-        private string profilePictureUrl;
+        private string profilePictureUrl = string.Empty; 
         public string ProfilePictureUrl
         {
             get => profilePictureUrl;
@@ -107,15 +107,15 @@ namespace BjjTrainer.ViewModels.Users
 
                 if (user != null)
                 {
-                    Username = user.UserName;
-                    Email = user.Email;
-                    Belt = user.Belt;
+                    Username = user.UserName ?? string.Empty;
+                    Email = user.Email ?? string.Empty;
+                    Belt = user.Belt ?? "White";
                     BeltStripes = user.BeltStripes;
                     TrainingHoursThisWeek = user.TrainingHoursThisWeek;
-                    PreferredTrainingStyle = user.PreferredTrainingStyle;
+                    PreferredTrainingStyle = user.PreferredTrainingStyle ?? string.Empty;
                     ProfilePictureUrl = string.IsNullOrEmpty(user.ProfilePictureUrl)
-                    ? "Resources/Images/default_profile.png"
-                    : user.ProfilePictureUrl;
+                        ? "Resources/Images/default_profile.png"
+                        : user.ProfilePictureUrl;
                     LastLoginDate = user.LastLoginDate;
                     TotalSubmissions = user.TotalSubmissions;
                     TotalTaps = user.TotalTaps;

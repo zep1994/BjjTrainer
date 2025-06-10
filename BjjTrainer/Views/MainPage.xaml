@@ -124,6 +124,46 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </VerticalStackLayout>
+
+                <!-- Swipable Graphs Section -->
+                <CollectionView ItemsSource="{Binding Graphs}" ItemsLayout="HorizontalList" HeightRequest="300" Margin="0,20,0,0">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="10" Margin="5" CornerRadius="10" BackgroundColor="{StaticResource CardBackgroundColor}">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    <Chart:SfCartesianChart>
+                                        <Chart:SfCartesianChart.XAxes>
+                                            <Chart:CategoryAxis LabelPlacement="OnTicks" Interval="1" ShowMajorGridLines="False"/>
+                                        </Chart:SfCartesianChart.XAxes>
+                                        <Chart:SfCartesianChart.YAxes>
+                                            <Chart:NumericalAxis ShowMajorGridLines="False"/>
+                                        </Chart:SfCartesianChart.YAxes>
+                                        <Chart:ColumnSeries ItemsSource="{Binding Data}"
+                                                            XBindingPath="Date"
+                                                            YBindingPath="Value"
+                                                            EnableTooltip="True">
+                                            <Chart:ColumnSeries.DataLabelSettings>
+                                                <Chart:CartesianDataLabelSettings />
+                                            </Chart:ColumnSeries.DataLabelSettings>
+                                        </Chart:ColumnSeries>
+                                    </Chart:SfCartesianChart>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Weekly Summary Section -->
+                <Frame BorderColor="Gray" Padding="15" CornerRadius="10" Margin="0,10,0,0">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Past Week Summary" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="{Binding WeeklyTrainingTimeSum, StringFormat='Total Training Time: {0} min'}"/>
+                        <Label Text="{Binding WeeklyRoundsRolledSum, StringFormat='Total Rounds Rolled: {0}'}"/>
+                        <Label Text="{Binding WeeklySubmissionsSum, StringFormat='Total Submissions: {0}'}"/>
+                        <Label Text="{Binding WeeklyTapsSum, StringFormat='Total Taps: {0}'}"/>
+                    </VerticalStackLayout>
+                </Frame>
                 
             </VerticalStackLayout>
         </ScrollView>

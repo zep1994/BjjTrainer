@@ -41,19 +41,19 @@ public partial class UpdateEventPage : ContentPage
 
     private async void OnDeleteEventClicked(object sender, EventArgs e)
     {
-        //var confirm = await DisplayAlert("Confirm", "Are you sure you want to delete this event?", "Yes", "No");
-        //if (confirm)
-        //{
-        //    var success = await _viewModel.DeleteEventAsync();
-        //    if (success)
-        //    {
-        //        await DisplayAlert("Success", "Event deleted successfully.", "OK");
-        //        await Navigation.PopToRootAsync();
-        //    }
-        //    else
-        //    {
-        //        await DisplayAlert("Error", "Failed to delete event.", "OK");
-        //    }
-        //}
+        var confirm = await DisplayAlert("Confirm", "Are you sure you want to delete this event?", "Yes", "No");
+        if (confirm)
+        {
+            var success = await _viewModel.DeleteEventAsync();
+            if (success)
+            {
+                await DisplayAlert("Success", "Event deleted successfully.", "OK");
+                await Navigation.PopToRootAsync();
+            }
+            else
+            {
+                await DisplayAlert("Error", "Failed to delete event.", "OK");
+            }
+        }
     }
 }

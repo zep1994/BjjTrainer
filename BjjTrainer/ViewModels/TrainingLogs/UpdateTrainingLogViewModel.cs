@@ -141,8 +141,15 @@ public partial class UpdateTrainingLogViewModel : BaseViewModel
 
     public async Task EditMovesAsync()
     {
-        var modal = new MoveSelectionModal(new ObservableCollection<UpdateMoveDto>(Moves), LogId);
-        await Application.Current?.MainPage?.Navigation.PushModalAsync(modal);
+        if (Application.Current?.MainPage?.Navigation != null)
+        {
+            var modal = new MoveSelectionModal(new ObservableCollection<UpdateMoveDto>(Moves), LogId);
+            await Application.Current.MainPage.Navigation.PushModalAsync(modal);
+        }
+        else
+        {
+            Console.WriteLine("Navigation is not available.");
+        }
     }
 
     public async Task<bool> UpdateLogAsync()

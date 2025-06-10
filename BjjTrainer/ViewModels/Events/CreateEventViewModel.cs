@@ -7,12 +7,12 @@ using System.Collections.ObjectModel;
 
 namespace BjjTrainer.ViewModels.Events
 {
-    public class CreateEventViewModel : BaseViewModel
+    public partial class CreateEventViewModel : BaseViewModel
     {
         private readonly EventService _eventService;
         private readonly MoveService _moveService;
 
-        public string? Title { get; set; }
+        public new string? Title { get; set; }
         public string? Description { get; set; }
         public DateTime StartDate { get; set; } = DateTime.Now.Date.AddDays(0);
         public TimeSpan StartTime { get; set; } = DateTime.Now.TimeOfDay.Add(TimeSpan.FromHours(1));

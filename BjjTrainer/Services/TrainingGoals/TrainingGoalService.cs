@@ -6,7 +6,7 @@ namespace BjjTrainer.Services.TrainingGoals
 {
     public class TrainingGoalService : ApiService
     {
-        public string userId { get; private set; }
+        public string? userId { get; private set; }
 
         public async Task<bool> CreateTrainingGoalAsync(CreateTrainingGoalDto dto)
         {

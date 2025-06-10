@@ -1,10 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using BjjTrainer.Models.Schools;
+﻿using BjjTrainer.Models.Schools;
 using BjjTrainer.Services.Schools;
-using MvvmHelpers;
-using System.Windows.Input;
 using BjjTrainer.Views.Schools;
+using MvvmHelpers;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace BjjTrainer.ViewModels.Schools
 {
@@ -24,6 +23,7 @@ namespace BjjTrainer.ViewModels.Schools
 
             CreateSchoolCommand = new Command(async () => await CreateSchool());
             EditSchoolCommand = new Command<School>(async (school) => await EditSchool(school));
+            DeleteSchoolCommand = new Command<School>(async (school) => await DeleteSchoolAsync(school)); 
 
             LoadSchools();
         }

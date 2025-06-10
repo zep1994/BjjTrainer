@@ -1,4 +1,5 @@
 ﻿using BjjTrainer.ViewModels;
+using System.Runtime.Versioning;
 
 namespace BjjTrainer.Views
 {
@@ -10,9 +11,18 @@ namespace BjjTrainer.Views
         {
             InitializeComponent();
             _viewModel = new MainPageViewModel();
+            SetBindingContext();
+        }
+
+        [SupportedOSPlatform("windows10.0.17763.0")]
+        [SupportedOSPlatform("android21.0")]
+        private void SetBindingContext()
+        {
             BindingContext = _viewModel;
         }
 
+        [SupportedOSPlatform("windows10.0.17763.0")]
+        [SupportedOSPlatform("android21.0")]
         protected override async void OnAppearing()
         {
             base.OnAppearing();

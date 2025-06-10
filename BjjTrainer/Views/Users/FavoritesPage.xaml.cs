@@ -10,7 +10,7 @@ namespace BjjTrainer.Views.Users
         public FavoritesPage()
         {
             InitializeComponent();
-            _viewModel = BindingContext as FavoritesViewModel;
+            _viewModel = BindingContext as FavoritesViewModel ?? throw new InvalidOperationException("BindingContext must be of type FavoritesViewModel.");
         }
 
         protected override async void OnAppearing()
@@ -26,8 +26,7 @@ namespace BjjTrainer.Views.Users
         private async void OnBackToLessonsClicked(object sender, EventArgs e)
         {
             // Navigate back to LessonsPage
-            //await Navigation.PopAsync(); // If you're using navigation stack
-            await Navigation.PushAsync(new LessonsPage()); 
+            await Navigation.PushAsync(new LessonsPage());
         }
     }
 }

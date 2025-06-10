@@ -1,27 +1,42 @@
 ﻿using BjjTrainer.Models.DTO.Events;
 using BjjTrainer.Services.Events;
 using MvvmHelpers;
+using System.ComponentModel;
 
 namespace BjjTrainer.ViewModels.Events
 {
-    public partial class UpdateEventViewModel(int eventId) : BaseViewModel
+    public partial class UpdateEventViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private readonly EventService _eventService = new EventService();
-        public int Id { get; } = eventId;
-        public string? Title { get; set; }
+        private readonly EventService _eventService;
+
+        public UpdateEventViewModel(int eventId)
+        {
+            Id = eventId;
+            _eventService = new EventService();
+        }
+
+        public int Id { get; }
+        public new string? Title { get; set; }
         public string? Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public TimeSpan? StartTime { get; set; }
         public TimeSpan? EndTime { get; set; }
         public bool? IsAllDay { get; set; }
-        public int? schoolId { get; set; }
+        public int? SchoolId { get; set; }
 
         public async Task LoadEventDetailsAsync()
         {
             try
             {
                 var eventDetails = await _eventService.GetEventByIdAsync(Id);
+
+                if (eventDetails == null)
+                {
+                    Console.WriteLine("Event details not found.");
+                    return;
+                }
+
                 Console.WriteLine($"Loaded Event for Update: {eventDetails.Title}");
 
                 Title = eventDetails.Title;
@@ -96,6 +111,19 @@ namespace BjjTrainer.ViewModels.Events
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating event: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteEventAsync()
+        {
+            try
+            {
+                return await _eventService.DeleteEventAsync(Id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting event: {ex.Message}");
                 return false;
             }
         }

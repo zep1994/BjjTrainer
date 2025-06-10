@@ -1,12 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using BjjTrainer_API.Data;
+﻿using BjjTrainer_API.Data;
 using BjjTrainer_API.Models.DTO;
 using BjjTrainer_API.Models.DTO.Moves;
 using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
-using BjjTrainer_API.Models.DTO.UserDtos;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Trainings;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace BjjTrainer_API.Services_API.Trainings
 {
@@ -129,7 +128,6 @@ namespace BjjTrainer_API.Services_API.Trainings
             };
         }
 
-        // ******************************** GET MOVES BY IDS ********************************
         public async Task<List<MoveDto>> GetMovesByIdsAsync(List<int> moveIds)
         {
             if (moveIds == null || !moveIds.Any())
@@ -141,12 +139,11 @@ namespace BjjTrainer_API.Services_API.Trainings
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = m.Description,
-                    SkillLevel = m.SkillLevel
+                    Description = m.Description ?? string.Empty, 
+                    SkillLevel = m.SkillLevel ?? string.Empty 
                 }).ToListAsync();
         }
 
-        // ******************************** UPDATE TRAINING LOG ********************************
         public async Task UpdateTrainingLogAsync(int logId, UpdateTrainingLogDto dto)
         {
             var log = await _context.TrainingLogs
@@ -156,29 +153,28 @@ namespace BjjTrainer_API.Services_API.Trainings
             if (log == null)
                 throw new Exception("Training log not found.");
 
-            // Update training log properties
-            log.Date = dto.Date;
-            log.TrainingTime = dto.TrainingTime;
-            log.RoundsRolled = dto.RoundsRolled;
-            log.Submissions = dto.Submissions;
-            log.Taps = dto.Taps;
-            log.Notes = dto.Notes;
-            log.SelfAssessment = dto.SelfAssessment;
+            log.Date = dto.Date ?? log.Date; 
+            log.TrainingTime = dto.TrainingTime ?? log.TrainingTime; 
+            log.RoundsRolled = dto.RoundsRolled ?? log.RoundsRolled; 
+            log.Submissions = dto.Submissions ?? log.Submissions;
+            log.Taps = dto.Taps ?? log.Taps; 
+            log.Notes = dto.Notes ?? log.Notes; 
+            log.SelfAssessment = dto.SelfAssessment ?? log.SelfAssessment; 
 
-            // Remove existing training log moves
             _context.TrainingLogMoves.RemoveRange(log.TrainingLogMoves);
 
-            // Add new training log moves based on the provided Moves
-            foreach (var move in dto.Moves)
+            if (dto.Moves != null)
             {
-                _context.TrainingLogMoves.Add(new TrainingLogMove
+                foreach (var move in dto.Moves)
                 {
-                    TrainingLogId = log.Id,
-                    MoveId = move.Id // Use the Id property from UpdateMoveDto
-                });
+                    _context.TrainingLogMoves.Add(new TrainingLogMove
+                    {
+                        TrainingLogId = log.Id,
+                        MoveId = move.Id 
+                    });
+                }
             }
 
-            // Save changes to the database
             await _context.SaveChangesAsync();
         }
 

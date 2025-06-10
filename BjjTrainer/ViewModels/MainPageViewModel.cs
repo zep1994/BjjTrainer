@@ -1,4 +1,5 @@
-﻿using BjjTrainer.Models.Moves;
+﻿using BjjTrainer.Models.DTO.Users;
+using BjjTrainer.Models.Moves;
 using BjjTrainer.Models.TrainingGoal;
 using BjjTrainer.Services.Events;
 using BjjTrainer.Services.Moves;
@@ -20,24 +21,35 @@ namespace BjjTrainer.ViewModels
 
         public ObservableCollection<MoveDto> MovesPerformed { get; set; } = [];
         public ObservableCollection<TrainingGoal> TrainingGoals { get; set; } = [];
+        public ObservableCollection<GraphViewModel> Graphs { get; } = new();
 
         // Properties for User Progress
-        public double TotalTrainingTime { get; private set; }
-        public int TotalRoundsRolled { get; private set; }
-        public int TotalSubmissions { get; private set; }
-        public int TotalTaps { get; private set; }
-        public double WeeklyTrainingHours { get; private set; }
-        public double AverageSessionLength { get; private set; }
-        public string FavoriteMoveThisMonth { get; private set; }
-        public int TotalGoalsAchieved { get; private set; }
-        public int TotalMoves { get; private set; }
+        public double? TotalTrainingTime { get; private set; }
+        public int? TotalRoundsRolled { get; private set; }
+        public int? TotalSubmissions { get; private set; }
+        public int? TotalTaps { get; private set; }
+        public double? WeeklyTrainingHours { get; private set; }
+        public double? AverageSessionLength { get; private set; }
+        public string? FavoriteMoveThisMonth { get; private set; }
+        public int? TotalGoalsAchieved { get; private set; }
+        public int? TotalMoves { get; private set; }
 
-        public string UserName { get; private set; }
-        public string Email { get; private set; }
-        public string Belt { get; private set; }
-        public int BeltStripes { get; private set; }
-        public string ProfilePictureUrl { get; private set; }
-        public string PreferredTrainingStyle { get; private set; }
+        public string? UserName { get; private set; }
+        public string? Email { get; private set; }
+        public string? Belt { get; private set; }
+        public int? BeltStripes { get; private set; }
+        public string? ProfilePictureUrl { get; private set; }
+        public string? PreferredTrainingStyle { get; private set; }
+
+        public ObservableCollection<DailyUserProgressDto> DailyTrainingTime { get; } = new();
+        public ObservableCollection<DailyUserProgressDto> DailyRoundsRolled { get; } = new();
+        public ObservableCollection<DailyUserProgressDto> DailySubmissions { get; } = new();
+        public ObservableCollection<DailyUserProgressDto> DailyTaps { get; } = new();
+
+        public double WeeklyTrainingTimeSum => DailyTrainingTime.Sum(x => x.Value);
+        public double WeeklyRoundsRolledSum => DailyRoundsRolled.Sum(x => x.Value);
+        public double WeeklySubmissionsSum => DailySubmissions.Sum(x => x.Value);
+        public double WeeklyTapsSum => DailyTaps.Sum(x => x.Value);
 
         public MainPageViewModel()
         {
@@ -56,11 +68,28 @@ namespace BjjTrainer.ViewModels
                 await LoadUserInfoAsync();
                 await LoadUserProgressAsync();
                 await LoadGoalsAsync();
+                await LoadWeeklyGraphsAsync();
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+        public async Task LoadWeeklyGraphsAsync()
+        {
+            var trainingTime = await _userProgressService.GetDailyTotalTrainingTimeLast7DaysAsync();
+            var roundsRolled = await _userProgressService.GetDailyTotalRoundsRolledLast7DaysAsync();
+            var submissions = await _userProgressService.GetDailyTotalSubmissionsLast7DaysAsync();
+            var taps = await _userProgressService.GetDailyTotalTapsLast7DaysAsync();
+
+            Graphs.Clear();
+            Graphs.Add(new GraphViewModel { Title = "Training Time (min)", Data = new ObservableCollection<DailyUserProgressDto>(trainingTime) });
+            Graphs.Add(new GraphViewModel { Title = "Rounds Rolled", Data = new ObservableCollection<DailyUserProgressDto>(roundsRolled) });
+            Graphs.Add(new GraphViewModel { Title = "Submissions", Data = new ObservableCollection<DailyUserProgressDto>(submissions) });
+            Graphs.Add(new GraphViewModel { Title = "Taps", Data = new ObservableCollection<DailyUserProgressDto>(taps) });
+
+            OnPropertyChanged(nameof(Graphs));
         }
 
         private async Task LoadUserInfoAsync()
@@ -74,12 +103,12 @@ namespace BjjTrainer.ViewModels
                     var user = await userService.GetUserByIdAsync(userId);
                     if (user != null)
                     {
-                        UserName = user.UserName;
-                        Email = user.Email;
-                        Belt = user.Belt;
+                        UserName = user.UserName ?? string.Empty;
+                        Email = user.Email ?? string.Empty;
+                        Belt = user.Belt ?? string.Empty;
                         BeltStripes = user.BeltStripes;
-                        ProfilePictureUrl = user.ProfilePictureUrl;
-                        PreferredTrainingStyle = user.PreferredTrainingStyle;
+                        ProfilePictureUrl = user.ProfilePictureUrl ?? string.Empty;
+                        PreferredTrainingStyle = user.PreferredTrainingStyle ?? string.Empty;
 
                         OnPropertyChanged(nameof(UserName));
                         OnPropertyChanged(nameof(Email));
@@ -108,7 +137,7 @@ namespace BjjTrainer.ViewModels
                 TotalTaps = userProgress.TotalTaps;
                 WeeklyTrainingHours = userProgress.WeeklyTrainingHours;
                 AverageSessionLength = userProgress.AverageSessionLength;
-                FavoriteMoveThisMonth = userProgress.FavoriteMoveThisMonth;
+                FavoriteMoveThisMonth = userProgress.FavoriteMoveThisMonth ?? string.Empty; // Fix for CS8601
                 TotalGoalsAchieved = userProgress.TotalGoalsAchieved;
                 TotalMoves = userProgress.TotalMoves;
 

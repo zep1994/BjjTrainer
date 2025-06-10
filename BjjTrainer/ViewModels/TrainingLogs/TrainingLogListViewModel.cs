@@ -8,9 +8,9 @@ namespace BjjTrainer.ViewModels.TrainingLogs
     public partial class TrainingLogListViewModel : BaseViewModel
     {
         private readonly TrainingService _trainingService;
-        private readonly INavigation _navigation;
+        private readonly INavigation? _navigation; 
 
-        public ObservableCollection<TrainingLogDto> TrainingLogs { get; set; } = [];
+        public ObservableCollection<TrainingLogDto> TrainingLogs { get; set; } = new();
 
         // Public Parameterless Constructor
         public TrainingLogListViewModel()

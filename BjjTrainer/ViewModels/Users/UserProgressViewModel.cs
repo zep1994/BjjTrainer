@@ -6,34 +6,34 @@ using System.Windows.Input;
 
 namespace BjjTrainer.ViewModels.Users
 {
-    public class UserProgressViewModel : BaseViewModel
+    public partial class UserProgressViewModel : BaseViewModel
     {
         private readonly UserProgressService _userProgressService;
 
-        public ObservableCollection<MoveDto> MovesPerformed { get; set; } = [];
+        public ObservableCollection<MoveDto> MovesPerformed { get; set; } = new ObservableCollection<MoveDto>();
 
-        private string _totalTrainingTime;
+        private string _totalTrainingTime = string.Empty;
         public string TotalTrainingTime
         {
             get => _totalTrainingTime;
             set => SetProperty(ref _totalTrainingTime, value);
         }
 
-        private string _totalRoundsRolled;
+        private string _totalRoundsRolled = string.Empty;
         public string TotalRoundsRolled
         {
             get => _totalRoundsRolled;
             set => SetProperty(ref _totalRoundsRolled, value);
         }
 
-        private string _totalSubmissions;
+        private string _totalSubmissions = string.Empty;
         public string TotalSubmissions
         {
             get => _totalSubmissions;
             set => SetProperty(ref _totalSubmissions, value);
         }
 
-        private string _totalTaps;
+        private string _totalTaps = string.Empty;
         public string TotalTaps
         {
             get => _totalTaps;
@@ -57,7 +57,10 @@ namespace BjjTrainer.ViewModels.Users
 
                 if (string.IsNullOrEmpty(userId))
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "User not logged in.", "OK");
+                    if (Application.Current?.MainPage != null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error", "User not logged in.", "OK");
+                    }
                     return;
                 }
 
@@ -79,7 +82,10 @@ namespace BjjTrainer.ViewModels.Users
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load progress: {ex.Message}", "OK");
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load progress: {ex.Message}", "OK");
+                }
             }
         }
     }

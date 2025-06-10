@@ -15,7 +15,7 @@ namespace BjjTrainer.ViewModels.Moves
         public MovesViewModel()
         {
             _moveService = new MoveService();
-            LoadMovesAsync();
+            _ = LoadMovesAsync(); // Explicitly discard the task to avoid CS4014 warning
         }
 
         public async Task LoadMovesAsync()

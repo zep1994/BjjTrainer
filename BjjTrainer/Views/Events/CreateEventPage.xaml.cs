@@ -1,6 +1,5 @@
 using BjjTrainer.Models.DTO.Events;
 using BjjTrainer.ViewModels.Events;
-using Syncfusion.Maui.Scheduler;
 
 namespace BjjTrainer.Views.Events
 {
@@ -47,7 +46,7 @@ namespace BjjTrainer.Views.Events
                 IncludeTrainingLog = _viewModel.IncludeTrainingLog,
                 MoveIds = _viewModel.IncludeTrainingLog
                     ? _viewModel.AvailableMoves.Where(m => m.IsSelected).Select(m => m.Id).ToList()
-                    : new List<int>()
+                    : []
             };
 
             var success = await _viewModel.SaveEventAsync(dto);
@@ -56,7 +55,8 @@ namespace BjjTrainer.Views.Events
             {
                 await DisplayAlert("Success", "Event saved successfully.", "OK");
 
-                if (Application.Current.MainPage.Navigation.NavigationStack
+                var mainPage = Application.Current?.MainPage;
+                if (mainPage?.Navigation?.NavigationStack
                     .FirstOrDefault(x => x is CalendarPage) is CalendarPage calendarPage)
                 {
                     if (calendarPage.BindingContext is CalendarViewModel calendarViewModel)

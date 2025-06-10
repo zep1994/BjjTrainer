@@ -1,5 +1,4 @@
 ﻿using BjjTrainer_API.Models.DTO.Moves;
-using BjjTrainer_API.Models.Moves;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
@@ -15,7 +14,7 @@ namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
         [Column(TypeName = "time")]
         public TimeSpan? StartTime { get; set; }
 
-        public string ApplicationUserId { get; set; }
+        public string? ApplicationUserId { get; set; }
         public double TrainingTime { get; set; } = 0;
         public int RoundsRolled { get; set; } = 0;
         public int Submissions { get; set; } = 0;
@@ -23,7 +22,7 @@ namespace BjjTrainer_API.Models.DTO.TrainingLogDTOs
         public string Notes { get; set; } = string.Empty;
         public string SelfAssessment { get; set; } = string.Empty;
         public List<int>? MoveIds { get; set; } = [];
-        public List<LogMoveDto>? Moves { get; set; } = new();
+        public List<LogMoveDto>? Moves { get; set; } = [];
         public bool IsCoachLog { get; set; }
         public bool IsImported { get; set; } = false;
         public int? ImportedFromLogId { get; set; }

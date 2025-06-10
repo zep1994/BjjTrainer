@@ -54,7 +54,14 @@ public partial class ShowTrainingLogViewModel : BaseViewModel
             if (log == null)
             {
                 Console.WriteLine($"No training log found for ID: {logId}");
-                await Application.Current.MainPage.DisplayAlert("Error", "Training log not found.", "OK");
+                if (Application.Current?.MainPage != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Training log not found.", "OK");
+                }
+                else
+                {
+                    Console.WriteLine("Application.Current.MainPage is null. Cannot display alert.");
+                }
                 return;
             }
 
@@ -90,7 +97,7 @@ public partial class ShowTrainingLogViewModel : BaseViewModel
             OnPropertyChanged(nameof(Notes));
             OnPropertyChanged(nameof(SelfAssessment));
             OnPropertyChanged(nameof(Moves));
-            OnPropertyChanged(nameof(IsCoachLog));  // Trigger UI updates for IsCoachLog
+            OnPropertyChanged(nameof(IsCoachLog));
         }
         catch (Exception ex)
         {

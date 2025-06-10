@@ -9,11 +9,10 @@ namespace BjjTrainer
             InitializeComponent();
             BindingContext = new AppShellViewModel();
 
-
             Navigated += OnNavigated;
         }
 
-        private void OnNavigated(object sender, ShellNavigatedEventArgs e)
+        private void OnNavigated(object? sender, ShellNavigatedEventArgs e)
         {
             bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
             var currentRoute = Shell.Current?.CurrentItem?.Route;
@@ -36,6 +35,5 @@ namespace BjjTrainer
         {
             await Shell.Current.GoToAsync("//UserProfilePage");
         }
-
     }
 }

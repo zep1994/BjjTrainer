@@ -1,6 +1,5 @@
 using BjjTrainer.Models.Schools;
 using BjjTrainer.Services.Users;
-using Microsoft.Maui.Storage;
 
 namespace BjjTrainer.Views.Users;
 
@@ -31,6 +30,7 @@ public partial class SignupPage : ContentPage
         }
     }
 
+    // Fix for CS8602: Dereference of a possibly null reference.
     private async void OnSignupClicked(object sender, EventArgs e)
     {
         try
@@ -50,6 +50,15 @@ public partial class SignupPage : ContentPage
 
             var isCoach = role == "Coach";
 
+            // Ensure non-null values for UsernameEntry, EmailEntry, and PasswordEntry
+            if (string.IsNullOrWhiteSpace(UsernameEntry?.Text) ||
+                string.IsNullOrWhiteSpace(EmailEntry?.Text) ||
+                string.IsNullOrWhiteSpace(PasswordEntry?.Text))
+            {
+                await DisplayAlert("Error", "All fields are required.", "OK");
+                return;
+            }
+
             string token = await _userService.SignupAsync(
                 UsernameEntry.Text,
                 EmailEntry.Text,
@@ -59,7 +68,7 @@ public partial class SignupPage : ContentPage
             );
 
             await DisplayAlert("Success", "Signup Successful", "OK");
-            Application.Current.MainPage = new AppShell();
+            Application.Current!.MainPage = new AppShell(); // Use null-forgiving operator
         }
         catch (Exception ex)
         {

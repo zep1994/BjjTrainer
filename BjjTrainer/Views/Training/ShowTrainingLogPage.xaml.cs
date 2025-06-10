@@ -20,7 +20,7 @@ public partial class ShowTrainingLogPage : ContentPage
                 Console.WriteLine($"LogId set to: {_logId}");
 
                 // Load details only once when LogId is assigned
-                Device.BeginInvokeOnMainThread(async () =>
+                Dispatcher.Dispatch(async () =>
                 {
                     await _viewModel.LoadLogDetailsAsync(_logId);
                 });
@@ -59,7 +59,14 @@ public partial class ShowTrainingLogPage : ContentPage
             else
             {
                 Console.WriteLine("Invalid logId for navigation.");
-                await Application.Current.MainPage.DisplayAlert("Error", "Invalid Training Log ID.", "OK");
+                if (Application.Current?.MainPage != null) // Null check for Application.Current.MainPage
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Invalid Training Log ID.", "OK");
+                }
+                else
+                {
+                    Console.WriteLine("MainPage is null. Cannot display alert.");
+                }
             }
         }
     }

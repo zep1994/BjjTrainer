@@ -39,7 +39,7 @@ namespace BjjTrainer_API.Models.Trainings
         // Relationship
         public ICollection<TrainingLogMove> TrainingLogMoves { get; set; } = [];
         // Foreign key to ApplicationUser
-        public string ApplicationUserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public string? ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
     }
 }

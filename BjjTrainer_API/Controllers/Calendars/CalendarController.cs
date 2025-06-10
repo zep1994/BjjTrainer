@@ -8,14 +8,9 @@ namespace BjjTrainer_API.Controllers.Calendar
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CalendarController : ControllerBase
+    public class CalendarController(CalendarService calendarService) : ControllerBase
     {
-        private readonly CalendarService _calendarService;
-
-        public CalendarController(CalendarService calendarService)
-        {
-            _calendarService = calendarService;
-        }
+        private readonly CalendarService _calendarService = calendarService;
 
         // ******************************** GET EVENT BY ID ****************************************
         [HttpGet("{eventId}")]
@@ -79,7 +74,7 @@ namespace BjjTrainer_API.Controllers.Calendar
 
                 return Ok(events);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(500, new { Message = "An error occurred while fetching events." });
             }
@@ -96,6 +91,9 @@ namespace BjjTrainer_API.Controllers.Calendar
                 return BadRequest(ModelState);
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { Message = "User is not authorized." });
+
             await _calendarService.UpdateEventAsync(eventId, model, userId);
             return Ok(new { Message = "Event updated successfully." });
         }
