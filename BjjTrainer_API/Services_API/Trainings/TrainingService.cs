@@ -87,12 +87,9 @@ namespace BjjTrainer_API.Services_API.Trainings
                 })
                 .FirstOrDefaultAsync();
 
-            if (log == null)
-            {
-                throw new Exception($"Training log with ID {logId} not found.");
-            }
-
-            return new UpdateTrainingLogDto
+            return log == null
+                ? throw new Exception($"Training log with ID {logId} not found.")
+                : new UpdateTrainingLogDto
             {
                 Date = log.Date,
                 TrainingTime = log.TrainingTime,
@@ -113,10 +110,9 @@ namespace BjjTrainer_API.Services_API.Trainings
                 .Where(tl => tl.CalendarEventId == eventId)
                 .FirstOrDefaultAsync();
 
-            if (log == null)
-                throw new Exception("Training log not found.");
-
-            return new TrainingLogDto
+            return log == null
+                ? throw new Exception("Training log not found.")
+                : new TrainingLogDto
             {
                 Id = log.Id,
                 Title = log.Title,
@@ -130,17 +126,16 @@ namespace BjjTrainer_API.Services_API.Trainings
 
         public async Task<List<MoveDto>> GetMovesByIdsAsync(List<int> moveIds)
         {
-            if (moveIds == null || !moveIds.Any())
-                throw new ArgumentException("Move IDs list cannot be empty.");
-
-            return await _context.Moves
+            return moveIds == null || !moveIds.Any()
+                ? throw new ArgumentException("Move IDs list cannot be empty.")
+                : await _context.Moves
                 .Where(m => moveIds.Contains(m.Id))
                 .Select(m => new MoveDto
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = m.Description ?? string.Empty, 
-                    SkillLevel = m.SkillLevel ?? string.Empty 
+                    Description = m.Description ?? string.Empty,
+                    SkillLevel = m.SkillLevel ?? string.Empty
                 }).ToListAsync();
         }
 

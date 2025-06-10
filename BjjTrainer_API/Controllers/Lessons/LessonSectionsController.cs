@@ -26,8 +26,7 @@ namespace BjjTrainer_API.Controllers.Lessons
         public async Task<ActionResult<LessonSection>> GetSection(int id)
         {
             var section = await _lessonSectionService.GetSectionByIdAsync(id);
-            if (section == null) return NotFound();
-            return Ok(section);
+            return section == null ? (ActionResult<LessonSection>)NotFound() : (ActionResult<LessonSection>)Ok(section);
         }
 
         [HttpPost]
@@ -49,8 +48,7 @@ namespace BjjTrainer_API.Controllers.Lessons
         public async Task<IActionResult> DeleteSection(int id)
         {
             var deleted = await _lessonSectionService.DeleteSectionAsync(id);
-            if (!deleted) return NotFound();
-            return NoContent();
+            return !deleted ? NotFound() : NoContent();
         }
     }
 }

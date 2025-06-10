@@ -26,21 +26,18 @@ namespace BjjTrainer_API.Services_API.Calendars
                     EndDate = e.EndDate,
                     EndTime = e.EndTime,
                     TrainingLogId = e.TrainingLogId,
-                    InstructorId = e.InstructorId 
+                    InstructorId = e.InstructorId
                 })
                 .FirstOrDefaultAsync();
 
-            if (calendarEvent == null)
-                throw new Exception("Event not found.");
-
-            return calendarEvent;
+            return calendarEvent ?? throw new Exception("Event not found.");
         }
 
         // ******************************** CREATE EVENT ****************************************
         public async Task<CalendarEvent> CreateEventAsync(string userId, CreateEventDto dto)
         {
-            if (dto.Title == null)
-                throw new ArgumentNullException(nameof(dto.Title), "Event title cannot be null.");
+            if (dto.Title is null)
+                throw new ArgumentNullException(nameof(dto), "Event title cannot be null.");
 
             var user = await _context.ApplicationUsers
                 .FirstOrDefaultAsync(u => u.Id == userId)
@@ -284,6 +281,64 @@ namespace BjjTrainer_API.Services_API.Calendars
             return await _context.CalendarEvents
                 .Where(e => e.SchoolId == schoolId && e.StartDate >= start && e.StartDate < end)
                 .CountAsync();
+        }
+
+        // ******************************** BOOK EVENT ****************************************
+        public async Task BookEventAsync(int eventId, string userId)
+        {
+            var user = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == userId)
+                ?? throw new Exception("User not found.");
+
+            var calendarEvent = await _context.CalendarEvents
+                .FirstOrDefaultAsync(e => e.Id == eventId)
+                ?? throw new Exception("Event not found.");
+
+            // Only allow booking for upcoming events
+            if (calendarEvent.StartDate == null || calendarEvent.StartDate < DateTime.UtcNow.Date)
+                throw new Exception("You can only book upcoming events.");
+
+            // Only allow booking for user's school
+            if (calendarEvent.SchoolId == null || user.SchoolId == null || calendarEvent.SchoolId != user.SchoolId)
+                throw new Exception("You can only book events for your school.");
+
+            // Find existing CalendarEventUser record
+            var eventUser = await _context.CalendarEventUsers
+                .FirstOrDefaultAsync(eu => eu.CalendarEventId == eventId && eu.UserId == userId);
+
+            if (eventUser != null)
+            {
+                if (eventUser.IsBooked)
+                    throw new Exception("You have already booked this event.");
+
+                eventUser.IsBooked = true;
+            }
+            else
+            {
+                eventUser = new CalendarEventUser
+                {
+                    CalendarEventId = eventId,
+                    UserId = userId,
+                    IsBooked = true,
+                    IsCheckedIn = false
+                };
+                _context.CalendarEventUsers.Add(eventUser);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        // ******************************** UNBOOK EVENT ****************************************
+        public async Task UnbookEventAsync(int eventId, string userId)
+        {
+            var eventUser = await _context.CalendarEventUsers
+                .FirstOrDefaultAsync(eu => eu.CalendarEventId == eventId && eu.UserId == userId);
+
+            if (eventUser == null || !eventUser.IsBooked)
+                throw new Exception("You have not booked this event.");
+
+            eventUser.IsBooked = false;
+            await _context.SaveChangesAsync();
         }
     }
 }

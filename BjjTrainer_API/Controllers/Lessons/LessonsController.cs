@@ -26,8 +26,7 @@ namespace BjjTrainer_API.Controllers.Lessons
         public async Task<IActionResult> GetLessonById(int id)
         {
             var lesson = await _lessonService.GetLessonByIdAsync(id);
-            if (lesson == null) return NotFound();
-            return Ok(lesson);
+            return lesson == null ? NotFound() : Ok(lesson);
         }
 
         [HttpPost]
@@ -45,18 +44,14 @@ namespace BjjTrainer_API.Controllers.Lessons
             if (id != lesson.Id) return BadRequest();
 
             var result = await _lessonService.UpdateLessonAsync(lesson);
-            if (!result) return NotFound();
-
-            return Ok(result);
+            return !result ? NotFound() : Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLesson(int id)
         {
             var result = await _lessonService.DeleteLessonAsync(id);
-            if (!result) return NotFound();
-
-            return NoContent();
+            return !result ? NotFound() : NoContent();
         }
     }
 }

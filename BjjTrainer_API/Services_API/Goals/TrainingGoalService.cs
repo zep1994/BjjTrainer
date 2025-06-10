@@ -23,15 +23,14 @@ namespace BjjTrainer_API.Services_API.Goals
                 .ThenInclude(tgm => tgm.Move)
                 .FirstOrDefaultAsync(g => g.Id == goalId);
 
-            if (goal == null)
-                throw new Exception("Training goal not found.");
-
-            return new TrainingGoalDto
+            return goal == null
+                ? throw new Exception("Training goal not found.")
+                : new TrainingGoalDto
             {
                 Id = goal.Id,
                 GoalDate = goal.GoalDate,
                 Notes = goal.Notes,
-                MoveIds = [.. goal.UserTrainingGoalMoves.Select(tgm => tgm.MoveId)], 
+                MoveIds = [.. goal.UserTrainingGoalMoves.Select(tgm => tgm.MoveId)],
                 Moves = [.. goal.UserTrainingGoalMoves
                     .Where(tgm => tgm.Move != null)
                     .Select(tgm => new TrainingGoalMoveDto
@@ -44,7 +43,7 @@ namespace BjjTrainer_API.Services_API.Goals
                             Name = tgm.Move.Name,
                             TrainingLogCount = tgm.Move.TrainingLogCount
                         }
-                    })] 
+                    })]
             };
         }
 
