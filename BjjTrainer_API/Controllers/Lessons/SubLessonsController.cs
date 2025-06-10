@@ -34,12 +34,7 @@ namespace BjjTrainer_API.Controllers.Lessons
         public async Task<ActionResult<SubLesson>> GetSubLesson(int id)
         {
             var subLesson = await _subLessonService.GetSubLessonByIdAsync(id);
-            if (subLesson == null)
-            {
-                return NotFound();
-            }
-
-            return Ok();
+            return subLesson == null ? (ActionResult<SubLesson>)NotFound() : (ActionResult<SubLesson>)Ok();
         }
 
         // Create a new SubLesson
@@ -81,8 +76,7 @@ namespace BjjTrainer_API.Controllers.Lessons
         public async Task<IActionResult> DeleteSubLesson(int id)
         {
             var deleted = await _subLessonService.DeleteSubLessonAsync(id);
-            if (!deleted) return NotFound();
-            return NoContent();
+            return !deleted ? NotFound() : NoContent();
         }
 
         [HttpGet("{id}/details")]
@@ -103,12 +97,7 @@ namespace BjjTrainer_API.Controllers.Lessons
         public async Task<IActionResult> AddMoveToSubLesson(int subLessonId, int moveId)
         {
             var success = await _subLessonService.AddMoveToSubLessonAsync(subLessonId, moveId);
-            if (!success)
-            {
-                return BadRequest("Failed to associate Move with SubLesson.");
-            }
-
-            return Ok(success);
+            return !success ? BadRequest("Failed to associate Move with SubLesson.") : Ok(success);
         }
 
         // Remove a Move from a SubLesson
@@ -116,12 +105,7 @@ namespace BjjTrainer_API.Controllers.Lessons
         public async Task<IActionResult> RemoveMoveFromSubLesson(int subLessonId, int moveId)
         {
             var success = await _subLessonService.RemoveMoveFromSubLessonAsync(subLessonId, moveId);
-            if (!success)
-            {
-                return BadRequest("Failed to remove Move from SubLesson.");
-            }
-
-            return Ok("This was Deleted");
+            return !success ? BadRequest("Failed to remove Move from SubLesson.") : Ok("This was Deleted");
         }
     }
 }

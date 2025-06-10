@@ -4,6 +4,6 @@ namespace BjjTrainer.Models.DTO.Users
     {
         public DateTime Date { get; set; }
         public double Value { get; set; }
-        public string Day => Date.ToString("ddd");
+        public string DateLabel => Date.ToString("MMM d"); // e.g., "Jun 9"
     }
 }

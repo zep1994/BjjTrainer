@@ -11,7 +11,7 @@ namespace BjjTrainer.Models.Lessons
         public TimeSpan Duration { get; set; }
         public string VideoUrl { get; set; } = string.Empty; 
         public string DocumentUrl { get; set; } = string.Empty; 
-        public List<string> Tags { get; set; } = new List<string>(); 
+        public List<string> Tags { get; set; } = []; 
         public string SkillLevel { get; set; } = string.Empty; 
         public string Notes { get; set; } = string.Empty; 
 
@@ -19,7 +19,7 @@ namespace BjjTrainer.Models.Lessons
         public int LessonSectionId { get; set; }
         public LessonSection? LessonSection { get; set; }
 
-        public List<MoveDto> Moves { get; set; } = new List<MoveDto>(); 
+        public List<MoveDto> Moves { get; set; } = []; 
     }
 
 }

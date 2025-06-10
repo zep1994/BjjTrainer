@@ -10,6 +10,7 @@ namespace BjjTrainer_API.Models.Calendars
         public string? UserId { get; set; }
         public ApplicationUser? User { get; set; }
 
+        public bool IsBooked { get; set; } = false;
         public bool IsCheckedIn { get; set; } = false;
     }
 }

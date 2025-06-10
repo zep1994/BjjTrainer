@@ -31,33 +31,32 @@ namespace BjjTrainer_API.Services_API.Moves
                 .ThenInclude(slm => slm.SubLesson)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (move == null) return null;
-
-            return new MoveDto
+            return move == null
+                ? null
+                : new MoveDto
             {
                 Id = move.Id,
                 Name = move.Name,
                 Description = move.Description ?? string.Empty,
                 Content = move.Content ?? string.Empty,
                 SkillLevel = move.SkillLevel ?? string.Empty,
-                Tags = move.Tags ?? new List<string>()
+                Tags = move.Tags ?? []
             };
         }
 
         // ******************************** GET MOVES BY IDS ********************************
         public async Task<List<MoveDto>> GetMovesByIdsAsync(List<int> moveIds)
         {
-            if (moveIds == null || !moveIds.Any())
-                throw new ArgumentException("Move IDs list cannot be empty.");
-
-            return await _context.Moves
+            return moveIds == null || !moveIds.Any()
+                ? throw new ArgumentException("Move IDs list cannot be empty.")
+                : await _context.Moves
                 .Where(m => moveIds.Contains(m.Id))
                 .Select(m => new MoveDto
                 {
                     Id = m.Id,
                     Name = m.Name,
-                    Description = m.Description ?? string.Empty, 
-                    SkillLevel = m.SkillLevel ?? string.Empty    
+                    Description = m.Description ?? string.Empty,
+                    SkillLevel = m.SkillLevel ?? string.Empty
                 }).ToListAsync();
         }
 

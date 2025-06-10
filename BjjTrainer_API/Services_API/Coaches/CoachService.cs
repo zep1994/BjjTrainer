@@ -54,12 +54,12 @@ namespace BjjTrainer_API.Services_API.Coaches
                 {
                     UserName = c.User?.UserName ?? "Unknown",
                     CheckInTime = c.CheckInTime
-                }).ToList() ?? new List<CheckInDto>(),
+                }).ToList() ?? [],
                 Moves = ev.TrainingLog?.TrainingLogMoves?.Select(tlm => new LogMoveDto
                 {
                     Id = tlm.Move?.Id ?? 0,
                     Name = tlm.Move?.Name ?? "Unknown"
-                }).ToList() ?? new List<LogMoveDto>()
+                }).ToList() ?? []
             }).ToList();
 
             return result;
@@ -82,10 +82,9 @@ namespace BjjTrainer_API.Services_API.Coaches
                 .ThenInclude(ci => ci.User)
                 .FirstOrDefaultAsync();
 
-            if (ev == null)
-                return null;
-
-            return new CoachEventDto
+            return ev == null
+                ? null
+                : new CoachEventDto
             {
                 Id = ev.Id,
                 Title = ev.Title,
@@ -100,12 +99,12 @@ namespace BjjTrainer_API.Services_API.Coaches
                 {
                     UserName = c.User?.UserName ?? "Unknown",
                     CheckInTime = c.CheckInTime
-                }).ToList() ?? new List<CheckInDto>(),
+                }).ToList() ?? [],
                 Moves = ev.TrainingLog?.TrainingLogMoves?.Select(tlm => new LogMoveDto
                 {
                     Id = tlm.Move?.Id ?? 0,
                     Name = tlm.Move?.Name ?? "Unknown"
-                }).ToList() ?? new List<LogMoveDto>()
+                }).ToList() ?? []
             };
         }
 
@@ -200,9 +199,9 @@ namespace BjjTrainer_API.Services_API.Coaches
         public async Task<List<ApplicationUser>> GetSchoolUsersAsync(string coachId)
         {
             var coach = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
-            if (coach == null || coach.SchoolId == null)
-                return [];
-            return await _context.ApplicationUsers.Where(u => u.SchoolId == coach.SchoolId).ToListAsync();
+            return coach == null || coach.SchoolId == null
+                ? []
+                : await _context.ApplicationUsers.Where(u => u.SchoolId == coach.SchoolId).ToListAsync();
         }
 
         public async Task<string> AddUsersToSchoolByEmailAsync(string coachId, List<string> emails)
@@ -266,10 +265,9 @@ namespace BjjTrainer_API.Services_API.Coaches
         {
             var coach = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
             var user = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == userId);
-            if (coach == null || user == null || coach.SchoolId != user.SchoolId)
-                return null;
-
-            return new
+            return coach == null || user == null || coach.SchoolId != user.SchoolId
+                ? null
+                : (object)(new
             {
                 user.Id,
                 user.UserName,
@@ -282,7 +280,7 @@ namespace BjjTrainer_API.Services_API.Coaches
                 user.TrainingStartDate,
                 user.LastLoginDate,
                 user.PreferredTrainingStyle
-            };
+            });
         }
     }
 }

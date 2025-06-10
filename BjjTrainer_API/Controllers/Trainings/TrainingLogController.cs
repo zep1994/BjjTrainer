@@ -48,10 +48,7 @@ namespace BjjTrainer_API.Controllers.Training
             try
             {
                 var log = await _trainingService.GetTrainingLogByIdAsync(logId);
-                if (log == null)
-                    return NotFound(new { message = "Training log not found." });
-
-                return Ok(log);
+                return log == null ? NotFound(new { message = "Training log not found." }) : Ok(log);
             }
             catch (Exception ex)
             {
@@ -66,10 +63,7 @@ namespace BjjTrainer_API.Controllers.Training
             try
             {
                 var log = await _trainingService.GetTrainingLogMovesAsync(logId);
-                if (log == null)
-                    return NotFound(new { message = "Training log not found." });
-
-                return Ok(log);
+                return log == null ? NotFound(new { message = "Training log not found." }) : Ok(log);
             }
             catch (Exception ex)
             {
@@ -87,10 +81,7 @@ namespace BjjTrainer_API.Controllers.Training
             try
             {
                 var moves = await _trainingService.GetMovesByIdsAsync(moveIds);
-                if (!moves.Any())
-                    return NotFound(new { message = "No moves found for the provided IDs." });
-
-                return Ok(moves);
+                return !moves.Any() ? NotFound(new { message = "No moves found for the provided IDs." }) : Ok(moves);
             }
             catch (Exception ex)
             {

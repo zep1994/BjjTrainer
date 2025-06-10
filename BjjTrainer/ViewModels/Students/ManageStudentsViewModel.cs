@@ -8,7 +8,7 @@ namespace BjjTrainer.ViewModels.Students
     public class ManageStudentsViewModel : BaseViewModel
     {
         private readonly SchoolService _schoolService;
-        public ObservableCollection<User> Students { get; set; } = new();
+        public ObservableCollection<User> Students { get; set; } = [];
 
         public ManageStudentsViewModel(SchoolService schoolService)
         {

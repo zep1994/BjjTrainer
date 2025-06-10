@@ -3,7 +3,6 @@ using BjjTrainer_API.Models.Users;
 using BjjTrainer_API.Services_API.Calendars;
 using BjjTrainer_API.Services_API.Coaches;
 using BjjTrainer_API.Services_API.Goals;
-using BjjTrainer_API.Services_API.Lessons;
 using BjjTrainer_API.Services_API.Moves;
 using BjjTrainer_API.Services_API.Schools;
 using BjjTrainer_API.Services_API.Trainings;
@@ -26,9 +25,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddScoped<LessonService>();
-builder.Services.AddScoped<LessonSectionService>();
-builder.Services.AddScoped<SubLessonService>();
+
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<MoveService>();

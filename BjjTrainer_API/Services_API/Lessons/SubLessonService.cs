@@ -45,9 +45,9 @@ namespace BjjTrainer_API.Services_API.Lessons
                     .AsQueryable() // Ensure compatibility with IEnumerable
                     .FirstOrDefaultAsync(sl => sl.Id == id);
 
-                if (subLesson == null || subLesson.SubLessonMoves == null) return null;
-
-                return new SubLessonDetailsDto
+                return subLesson == null || subLesson.SubLessonMoves == null
+                    ? null
+                    : new SubLessonDetailsDto
                 {
                     Id = subLesson.Id,
                     Title = subLesson.Title,
@@ -113,12 +113,7 @@ namespace BjjTrainer_API.Services_API.Lessons
                                  .FirstOrDefaultAsync(sl => sl.Id == id);
 
             // Ensure a non-null value is returned
-            if (subLesson == null)
-            {
-                throw new InvalidOperationException($"SubLesson with Id {id} not found.");
-            }
-
-            return subLesson;
+            return subLesson == null ? throw new InvalidOperationException($"SubLesson with Id {id} not found.") : subLesson;
         }
 
         // Create a new SubLesson

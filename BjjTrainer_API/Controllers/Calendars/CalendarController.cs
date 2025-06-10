@@ -23,10 +23,7 @@ namespace BjjTrainer_API.Controllers.Calendar
             {
                 var calendarEvent = await _calendarService.GetEventByIdAsync(eventId);
 
-                if (calendarEvent == null)
-                    return NotFound(new { Message = $"Event with ID {eventId} not found." });
-
-                return Ok(calendarEvent);
+                return calendarEvent == null ? NotFound(new { Message = $"Event with ID {eventId} not found." }) : Ok(calendarEvent);
             }
             catch (Exception ex)
             {
@@ -69,10 +66,7 @@ namespace BjjTrainer_API.Controllers.Calendar
             {
                 var events = await _calendarService.GetEventsForUserAsync(userId);
 
-                if (events == null || !events.Any())
-                    return NotFound(new { Message = "No events found for this user." });
-
-                return Ok(events);
+                return events == null || !events.Any() ? NotFound(new { Message = "No events found for this user." }) : Ok(events);
             }
             catch (Exception)
             {
@@ -179,6 +173,50 @@ namespace BjjTrainer_API.Controllers.Calendar
 
             var count = await _calendarService.GetUpcomingEventsCountAsync(schoolId, todayMin, weekFromNow);
             return Ok(new { count });
+        }
+
+        // ******************************** BOOK EVENT ****************************************
+        [HttpPost("events/{eventId}/book")]
+        public async Task<IActionResult> BookEvent(int eventId)
+        {
+            if (eventId <= 0)
+                return BadRequest(new { Message = "Invalid event ID." });
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { Message = "User is not authorized." });
+
+            try
+            {
+                await _calendarService.BookEventAsync(eventId, userId);
+                return Ok(new { Message = "Event booked successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        // ******************************** UNBOOK EVENT ****************************************
+        [HttpPost("events/{eventId}/unbook")]
+        public async Task<IActionResult> UnbookEvent(int eventId)
+        {
+            if (eventId <= 0)
+                return BadRequest(new { Message = "Invalid event ID." });
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { Message = "User is not authorized." });
+
+            try
+            {
+                await _calendarService.UnbookEventAsync(eventId, userId);
+                return Ok(new { Message = "Event unbooked successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
         }
     }
 }

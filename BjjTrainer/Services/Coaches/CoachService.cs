@@ -13,7 +13,7 @@ namespace BjjTrainer.Services.Coaches
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<List<CoachEventDto>>();
-                return result ?? new List<CoachEventDto>(); // Ensure a non-null return value
+                return result ?? []; // Ensure a non-null return value
             }
 
             throw new Exception($"Failed to retrieve past events: {await response.Content.ReadAsStringAsync()}");

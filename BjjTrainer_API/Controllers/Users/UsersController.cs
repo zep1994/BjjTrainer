@@ -23,10 +23,7 @@ namespace BjjTrainer_API.Controllers.Users
         {
             var tokens = await _userService.RefreshTokensAsync(refreshToken);
 
-            if (tokens == null)
-                return Unauthorized(new { message = "Invalid or expired refresh token." });
-
-            return Ok(tokens);
+            return tokens == null ? Unauthorized(new { message = "Invalid or expired refresh token." }) : Ok(tokens);
         }
 
         // Get all favorite lessons for a specific user
@@ -42,11 +39,7 @@ namespace BjjTrainer_API.Controllers.Users
         public async Task<IActionResult> AddLessonToFavorites(string userId, int lessonId)
         {
             var success = await _userService.AddLessonToFavoritesAsync(userId, lessonId);
-            if (success)
-            {
-                return Ok("Lesson added to favorites.");
-            }
-            return BadRequest("Failed to add lesson to favorites.");
+            return success ? Ok("Lesson added to favorites.") : BadRequest("Failed to add lesson to favorites.");
         }
 
         // Remove a lesson from the user's favorites
@@ -54,11 +47,7 @@ namespace BjjTrainer_API.Controllers.Users
         public async Task<IActionResult> RemoveLessonFromFavorites(string userId, int lessonId)
         {
             var success = await _userService.RemoveLessonFromFavoritesAsync(userId, lessonId);
-            if (success)
-            {
-                return Ok("Lesson removed from favorites.");
-            }
-            return BadRequest("Failed to remove lesson from favorites.");
+            return success ? Ok("Lesson removed from favorites.") : BadRequest("Failed to remove lesson from favorites.");
         }
 
         // GET: api/users/{id}

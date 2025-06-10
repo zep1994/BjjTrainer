@@ -20,12 +20,7 @@ namespace BjjTrainer_API.Services_API.Schools
                 .Include(u => u.School) 
                 .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
 
-            if (coach == null || coach.SchoolId == null)
-            {
-                return null;
-            }
-
-            return await _context.Schools.FirstOrDefaultAsync(s => s.Id == coach.SchoolId);
+            return coach == null || coach.SchoolId == null ? null : await _context.Schools.FirstOrDefaultAsync(s => s.Id == coach.SchoolId);
         }
 
         public async Task<string> CreateSchoolAndAddCoachAsync(string coachId, string schoolName, string schoolAddress, string schoolPhone)

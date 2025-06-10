@@ -13,12 +13,7 @@ namespace BjjTrainer_API.Controllers
             }
 
             var userId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnauthorizedAccessException("User ID claim is missing.");
-            }
-
-            return userId;
+            return string.IsNullOrEmpty(userId) ? throw new UnauthorizedAccessException("User ID claim is missing.") : userId;
         }
     }
 }

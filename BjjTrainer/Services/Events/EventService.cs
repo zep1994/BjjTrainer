@@ -126,16 +126,16 @@ namespace BjjTrainer.Services.Events
                     try
                     {
                         var events = JsonSerializer.Deserialize<List<CalendarEventDto>>(jsonResponse);
-                        return events ?? new List<CalendarEventDto>(); 
+                        return events ?? []; 
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Deserialization error: {ex.Message}");
-                        return new List<CalendarEventDto>(); 
+                        return []; 
                     }
                 }
 
-                return new List<CalendarEventDto>(); 
+                return []; 
             }
             catch (Exception ex)
             {

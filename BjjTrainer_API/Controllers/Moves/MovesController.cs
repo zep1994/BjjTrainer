@@ -29,11 +29,7 @@ namespace BjjTrainer_API.Controllers.Moves
         public async Task<ActionResult<MoveDto>> GetMoveById(int id)
         {
             var move = await _moveService.GetMoveByIdAsync(id);
-            if (move == null)
-            {
-                return NotFound("Move not found.");
-            }
-            return Ok(move);
+            return move == null ? (ActionResult<MoveDto>)NotFound("Move not found.") : (ActionResult<MoveDto>)Ok(move);
         }
 
         // ******************************** GET MOVES BY IDS ********************************
@@ -69,12 +65,7 @@ namespace BjjTrainer_API.Controllers.Moves
             }
 
             var success = await _moveService.UpdateMoveAsync(moveDto);
-            if (!success)
-            {
-                return NotFound("Move not found.");
-            }
-
-            return NoContent();
+            return !success ? NotFound("Move not found.") : NoContent();
         }
 
         // ******************************** DELETE MOVE ********************************
@@ -82,12 +73,7 @@ namespace BjjTrainer_API.Controllers.Moves
         public async Task<IActionResult> DeleteMove(int id)
         {
             var success = await _moveService.DeleteMoveAsync(id);
-            if (!success)
-            {
-                return NotFound("Move not found.");
-            }
-
-            return NoContent();
+            return !success ? NotFound("Move not found.") : NoContent();
         }
     }
 }

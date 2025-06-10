@@ -14,18 +14,15 @@ namespace BjjTrainer
 
         private void OnNavigated(object? sender, ShellNavigatedEventArgs e)
         {
-            bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
-            var currentRoute = Shell.Current?.CurrentItem?.Route;
+            var currentRoute = Current?.CurrentItem?.Route;
 
             if (currentRoute == "IMPL_LoginPage" || currentRoute == "IMPL_SignupPage")
             {
-                // Enable FlyoutHeader for logged-in pages
                 Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
                 ProfileImage.IsVisible = false;
             }
             else
             {
-                // Enable FlyoutHeader for logged-in pages
                 Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
                 ProfileImage.IsVisible = true;
             }

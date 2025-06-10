@@ -8,7 +8,7 @@ namespace BjjTrainer.ViewModels
     public partial class SubLessonViewModel : BaseViewModel
     {
         private readonly SubLessonService _subLessonService;
-        private ObservableCollection<SubLesson> _subLessons = new ObservableCollection<SubLesson>(); // Initialize to avoid null
+        private ObservableCollection<SubLesson> _subLessons = []; // Initialize to avoid null
 
         public ObservableCollection<SubLesson> SubLessons
         {

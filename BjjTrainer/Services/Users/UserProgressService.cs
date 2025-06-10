@@ -5,15 +5,15 @@ namespace BjjTrainer.Services.Users
 {
     public class UserProgressService : ApiService
     {
-        public string? userId { get; private set; }
+        public string? UserId { get; private set; } 
 
         public async Task<UserProgressDto> GetUserProgressAsync()
         {
-            userId = Preferences.Get("UserId", string.Empty);
-            if (string.IsNullOrEmpty(userId))
+            UserId = Preferences.Get("UserId", string.Empty); 
+            if (string.IsNullOrEmpty(UserId))
                 throw new Exception("User ID is not set in preferences.");
 
-            var response = await HttpClient.GetAsync($"userprogress/{userId}/progress");
+            var response = await HttpClient.GetAsync($"userprogress/{UserId}/progress"); 
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<UserProgressDto>() ?? throw new Exception("Training summary is null.");
             var errorMessage = await response.Content.ReadAsStringAsync();
@@ -23,13 +23,13 @@ namespace BjjTrainer.Services.Users
         // Helper for all daily progress endpoints
         private async Task<List<DailyUserProgressDto>> GetDailyProgressAsync(string endpoint)
         {
-            userId = Preferences.Get("UserId", string.Empty);
-            if (string.IsNullOrEmpty(userId))
+            UserId = Preferences.Get("UserId", string.Empty); 
+            if (string.IsNullOrEmpty(UserId))
                 throw new Exception("User ID is not set in preferences.");
 
-            var response = await HttpClient.GetAsync($"userprogress/{userId}/{endpoint}");
+            var response = await HttpClient.GetAsync($"userprogress/{UserId}/{endpoint}"); 
             if (response.IsSuccessStatusCode)
-                return await response.Content.ReadFromJsonAsync<List<DailyUserProgressDto>>() ?? new();
+                return await response.Content.ReadFromJsonAsync<List<DailyUserProgressDto>>() ?? [];
             var errorMessage = await response.Content.ReadAsStringAsync();
             throw new Exception($"Server error: {errorMessage}");
         }

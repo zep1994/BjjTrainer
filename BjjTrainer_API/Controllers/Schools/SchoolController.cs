@@ -35,12 +35,7 @@ namespace BjjTrainer_API.Controllers.Schools
         {
             var school = await _schoolService.GetSchoolByCoachIdAsync(coachId);
 
-            if (school == null)
-            {
-                return NotFound("School not found or coach is not assigned to a school.");
-            }
-
-            return Ok(school);
+            return school == null ? NotFound("School not found or coach is not assigned to a school.") : Ok(school);
         }
 
         [HttpPost("create")]
@@ -81,12 +76,9 @@ namespace BjjTrainer_API.Controllers.Schools
             }
 
             var success = await _schoolService.UpdateSchoolByCoachIdAsync(userId, request.Name, request.Address, request.Phone);
-            if (!success)
-            {
-                return BadRequest("Failed to update the school. Ensure you have the right permissions.");
-            }
-
-            return Ok("School updated successfully.");
+            return !success
+                ? BadRequest("Failed to update the school. Ensure you have the right permissions.")
+                : Ok("School updated successfully.");
         }
 
         [HttpDelete("delete/{id}")]
@@ -100,12 +92,9 @@ namespace BjjTrainer_API.Controllers.Schools
             }
 
             var success = await _schoolService.DeleteSchoolAsync(userId, id);
-            if (!success)
-            {
-                return BadRequest("Failed to delete the school. Ensure no users are associated and you have the right permissions.");
-            }
-
-            return Ok("School deleted successfully.");
+            return !success
+                ? BadRequest("Failed to delete the school. Ensure no users are associated and you have the right permissions.")
+                : Ok("School deleted successfully.");
         }
 
         [HttpGet("students")]
@@ -119,12 +108,7 @@ namespace BjjTrainer_API.Controllers.Schools
             }
 
             var students = await _schoolService.GetStudentsByCoachIdAsync(userId);
-            if (students == null || students.Count == 0)
-            {
-                return NotFound("No students found for this coach.");
-            }
-
-            return Ok(students);
+            return students == null || students.Count == 0 ? NotFound("No students found for this coach.") : Ok(students);
         }
     }
 }

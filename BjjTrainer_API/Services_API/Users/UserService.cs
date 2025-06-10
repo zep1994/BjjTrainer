@@ -180,11 +180,9 @@ namespace BjjTrainer_API.Services_API.Users
         private string GetJwtSecretKey()
         {
             var secretKey = _configuration["Jwt:SecretKey"];
-            if (string.IsNullOrEmpty(secretKey))
-            {
-                throw new InvalidOperationException("Jwt:SecretKey is not configured in the application settings.");
-            }
-            return secretKey;
+            return string.IsNullOrEmpty(secretKey)
+                ? throw new InvalidOperationException("Jwt:SecretKey is not configured in the application settings.")
+                : secretKey;
         }
 
         private string GenerateAccessToken(string userId)

@@ -29,10 +29,7 @@ namespace BjjTrainer_API.Controllers.Coaches
             try
             {
                 var events = await _coachService.GetPastEventsWithLogs(userId, schoolId);
-                if (!events.Any())
-                    return NotFound("No past events found.");
-
-                return Ok(events);
+                return !events.Any() ? (ActionResult<List<CoachEventDto>>)NotFound("No past events found.") : (ActionResult<List<CoachEventDto>>)Ok(events);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -54,10 +51,7 @@ namespace BjjTrainer_API.Controllers.Coaches
             try
             {
                 var eventDetails = await _coachService.GetEventDetailsAsync(eventId, userId);
-                if (eventDetails == null)
-                    return NotFound("Event not found.");
-
-                return Ok(eventDetails);
+                return eventDetails == null ? (ActionResult<CoachEventDto>)NotFound("Event not found.") : (ActionResult<CoachEventDto>)Ok(eventDetails);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -161,9 +155,7 @@ namespace BjjTrainer_API.Controllers.Coaches
                 return Unauthorized("User is not authenticated.");
 
             var result = await _coachService.ChangeUserRoleAsync(coachId, userId, newRole);
-            if (!result.Success)
-                return BadRequest(result.Message);
-            return Ok(result.Message);
+            return !result.Success ? BadRequest(result.Message) : Ok(result.Message);
         }
 
         // Remove user from school
@@ -176,9 +168,7 @@ namespace BjjTrainer_API.Controllers.Coaches
                 return Unauthorized("User is not authenticated.");
 
             var result = await _coachService.RemoveUserFromSchoolAsync(coachId, userId);
-            if (!result.Success)
-                return BadRequest(result.Message);
-            return Ok(result.Message);
+            return !result.Success ? BadRequest(result.Message) : Ok(result.Message);
         }
 
         // Get user details
@@ -191,9 +181,7 @@ namespace BjjTrainer_API.Controllers.Coaches
                 return Unauthorized("User is not authenticated.");
 
             var user = await _coachService.GetUserDetailsAsync(coachId, userId);
-            if (user == null)
-                return NotFound("User not found or not in your school.");
-            return Ok(user);
+            return user == null ? NotFound("User not found or not in your school.") : Ok(user);
         }
 
         [HttpGet("school/students/progress")]

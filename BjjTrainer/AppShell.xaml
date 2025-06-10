@@ -26,23 +26,23 @@
     <Shell.TitleView>
         <Grid Padding="10" BackgroundColor="{StaticResource BackgroundColor}">
 
-             <!--Page Title--> 
+            <!--Page Title-->
             <Label Text="{Binding Title}" 
-                   FontAttributes="Bold" 
-                   FontSize="20" 
-                   TextColor="White"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Start" />
+                    FontAttributes="Bold" 
+                    FontSize="20" 
+                    TextColor="White"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Start" />
 
             <Image x:Name="ProfileImage" 
-                   Source="default_profile.png" 
-                   HeightRequest="40" 
-                   WidthRequest="40" 
-                   Aspect="AspectFill"
-                   HorizontalOptions="End" 
-                   VerticalOptions="Center"
-                   Margin="0,0,10,0"
-                   IsVisible="True">
+                    Source="default_profile.png" 
+                    HeightRequest="40" 
+                    WidthRequest="40" 
+                    Aspect="AspectFill"
+                    HorizontalOptions="End" 
+                    VerticalOptions="Center"
+                    Margin="0,0,10,0"
+                    IsVisible="True">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnProfileIconTapped" />
                 </Image.GestureRecognizers>
@@ -52,8 +52,8 @@
     </Shell.TitleView>
 
     <ShellContent Title="Login Page" 
-                  Route="LoginPage" 
-                  ContentTemplate="{DataTemplate users:LoginPage}" />
+                    Route="LoginPage" 
+                    ContentTemplate="{DataTemplate users:LoginPage}" />
     
     <!-- TabBar -->
     <TabBar>
@@ -77,10 +77,6 @@
             <ShellContent Route="UserProgressPage" ContentTemplate="{DataTemplate users:UserProgressPage}" />
         </Tab>
 
-        <Tab Title="Lessons" Icon="lessons.png">
-            <ShellContent Route="LessonsPage" ContentTemplate="{DataTemplate lessons:LessonsPage}" />
-        </Tab>
-
         <Tab Title="Moves" Icon="moves.png">
             <ShellContent Route="MovesPage" ContentTemplate="{DataTemplate moves:MovesPage}" />
         </Tab>
@@ -93,13 +89,11 @@
 
         <!-- User Profile Tab -->
         <ShellContent Title="Profile"
-               Icon="profile_icon.png"
-               ContentTemplate="{DataTemplate users:UserProfilePage}"
-               Route="UserProfilePage" />
+                Icon="profile_icon.png"
+                ContentTemplate="{DataTemplate users:UserProfilePage}"
+                Route="UserProfilePage" />
     </TabBar>
     
-    <ShellContent Title="Lessons" Route="SubLessonPage" ContentTemplate="{DataTemplate lessons:SubLessonPage}" />
-    <ShellContent Title="SubLessons" Route="SubLessonDetailsPage" ContentTemplate="{DataTemplate lessons:SubLessonDetailsPage}" />
     <ShellContent Title="My Lessons" Route="FavoritesPage" ContentTemplate="{DataTemplate users:FavoritesPage}" />
     <ShellContent Title="My Goals" Route="TrainingGoalPage" ContentTemplate="{DataTemplate goals:TrainingGoalPage}" />
     <ShellContent Title="Update Training Log" Route="UpdateTrainingLogPage" ContentTemplate="{DataTemplate train:UpdateTrainingLogPage}" />

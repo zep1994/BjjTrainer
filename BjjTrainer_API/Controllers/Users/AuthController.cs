@@ -19,10 +19,10 @@ namespace BjjTrainer_API.Controllers.Users
 
 
         public AuthController(UserManager<ApplicationUser> userManager,
-                              SignInManager<ApplicationUser> signInManager,
-                              JwtTokenService jwtTokenService,
-                              UserService userService,
-                              ILogger<AuthController> logger)
+                                    SignInManager<ApplicationUser> signInManager,
+                                    JwtTokenService jwtTokenService,
+                                    UserService userService,
+                                    ILogger<AuthController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -100,12 +100,7 @@ namespace BjjTrainer_API.Controllers.Users
             }
 
             var newTokens = await _jwtTokenService.RefreshTokenAsync(refreshTokenDto.Token);
-            if (newTokens == null)
-            {
-                return Unauthorized("Invalid or expired refresh token.");
-            }
-
-            return Ok(newTokens);
+            return newTokens == null ? Unauthorized("Invalid or expired refresh token.") : Ok(newTokens);
         }
 
         [HttpPost("logout")]
