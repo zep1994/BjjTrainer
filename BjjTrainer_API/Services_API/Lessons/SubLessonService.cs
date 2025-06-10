@@ -35,7 +35,7 @@ namespace BjjTrainer_API.Services_API.Lessons
             }
         }
 
-        public async Task<SubLessonDetailsDto> GetSubLessonDetailsByIdAsync(int id)
+        public async Task<SubLessonDetailsDto?> GetSubLessonDetailsByIdAsync(int id)
         {
             try
             {
