@@ -215,5 +215,97 @@ namespace BjjTrainer_API.Controllers.Coaches
 
             return Ok(progressList);
         }
+
+        [HttpGet("school/students/management")]
+        [Authorize]
+        public async Task<IActionResult> GetSchoolStudentsManagement()
+        {
+            var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId))
+                return Unauthorized("User is not authenticated.");
+
+            try
+            {
+                var students = await _coachService.GetSchoolStudentsWithAttendanceAsync(coachId);
+                return Ok(students);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("school/attendance/summary")]
+        [Authorize]
+        public async Task<IActionResult> GetSchoolAttendanceSummary()
+        {
+            var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId))
+                return Unauthorized("User is not authenticated.");
+
+            try
+            {
+                var summary = await _coachService.GetSchoolAttendanceSummaryAsync(coachId);
+                return Ok(summary);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("school/students/{studentId}/attendance")]
+        [Authorize]
+        public async Task<IActionResult> GetStudentAttendanceRecords(string studentId)
+        {
+            var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId))
+                return Unauthorized("User is not authenticated.");
+
+            try
+            {
+                var records = await _coachService.GetStudentAttendanceRecordsAsync(coachId, studentId);
+                return Ok(records);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("school/students/{studentId}/attendance/summary")]
+        [Authorize]
+        public async Task<IActionResult> GetStudentAttendanceSummary(string studentId)
+        {
+            var coachId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachId))
+                return Unauthorized("User is not authenticated.");
+
+            try
+            {
+                var summary = await _coachService.GetStudentAttendanceSummaryAsync(coachId, studentId);
+                return Ok(summary);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
     }
 }

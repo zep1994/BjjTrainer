@@ -36,7 +36,7 @@ namespace BjjTrainer_API.Services_API.Calendars
         // ******************************** CREATE EVENT ****************************************
         public async Task<CalendarEvent> CreateEventAsync(string userId, CreateEventDto dto)
         {
-            if (dto.Title is null)
+            if (string.IsNullOrWhiteSpace(dto.Title)) 
                 throw new ArgumentNullException(nameof(dto), "Event title cannot be null.");
 
             var user = await _context.ApplicationUsers
@@ -255,8 +255,21 @@ namespace BjjTrainer_API.Services_API.Calendars
             else
             {
                 var userEvent = calendarEvent.CalendarEventUsers
-                    .FirstOrDefault(ceu => ceu.UserId == userId && ceu.User.Role == UserRole.Student);
+                    .FirstOrDefault(ceu => ceu.UserId == userId && ceu.User != null && ceu.User.Role == UserRole.Student);
 
+                if (userEvent != null)
+                {
+                    _context.CalendarEventUsers.Remove(userEvent);
+
+                    if (!calendarEvent.CalendarEventUsers.Any())
+                    {
+                        _context.CalendarEvents.Remove(calendarEvent);
+                    }
+                }
+                else
+                {
+                    throw new Exception("You can only delete your personal events.");
+                }
                 if (userEvent != null)
                 {
                     _context.CalendarEventUsers.Remove(userEvent);
@@ -339,6 +352,88 @@ namespace BjjTrainer_API.Services_API.Calendars
 
             eventUser.IsBooked = false;
             await _context.SaveChangesAsync();
+        }
+
+        // ******************************** GET EVENT STUDENT STATUSES ****************************************
+        public async Task<List<CalendarEventStudentStatusDto>> GetEventStudentStatusesAsync(
+            int eventId, string coachUserId)
+        {
+            // Ensure the requesting user is a coach
+            var coach = await _context.ApplicationUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == coachUserId && u.Role == UserRole.Coach);
+            if (coach == null)
+                throw new Exception("Only coaches can view this information.");
+
+            // Load the event and check school
+            var calendarEvent = await _context.CalendarEvents
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == eventId);
+            if (calendarEvent == null)
+                throw new Exception("Event not found.");
+            if (calendarEvent.SchoolId != coach.SchoolId)
+                throw new Exception("You can only view events for your school.");
+
+            // Query all students who have booked or checked in for this event
+            var students = await _context.CalendarEventUsers
+                .AsNoTracking()
+                .Where(eu => eu.CalendarEventId == eventId && (eu.IsBooked || eu.IsCheckedIn))
+                .Include(eu => eu.User)
+                .OrderBy(eu => eu.User.UserName)
+                .Select(eu => new CalendarEventStudentStatusDto
+                {
+                    UserId = eu.UserId ?? "",
+                    UserName = eu.User != null ? eu.User.UserName : null,
+                    ProfilePictureUrl = eu.User != null ? eu.User.ProfilePictureUrl : null,
+                    IsBooked = eu.IsBooked,
+                    IsCheckedIn = eu.IsCheckedIn
+                })
+                .ToListAsync();
+
+            return students;
+        }
+
+        public async Task<(List<CalendarEventStudentStatusDto> Students, int TotalCount)> GetEventStudentStatusesAsync(
+            int eventId, string coachUserId, int pageNumber, int pageSize)
+        {
+            // Ensure the requesting user is a coach
+            var coach = await _context.ApplicationUsers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == coachUserId && u.Role == UserRole.Coach);
+            if (coach == null)
+                throw new Exception("Only coaches can view this information.");
+
+            // Load the event and check school
+            var calendarEvent = await _context.CalendarEvents
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == eventId);
+            if (calendarEvent == null)
+                throw new Exception("Event not found.");
+            if (calendarEvent.SchoolId != coach.SchoolId)
+                throw new Exception("You can only view events for your school.");
+
+            // Query all students who have booked or checked in for this event
+            var query = _context.CalendarEventUsers
+                .AsNoTracking()
+                .Where(eu => eu.CalendarEventId == eventId)
+                .Include(eu => eu.User)
+                .Select(eu => new CalendarEventStudentStatusDto
+                {
+                    UserId = eu.UserId ?? "",
+                    UserName = eu.User != null ? eu.User.UserName : null,
+                    ProfilePictureUrl = eu.User != null ? eu.User.ProfilePictureUrl : null,
+                    IsBooked = eu.IsBooked,
+                    IsCheckedIn = eu.IsCheckedIn
+                });
+
+            var totalCount = await query.CountAsync();
+            var students = await query
+                .OrderBy(eu => eu.UserName)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (students, totalCount);
         }
     }
 }
