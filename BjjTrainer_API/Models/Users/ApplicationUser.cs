@@ -32,7 +32,7 @@ namespace BjjTrainer_API.Models.Users
         public DateOnly? TrainingStartDate { get; set; }
         public int TotalSubmissions { get; set; } = 0;
         public int TotalTaps { get; set; } = 0;
-        public double TotalTrainingTime { get; set; } = 0; // HH.MM
+        public double TotalTrainingTime { get; set; } = 0; 
         public int TotalRoundsRolled { get; set; } = 0;
         public string Belt { get; set; } = "White";
         public string Stripes { get; set; } = "0"; 
@@ -48,6 +48,12 @@ namespace BjjTrainer_API.Models.Users
 
         public UserRole Role { get; set; } = UserRole.Student;
         public int? SchoolId { get; set; } 
-        public School? School { get; set; } 
+        public School? School { get; set; }
+        public string? StripeCustomerId { get; set; }
+        public string? StripeSubscriptionId { get; set; }
+        public string? MembershipPlan { get; set; } 
+        public string? MembershipStatus { get; set; }
+        public DateTime? MembershipStartDate { get; set; }
+        public DateTime? MembershipEndDate { get; set; }
     }
 }

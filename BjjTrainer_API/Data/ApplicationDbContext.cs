@@ -3,6 +3,7 @@ using BjjTrainer_API.Models.Goals;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Lessons;
 using BjjTrainer_API.Models.Moves;
+using BjjTrainer_API.Models.Payments;
 using BjjTrainer_API.Models.Schools;
 using BjjTrainer_API.Models.Trainings;
 using BjjTrainer_API.Models.Users;
@@ -10,10 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BjjTrainer_API.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<LessonSection> LessonSections { get; set; }
         public DbSet<SubLesson> SubLessons { get; set; }
@@ -29,6 +28,7 @@ namespace BjjTrainer_API.Data
         public DbSet<School> Schools { get; set; }
         public DbSet<CalendarEventUser> CalendarEventUsers { get; set; }
         public DbSet<CalendarEventCheckIn> CalendarEventCheckIns { get; set; }
+        public DbSet<ProcessedStripeEvent> ProcessedStripeEvents { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
