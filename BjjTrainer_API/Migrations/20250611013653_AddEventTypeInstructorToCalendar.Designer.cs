@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BjjTrainer_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BjjTrainer_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250611013653_AddEventTypeInstructorToCalendar")]
+    partial class AddEventTypeInstructorToCalendar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,12 +221,17 @@ namespace BjjTrainer_API.Migrations
                     b.Property<int>("MoveId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("MoveId1")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PracticeCount")
                         .HasColumnType("integer");
 
                     b.HasKey("TrainingGoalId", "MoveId");
 
                     b.HasIndex("MoveId");
+
+                    b.HasIndex("MoveId1");
 
                     b.ToTable("UserTrainingGoalMoves");
                 });
@@ -560,10 +568,6 @@ namespace BjjTrainer_API.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<string>("Stripes")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("TotalRoundsRolled")
                         .HasColumnType("integer");
 
@@ -749,10 +753,14 @@ namespace BjjTrainer_API.Migrations
             modelBuilder.Entity("BjjTrainer_API.Models.Joins.UserTrainingGoalMove", b =>
                 {
                     b.HasOne("BjjTrainer_API.Models.Moves.Move", "Move")
-                        .WithMany("UserTrainingGoalMoves")
+                        .WithMany()
                         .HasForeignKey("MoveId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BjjTrainer_API.Models.Moves.Move", null)
+                        .WithMany("UserTrainingGoalMoves")
+                        .HasForeignKey("MoveId1");
 
                     b.HasOne("BjjTrainer_API.Models.Goals.TrainingGoal", "TrainingGoal")
                         .WithMany("UserTrainingGoalMoves")

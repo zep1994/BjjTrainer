@@ -11,6 +11,8 @@
         public bool? IsAllDay { get; set; }
         public int? SchoolId { get; set; }
         public int? TrainingLogId { get; set; }
+        public string? EventType { get; set; }
         public string? InstructorId { get; set; }
+        public string? InstructorName { get; set; }
     }
 }

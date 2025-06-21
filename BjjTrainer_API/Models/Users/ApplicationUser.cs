@@ -35,6 +35,7 @@ namespace BjjTrainer_API.Models.Users
         public double TotalTrainingTime { get; set; } = 0; // HH.MM
         public int TotalRoundsRolled { get; set; } = 0;
         public string Belt { get; set; } = "White";
+        public string Stripes { get; set; } = "0"; 
         public int BeltStripes { get; set; } = 0;
         public string ProfilePictureUrl { get; set; } = string.Empty;  
         public int TrainingHoursThisWeek { get; set; } = 0; 
