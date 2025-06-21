@@ -151,20 +151,18 @@ namespace BjjTrainer_API.Data
                 .HasForeignKey(c => c.CalendarEventId)
                 .OnDelete(DeleteBehavior.Restrict);  // Prevent event deletion
 
-            // TrainingGoal -> Move
-            // Configure many-to-many relationship
             modelBuilder.Entity<UserTrainingGoalMove>()
-                .HasKey(utgm => new { utgm.TrainingGoalId, utgm.MoveId });
+                    .HasKey(x => new { x.TrainingGoalId, x.MoveId });
 
             modelBuilder.Entity<UserTrainingGoalMove>()
-                .HasOne(utgm => utgm.TrainingGoal)
-                .WithMany(tg => tg.UserTrainingGoalMoves)
-                .HasForeignKey(utgm => utgm.TrainingGoalId);
+                .HasOne(x => x.TrainingGoal)
+                .WithMany(g => g.UserTrainingGoalMoves)
+                .HasForeignKey(x => x.TrainingGoalId);
 
             modelBuilder.Entity<UserTrainingGoalMove>()
-                .HasOne(utgm => utgm.Move)
-                .WithMany() // or .WithMany(m => m.UserTrainingGoalMoves) if navigation exists
-                .HasForeignKey(utgm => utgm.MoveId);
+                .HasOne(x => x.Move)
+                .WithMany(m => m.UserTrainingGoalMoves)
+                .HasForeignKey(x => x.MoveId);
 
             // Configure one-to-many relationship with ApplicationUser
             modelBuilder.Entity<TrainingGoal>()

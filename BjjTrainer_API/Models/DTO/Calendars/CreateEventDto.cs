@@ -11,20 +11,15 @@ namespace BjjTrainer_API.Models.DTO.Calendars
 
         [Required]
         public DateTime StartDate { get; set; }
-
         public TimeSpan? StartTime { get; set; }
-
         public DateTime? EndDate { get; set; }
         public TimeSpan? EndTime { get; set; }
-
         public bool IsAllDay { get; set; } = false;
-
-        // Is this a training session?
         public bool IncludeTrainingLog { get; set; } = false;
-
-        // Moves selected by the coach (optional)
         public List<int> MoveIds { get; set; } = [];
 
-        public string? InstructorId { get; set; } // <-- Add this
+        public string? EventType { get; set; }
+        public string? InstructorId { get; set; }
+        public string? InstructorName { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using BjjTrainer_API.Models.Calendars;
 using BjjTrainer_API.Models.DTO.Calendars;
 using BjjTrainer_API.Models.DTO.Coaches;
 using BjjTrainer_API.Models.DTO.Moves;
+using BjjTrainer_API.Models.DTO.Students;
 using BjjTrainer_API.Models.DTO.TrainingLogDTOs;
 using BjjTrainer_API.Models.Joins;
 using BjjTrainer_API.Models.Trainings;
@@ -281,6 +282,137 @@ namespace BjjTrainer_API.Services_API.Coaches
                 user.LastLoginDate,
                 user.PreferredTrainingStyle
             });
+        }
+
+        public async Task<List<SchoolStudentDto>> GetSchoolStudentsWithAttendanceAsync(string coachId)
+        {
+            var coach = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
+
+            if (coach == null || coach.SchoolId == null)
+                throw new UnauthorizedAccessException("Coach is not assigned to a school.");
+
+            // Get all students in the coach's school
+            var students = await _context.ApplicationUsers
+                .Where(u => u.SchoolId == coach.SchoolId && u.Role == UserRole.Student)
+                .ToListAsync();
+
+            // Get all check-ins for students in this school
+            var studentIds = students.Select(s => s.Id).ToList();
+            var checkInCounts = await _context.CalendarEventCheckIns
+                .Where(ci => ci.UserId != null && studentIds.Contains(ci.UserId))
+                .GroupBy(ci => ci.UserId)
+                .Select(g => new { UserId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(g => g.UserId!, g => g.Count);
+
+            // Build DTOs
+            var result = students.Select(s => new SchoolStudentDto
+            {
+                UserId = s.Id,
+                UserName = s.UserName ?? "",
+                Email = s.Email ?? "",
+                ProfilePictureUrl = s.ProfilePictureUrl ?? "",
+                Belt = s.Belt,
+                BeltStripes = s.BeltStripes,
+                TrainingStartDate = s.TrainingStartDate,
+                LastLoginDate = s.LastLoginDate,
+                EventsAttended = checkInCounts.TryGetValue(s.Id, out var count) ? count : 0
+            }).ToList();
+
+            return result;
+        }
+
+        public async Task<SchoolAttendanceSummaryDto> GetSchoolAttendanceSummaryAsync(string coachId)
+        {
+            var coach = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
+
+            if (coach == null || coach.SchoolId == null)
+                throw new UnauthorizedAccessException("Coach is not assigned to a school.");
+
+            var schoolId = coach.SchoolId.Value;
+
+            var totalStudents = await _context.ApplicationUsers
+                .CountAsync(u => u.SchoolId == schoolId && u.Role == UserRole.Student);
+
+            var totalEvents = await _context.CalendarEvents
+                .CountAsync(e => e.SchoolId == schoolId);
+
+            var totalCheckIns = await _context.CalendarEventCheckIns
+                .CountAsync(ci => ci.User != null && ci.User.SchoolId == schoolId);
+
+            double avgAttendancePerEvent = totalEvents > 0 ? (double)totalCheckIns / totalEvents : 0;
+            double avgAttendancePerStudent = totalStudents > 0 ? (double)totalCheckIns / totalStudents : 0;
+
+            return new SchoolAttendanceSummaryDto
+            {
+                TotalStudents = totalStudents,
+                TotalEvents = totalEvents,
+                TotalCheckIns = totalCheckIns,
+                AverageAttendancePerEvent = Math.Round(avgAttendancePerEvent, 2),
+                AverageAttendancePerStudent = Math.Round(avgAttendancePerStudent, 2)
+            };
+        }
+
+        public async Task<SchoolAttendanceSummaryDto> GetStudentAttendanceSummaryAsync(string coachId, string studentId)
+        {
+            var coach = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
+
+            var student = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == studentId && u.Role == UserRole.Student);
+
+            if (coach == null || student == null || coach.SchoolId == null || coach.SchoolId != student.SchoolId)
+                throw new UnauthorizedAccessException("Coach and student must be in the same school.");
+
+            var totalEventsAttended = await _context.CalendarEventCheckIns
+                .CountAsync(ci => ci.UserId == studentId && ci.User != null && ci.User.SchoolId == coach.SchoolId);
+
+            var records = await _context.CalendarEventCheckIns
+                .Where(ci => ci.UserId == studentId && ci.User != null && ci.User.SchoolId == coach.SchoolId)
+                .Include(ci => ci.CalendarEvent)
+                .OrderByDescending(ci => ci.CheckInTime)
+                .Select(ci => new SchoolAttendanceRecordDto
+                {
+                    EventId = ci.CalendarEventId,
+                    EventTitle = ci.CalendarEvent != null ? ci.CalendarEvent.Title : "Unknown",
+                    EventDate = ci.CalendarEvent != null ? ci.CalendarEvent.StartDate : null,
+                    CheckInTime = ci.CheckInTime
+                })
+                .ToListAsync();
+
+            return new SchoolAttendanceSummaryDto
+            {
+                TotalEventsAttended = totalEventsAttended,
+                Records = records
+            };
+        }
+
+        public async Task<List<SchoolAttendanceRecordDto>> GetStudentAttendanceRecordsAsync(string coachId, string studentId)
+        {
+            var coach = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == coachId && u.Role == UserRole.Coach);
+
+            var student = await _context.ApplicationUsers
+                .FirstOrDefaultAsync(u => u.Id == studentId && u.Role == UserRole.Student);
+
+            if (coach == null || student == null || coach.SchoolId == null || coach.SchoolId != student.SchoolId)
+                throw new UnauthorizedAccessException("Coach and student must be in the same school.");
+
+            var records = await _context.CalendarEventCheckIns
+                .Where(ci => ci.UserId == studentId && ci.User != null && ci.User.SchoolId == coach.SchoolId)
+                .Include(ci => ci.CalendarEvent)
+                .OrderByDescending(ci => ci.CheckInTime)
+                .Select(ci => new SchoolAttendanceRecordDto
+                {
+                    EventId = ci.CalendarEventId,
+                    EventTitle = ci.CalendarEvent != null ? ci.CalendarEvent.Title : "Unknown",
+                    EventDate = ci.CalendarEvent != null ? ci.CalendarEvent.StartDate : null,
+                    CheckInTime = ci.CheckInTime
+                })
+                .ToListAsync();
+
+            return records;
         }
     }
 }

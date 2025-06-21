@@ -1,6 +1,7 @@
 ﻿using BjjTrainer_API.Models.Schools;
 using BjjTrainer_API.Models.Trainings;
 using BjjTrainer_API.Models.Users;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -46,7 +47,11 @@ namespace BjjTrainer_API.Models.Calendars
         public ICollection<CalendarEventUser> CalendarEventUsers { get; set; } = [];
         public ICollection<CalendarEventCheckIn> CalendarEventCheckIns { get; set; } = [];
 
+        [MaxLength(50)]
+        public string? EventType { get; set; } = "Class";
+
         public string? InstructorId { get; set; }
         public ApplicationUser? Instructor { get; set; }
     }
 }
+

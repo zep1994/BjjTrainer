@@ -4,7 +4,7 @@ using BjjTrainer_API.Services_API.Calendars;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace BjjTrainer_API.Controllers.Calendar
+namespace BjjTrainer_API.Controllers.Calendars
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -51,7 +51,7 @@ namespace BjjTrainer_API.Controllers.Calendar
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { ex.Message });
             }
         }
 
@@ -110,7 +110,7 @@ namespace BjjTrainer_API.Controllers.Calendar
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { ex.Message });
             }
         }
 
@@ -136,7 +136,7 @@ namespace BjjTrainer_API.Controllers.Calendar
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { ex.Message });
             }
         }
 
@@ -159,7 +159,7 @@ namespace BjjTrainer_API.Controllers.Calendar
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { ex.Message });
             }
         }
 
@@ -193,7 +193,7 @@ namespace BjjTrainer_API.Controllers.Calendar
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { ex.Message });
             }
         }
 
@@ -215,7 +215,30 @@ namespace BjjTrainer_API.Controllers.Calendar
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        // ******************************** GET EVENT STUDENT STATUSES ****************************************
+        [HttpGet("events/{eventId}/students")]
+        public async Task<IActionResult> GetEventStudentStatuses(
+            int eventId, int pageNumber = 1, int pageSize = 20)
+        {
+            if (eventId <= 0)
+                return BadRequest(new { Message = "Invalid event ID." });
+
+            var coachUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(coachUserId))
+                return Unauthorized(new { Message = "User is not authorized." });
+
+            try
+            {
+                var students = await _calendarService.GetEventStudentStatusesAsync(eventId, coachUserId);
+                return Ok(students);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
             }
         }
     }
